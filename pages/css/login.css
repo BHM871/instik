@@ -11,6 +11,12 @@ body {
 	color: #252525;
 }
 
+main {
+	display: grid;
+	grid-template-columns: 100% 100%;
+	transition: 1s;
+}
+
 input[type=button] {
 	width: 18rem;
 	height: 3.5rem;
@@ -31,7 +37,7 @@ input[type=button]:hover {
 }
 
 hr {
-	width: 100%;
+	width: 25rem;
 	height: .5px;
 	margin: 40px;
 }
@@ -77,10 +83,12 @@ hr {
 	width: var(--content-w);
 	height: var(--content-h);
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	justify-content: space-between;
 	align-items: center;
 	background-color: #f4f4f4;
 	border-radius: 50px;
+	overflow: hidden;
 }
 
 .content {
@@ -120,4 +128,12 @@ hr {
 .link:hover {
 	cursor: pointer;
 	color: #bd14ff;
+}
+
+.deslocate {
+	transform: translateX(-100%);
+}
+
+.alocate {
+	transform: translateX(100%);
 }
