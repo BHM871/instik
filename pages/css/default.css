@@ -1,0 +1,10 @@
+body {
+	width: 100vw;
+	height: 100vh;
+	margin: 0;
+	background: linear-gradient(180deg, #2a52d6, #8c0dbe, #bd14ff);
+}
+
+.hide {
+	display: none;
+}
