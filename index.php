@@ -1,7 +1,7 @@
 <?php
 require_once("./configs/init.php");
 
-$loader = new ViewLoader();
+$loader = ViewLoader::instance();
 
 if (isset($_COOKIE[Cookies::$session]))
 	$loader->load("inicital_page");	
