@@ -9,6 +9,6 @@ class ViewLoader {
 			return;
 		}
 
-		include("./pages/errors/NotFoundView.html");
+		include("./views/errors/NotFoundView.html");
 	}
 }
