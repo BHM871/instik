@@ -23,7 +23,7 @@
 
 		<main id="main">
 			<div id="login" class="content">
-				<h1 class="title">Login</h1>
+				<h1 class="title">Conectar-se</h1>
 
 				<hr />
 
@@ -46,7 +46,7 @@
 				</div>
 			</div>
 			<div id="register" class="content">
-				<h1 class="title">Cadastrar</h1>
+				<h1 class="title">Registrar-se</h1>
 
 				<hr />
 
