@@ -6,13 +6,13 @@
 	<title>Instik - Login</title>
 
 	<!-- CSS -->
-	<link rel="stylesheet" type="text/css" href="./css/login.css" />
-	<link rel="stylesheet" type="text/css" href="./css/default.css" />
+	<link rel="stylesheet" href="<?= BASE_URL ?>/pages/css/login.css" />
+	<link rel="stylesheet" href="<?= BASE_URL ?>/pages/css/default.css" />
 </head>
 <body>
 	<aside id="left">
 		<div>
-			<img id="logo" src="../assets/todomundo.jpeg" alt="Logo do Site">
+			<img id="logo" src="<?= BASE_URL ?>/assets/todomundo.jpeg" alt="Logo do Site">
 			<h1>Instik</h1>
 			<p>Para Inspirar-se</p>
 		</div>
@@ -80,5 +80,5 @@
 	</aside>
 </body>
 
-	<script type="text/javascript" src="./js/login.js"></script>
+	<script type="text/javascript" src="<?= BASE_URL ?>/pages/js/login.js"></script>
 </html>
