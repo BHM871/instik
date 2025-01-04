@@ -1,8 +1,8 @@
 <?php
 
 class ViewLoader {
-	static function load($view) : void {
-		$view = './pages/'.$view.'.php';
+	function load($view) : void {
+		$view = './views/'.$view.'.php';
 		
 		if (file_exists($view)) {
 			include($view);
