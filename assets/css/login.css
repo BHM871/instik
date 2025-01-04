@@ -23,7 +23,7 @@ input[type=button] {
 	font-size: 1.5rem;
 	font-weight: bold;
 	text-transform: uppercase;
-	background: linear-gradient(135deg, #2a52d6, #8c0dbe);
+	background: linear-gradient(135deg, var(--color1), var(--color2));
 	color: var(--white);
 	border-radius: 40px;
 	transition: 1s;
