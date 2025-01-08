@@ -6,7 +6,7 @@ class ViewLoader {
 
 	private function __constructor(){}
 
-	public static function instance() {
+	public static function instance(): ViewLoader {
 		if (isset($ths))
 			return $ths;
 
