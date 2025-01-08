@@ -3,7 +3,9 @@ require_once("./configs/init.php");
 
 $loader = ViewLoader::instance();
 
-if (isset($_COOKIE[Cookies::$session]))
-	$loader->load("inicital_page");	
+if (isset($_COOKIE[Cookies::$session])) {
+	$loader->load(Pages::$home);	
+	return;
+}
 
-$loader->load("login");
+$loader->load(Pages::$login);
