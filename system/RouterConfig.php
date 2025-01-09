@@ -90,7 +90,7 @@ class RouterConfig {
 		);
 	}
 
-	public static function submitView($uri = 'errors/BadRequest') {
+	private static function submitView($uri = 'errors/BadRequest') {
 		ViewLoader::instance()->load($uri);
 	}
 
