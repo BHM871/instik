@@ -7,7 +7,7 @@ class ClassLoader {
 		$iterator = new DirectoryIterator($path);
 
 		foreach ($iterator as $info) {
-			if ($info->getFilename() == '.' || $info->getFilename() == '..') {
+			if ($info->getFilename() == '.' || $info->getFilename() == '..' || $info->getFilename() == 'views') {
 				continue;
 			}
 

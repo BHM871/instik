@@ -52,7 +52,7 @@ class RouterConfig {
 	}
 
 	public static function submit($uri) {
-		preg_match_all("/\/\w*/", $uri, $occurences);
+		preg_match_all("/\/\w+/", $uri, $occurences);
 		foreach ($occurences as $occu) {
 			foreach ($occu as $oc) {
 				$oc = '/'.preg_replace('/\//', '\/', $oc).'/';
@@ -62,13 +62,18 @@ class RouterConfig {
 			}
 		} 
 
+		if ($uri == "/") {
+			RouterConfig::submitView("index");
+			return;
+		}
+
 		if (preg_match("/^(errors)\/.*/", $uri)) {
-			RouterConfig::submitError($uri);
+			RouterConfig::submitView($uri);
 			return;
 		}
 
 		if (!isset(RouterConfig::$route[$uri])) {
-			RouterConfig::submitError(ErrorsPaths::notFound);
+			RouterConfig::submitView(ErrorsPaths::notFound);
 			return;
 		}
 
@@ -76,16 +81,16 @@ class RouterConfig {
 		$method = $_SERVER['REQUEST_METHOD'];
 
 		if (!isset($route[$method])) {
-			RouterConfig::submitError(ErrorsPaths::methodNotAllowed);
+			RouterConfig::submitView(ErrorsPaths::methodNotAllowed);
 			return;
 		}
 
 		$route[$method][RouterConfig::METHOD]->invoke(
-			$route[RouterConfig::OBJECT]
+			$route[$method][RouterConfig::OBJECT]
 		);
 	}
 
-	public static function submitError($uri = 'errors/BadRequest') {
+	public static function submitView($uri = 'errors/BadRequest') {
 		ViewLoader::instance()->load($uri);
 	}
 

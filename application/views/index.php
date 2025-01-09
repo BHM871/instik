@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Instik - Login</title>
 
-	<?php $this->load(Templates::$head_links) ?>
+	<?php $this->load(Templates::head_links) ?>
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/login.css" />
@@ -22,7 +22,7 @@
 		<div></div>
 
 		<main id="main">
-			<div id="login" class="content">
+			<form id="login" class="content" action="<?= BASE_URL ?>/auth/authenticate" method="POST">
 				<h1 class="title">Conectar-se</h1>
 
 				<hr />
@@ -39,13 +39,13 @@
 					</div>
 				</div>
 
-				<input id="login-btn" type="button" value="Login" />
+				<input id="login-btn" type="submit" value="Login" />
 
 				<div class="aux">
 					<small>Não possui conta? <b><span id="register-link" class="link">Cadastre-se</span></b></small>
 				</div>
-			</div>
-			<div id="register" class="content">
+			</form>
+			<form id="register" class="content" action="<?= BASE_URL ?>/auth/register" method="POST">
 				<h1 class="title">Registrar-se</h1>
 
 				<hr />
@@ -67,12 +67,12 @@
 					</div>
 				</div>
 
-				<input id="register-btn" type="button" value="Registrar" />
+				<input id="register-btn" type="submit" value="Registrar" />
 
 				<div class="aux">
 					<small>Já possui conta? <b><span id="login-link" class="link">Faça o login</span></b></small>
 				</div>
-			</div>
+			</form>
 		</main>
 
 		<div class="margin-bottom">
@@ -82,4 +82,5 @@
 </body>
 
 	<script type="text/javascript" src="<?= BASE_URL ?>/assets/js/login.js"></script>
+
 </html>

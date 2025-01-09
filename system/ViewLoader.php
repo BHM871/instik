@@ -15,7 +15,7 @@ class ViewLoader {
 	}
 
 	public function load($view, $data = array()) : void {
-		$view = './views/'.$view.'.php';
+		$view = './application/views/'.$view.'.php';
 		
 		if (file_exists($view)) {
 			extract($data);
@@ -23,6 +23,6 @@ class ViewLoader {
 			return;
 		}
 
-		include("./views/errors/NotFound.php");
+		include("./application/views/errors/NotFound.php");
 	}
 }
