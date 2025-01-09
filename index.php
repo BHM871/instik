@@ -1,11 +1,7 @@
 <?php
 require_once("./configs/init.php");
 
-$loader = ViewLoader::instance();
+$uri = $_SERVER['REQUEST_URI'];
+$uri = parse_url($uri, PHP_URL_PATH);
 
-if (isset($_COOKIE[Cookies::$session])) {
-	$loader->load(Pages::$home);	
-	return;
-}
-
-$loader->load(Pages::$login);
+RouterConfig::submit($uri);

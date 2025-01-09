@@ -3,9 +3,7 @@ require_once("./configs/constants.php");
 require_once("./configs/enums.php");
 
 require_once("./system/ViewLoader.php");
-require_once("./system/Router.php");
-
-$classesToLoad = array();
+require_once("./system/RouterConfig.php");
 
 function loadClasses($path) {
 	$iterator = new DirectoryIterator($path);
@@ -45,12 +43,14 @@ function addRoutes() {
 			if(empty($attributes) || $method->isConstructor() || $method->isDestructor())
 				continue;
 
-			$methodUri = $attributes[0]->getArguments()[0];
+			$arguments = $attributes[0]->getArguments();
+
+			$methodUri = $arguments[0];
 			$methodUri = preg_replace("/^[^\/]/", '/', $methodUri);
 			$methodUri = preg_replace("/\/$]/", '', $methodUri);
 
 			$realPath = $classUri.$methodUri;
-			Router::add($realPath, $object, $method);
+			RouterConfig::add($realPath, $arguments[1], $object, $method);
 		}
 	}
 }
