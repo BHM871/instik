@@ -14,14 +14,15 @@ class ViewLoader {
 		return $ths;
 	}
 
-	public function load($view) : void {
+	public function load($view, $data = array()) : void {
 		$view = './views/'.$view.'.php';
 		
 		if (file_exists($view)) {
+			extract($data);
 			include($view);
 			return;
 		}
 
-		include("./views/errors/NotFoundView.html");
+		include("./views/errors/NotFound.php");
 	}
 }
