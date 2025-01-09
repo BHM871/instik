@@ -6,7 +6,7 @@
 	<title>ERROR</title>
 </head>
 <body>
-	<h1>404 - NotFound</h1>
-	<p>Page is not found or moved</p>
+	<h1>405 - MethodNotFound</h1>
+	<p>This HTTP Method is not allowed to this URL</p>
 </body>
 </html>
