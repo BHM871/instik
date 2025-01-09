@@ -15,7 +15,7 @@ class ViewLoader {
 	}
 
 	public function load($view, $data = array()) : void {
-		$view = './application/views/'.$view.'.php';
+		$view = VIEWS_PATH.'/'.$view.'.php';
 		
 		if (file_exists($view)) {
 			extract($data);
