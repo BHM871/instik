@@ -7,6 +7,39 @@ class RouterConfig {
 	private const METHOD = 'method';
 	private const OBJECT = 'object';
 
+	public static function configure() {
+		foreach (get_declared_classes() as $className) {
+			$class = new ReflectionClass($className);
+			$attributes = $class->getAttributes(Routable::class);
+			
+			if (empty($attributes)) {
+				continue;
+			}
+
+			$object = $class->newInstance();
+
+			$classUri = $attributes[0]->getArguments()[0];
+			$classUri = preg_replace("/^[^\/]/", '/', $classUri);
+			$classUri = preg_replace("/\/$/", '', $classUri);
+
+			foreach ($class->getMethods() as $method) {
+				$attributes = $method->getAttributes(Route::class);
+
+				if(empty($attributes) || $method->isConstructor() || $method->isDestructor())
+					continue;
+
+				$arguments = $attributes[0]->getArguments();
+
+				$methodUri = $arguments[0];
+				$methodUri = preg_replace("/^[^\/]/", '/', $methodUri);
+				$methodUri = preg_replace("/\/$]/", '', $methodUri);
+
+				$realPath = $classUri.$methodUri;
+				RouterConfig::add($realPath, $arguments[1], $object, $method);
+			}
+		}
+	}
+
 	public static function add(string $uri, string $type, object $object, ReflectionMethod $method) {
 		if(isset(RouterConfig::$route[$uri]) && isset(RouterConfig::$route[$uri][$type])) {
 			throw new Exception("URL is defined more than one way");
@@ -40,14 +73,14 @@ class RouterConfig {
 		}
 
 		$route = RouterConfig::$route[$uri];
-		$route = $route[$_SERVER['REQUEST_METHOD']];
+		$method = $_SERVER['REQUEST_METHOD'];
 
-		if (!isset($route)) {
+		if (!isset($route[$method])) {
 			RouterConfig::submitError(ErrorsPaths::methodNotAllowed);
 			return;
 		}
 
-		$route[RouterConfig::METHOD]->invoke(
+		$route[$method][RouterConfig::METHOD]->invoke(
 			$route[RouterConfig::OBJECT]
 		);
 	}
