@@ -18,9 +18,7 @@ class RouterConfig {
 
 			$object = $class->newInstance();
 
-			$classUri = $attributes[0]->getArguments()[0];
-			$classUri = preg_replace("/^[^\/]/", '/', $classUri);
-			$classUri = preg_replace("/\/$/", '', $classUri);
+			$classUri = preg_replace("/\/$/", '', preg_replace("/^[^\/]/", '/', $attributes[0]->getArguments()[0]));
 
 			foreach ($class->getMethods() as $method) {
 				$attributes = $method->getAttributes(Route::class);
@@ -30,10 +28,7 @@ class RouterConfig {
 
 				$arguments = $attributes[0]->getArguments();
 
-				$methodUri = $arguments[0];
-				$methodUri = preg_replace("/^[^\/]/", '/', $methodUri);
-				$methodUri = preg_replace("/\/$]/", '', $methodUri);
-
+				$methodUri = preg_replace("/\/$]/", '', preg_replace("/^[^\/]/", '/', $arguments[0]));
 				$realPath = $classUri.$methodUri;
 				RouterConfig::add($realPath, $arguments[1], $object, $method);
 			}
