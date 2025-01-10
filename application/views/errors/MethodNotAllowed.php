@@ -6,7 +6,7 @@
 	<title>ERROR</title>
 </head>
 <body>
-	<h1>405 - MethodNotFound</h1>
+	<h1>405 - MethodNotAllowed</h1>
 	<p>This HTTP Method is not allowed to this URL</p>
 </body>
 </html>

@@ -6,7 +6,7 @@
 	<title>ERROR</title>
 </head>
 <body>
-	<h1>500 - BadRequest</h1>
+	<h1>500 - InternalServerError</h1>
 	<p>Something is wrong</p>
 </body>
 </html>

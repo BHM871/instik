@@ -19,8 +19,6 @@
 		</div>
 	</aside>
 	<aside id="rigth">
-		<div></div>
-
 		<main id="main">
 			<form id="login" class="content" action="<?= BASE_URL ?>/auth/authenticate" method="POST">
 				<h1 class="title">Conectar-se</h1>
@@ -70,14 +68,10 @@
 				<input id="register-btn" type="submit" value="Registrar" />
 
 				<div class="aux">
-					<small>Já possui conta? <b><span id="login-link" class="link">Faça o login</span></b></small>
+					<small>Já possui conta? <b><span id="login-link" class="link">Faça login</span></b></small>
 				</div>
 			</form>
 		</main>
-
-		<div class="margin-bottom">
-			<small>Sem tempo? <b><span id="without-account" class="link">Entre sem conta.</span></b></small>
-		</div>
 	</aside>
 </body>
 

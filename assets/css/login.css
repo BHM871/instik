@@ -1,14 +1,13 @@
 :root {
 	--content-w: 40%;
 	--content-h: 93%;
-	--white: #f4f4f4;
 }
 
 body {
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
-	color: #252525;
+	color: var(--white);
 }
 
 main {
@@ -40,6 +39,7 @@ hr {
 	width: 25rem;
 	height: .5px;
 	margin: 40px;
+	color: var(--white);
 }
 
 #left {
@@ -84,9 +84,9 @@ hr {
 	height: var(--content-h);
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: center;
 	align-items: center;
-	background-color: #f4f4f4;
+	background-color: var(--primary-black);
 	border-radius: 50px;
 	overflow: hidden;
 }
@@ -103,8 +103,7 @@ hr {
 	text-transform: uppercase;
 	margin: 0;
 	font-size: 2.5rem;
-	color: var(--color2);
-	opacity: .6;
+	color: var(--white);
 }
 
 .inputs {
@@ -118,27 +117,26 @@ hr {
 		label {
 			margin: 10px 5px;
 			font-size: 1.15rem;
-			color: var(--color2);
-			opacity: .6;
+			color: var(--white);
 		}
 
 		input {
 			width: 20rem;
 			height: 3.5rem;
 			border-radius: 10px;
-			border: 1px solid #252525;
+			border: 1px solid var(--thirty-black);
 			padding: 0 10px 0 10px;
 		}
 	}
 }
 
 .link {
-	color: #8c0dbe;
+	color: var(--color1);
 }
 
 .link:hover {
 	cursor: pointer;
-	color: #bd14ff;
+	color: var(--color3);
 }
 
 .deslocate {
