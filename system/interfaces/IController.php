@@ -6,8 +6,8 @@ class IController {
 	*/
 	protected $loader;
 
-	public function __constructor() {
-		require_once("./configs/init.php");
+	public function __construct()
+	{
 		$this->loader = ViewLoader::instance();
 	}
 }

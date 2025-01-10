@@ -2,16 +2,14 @@
 
 class ViewLoader {
 
-	private $ths;
-
-	private function __constructor(){}
+	private static $ths;
 
 	public static function instance(): ViewLoader {
-		if (isset($ths))
-			return $ths;
+		if (isset(ViewLoader::$ths))
+			return ViewLoader::$ths;
 
-		$ths = new ViewLoader();
-		return $ths;
+		ViewLoader::$ths = new ViewLoader();
+		return ViewLoader::$ths;
 	}
 
 	public function load($view, $data = array()) : void {
