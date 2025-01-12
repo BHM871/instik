@@ -38,11 +38,13 @@
 ## ./application/*
 
  - **Must contain all views, logic, business rules, configs... from YOUR application**
+ - **You need to create constructors in your class for Dependence Injector works**
 
 <br/>
 
  #### ./application/views/*
 
  - **Your applications pages, templates or views, must stay here**
+ - **To load templates in your views files, use this code `<?php $this->load("view_path") ?>`**
 
  > You can change default views path, in `./configs/constants.php` and update `VIEWS_PATH` constant
