@@ -7,7 +7,7 @@ class ClassLoader {
 		$iterator = new DirectoryIterator($path);
 
 		foreach ($iterator as $info) {
-			if ($info->getFilename() == '.' || $info->getFilename() == '..' || $info->getFilename() == 'views') {
+			if ($info->getFilename() == '.' || $info->getFilename() == '..' || preg_match("/".str_replace("/", "\/", VIEWS_PATH)."/", $info->getPathname())) {
 				continue;
 			}
 
