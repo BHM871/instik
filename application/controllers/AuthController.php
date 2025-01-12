@@ -1,8 +1,8 @@
 <?php
 
-include("./system/interfaces/IController.php");
-include("./system/annotations/Routable.php");
-include("./system/annotations/Route.php");
+require_once("./system/interfaces/IController.php");
+require_once("./system/annotations/Routable.php");
+require_once("./system/annotations/Route.php");
 
 #[Routable("/auth")]
 class AuthController extends IController {

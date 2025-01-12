@@ -16,7 +16,7 @@ class RouterConfig {
 				continue;
 			}
 
-			$object = $class->newInstance();
+			$object = Instancer::get($class);
 
 			$classUri = preg_replace("/\/$/", '', preg_replace("/^[^\/]/", '/', $attributes[0]->getArguments()[0]));
 

@@ -1,6 +1,6 @@
 <?php
 
-class IController {
+abstract class IController {
 	/*
 		system/ViewLoader
 	*/
