@@ -6,10 +6,7 @@
 	<title>ERROR</title>
 </head>
 <body>
-	<h1>400 - BadRequest</h1>
-	<p>The service that you try to use, generate a error</p>
-	<?php if (isset($error) && $error != null) : ?>
-		<p><?= $error ?></p>
-	<?php endif; ?>
+	<h1>500 - InternalServerError</h1>
+	<p>Something is wrong</p>
 </body>
 </html>

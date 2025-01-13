@@ -21,6 +21,6 @@ class ViewLoader {
 			return;
 		}
 
-		include("./application/views/errors/NotFound.php");
+		include(VIEWS_PATH."/errors/".ErrorsPaths::notFound."php");
 	}
 }

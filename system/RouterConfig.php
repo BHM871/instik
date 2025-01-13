@@ -80,13 +80,17 @@ class RouterConfig {
 			return;
 		}
 
-		$route[$method][RouterConfig::METHOD]->invoke(
-			$route[$method][RouterConfig::OBJECT]
-		);
+		try {
+			$route[$method][RouterConfig::METHOD]->invoke(
+				$route[$method][RouterConfig::OBJECT]
+			);
+		} catch (\Throwable $th) {
+			RouterConfig::submitView(ErrorsPaths::badRequest, $th->getMessage());
+		}
 	}
 
-	private static function submitView($uri = 'errors/BadRequest') {
-		ViewLoader::instance()->load($uri);
+	private static function submitView($uri = ErrorsPaths::internalServerError, $error = NULL) {
+		ViewLoader::instance()->load($uri, array('error' => $error));
 	}
 
 }
