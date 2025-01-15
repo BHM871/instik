@@ -6,6 +6,7 @@ require_once("./system/ClassLoader.php");
 require_once("./system/ViewLoader.php");
 require_once("./system/Instancer.php");
 require_once("./system/RouterConfig.php");
+require_once("./system/Database.php");
 
 ClassLoader::load('./application');
 RouterConfig::configure();
