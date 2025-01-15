@@ -5,9 +5,17 @@ require_once("./system/Logger.php");
 class Database {
 
 	private Logger $logger;
+	private static Database $th;
 
-	public function __construct() {
+	private function __construct() {
 		$this->logger = new Logger($this);
+	}
+
+	public static function instance() : Database {
+		if (Database::$th == null)
+			Database::$th = new Database();
+
+		return Database::$th;	
 	}
 
 	private function getConnection() : PDO {

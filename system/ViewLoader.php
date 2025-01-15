@@ -4,6 +4,8 @@ class ViewLoader {
 
 	private static $ths;
 
+	private function __construct() {}
+
 	public static function instance(): ViewLoader {
 		if (isset(ViewLoader::$ths))
 			return ViewLoader::$ths;
