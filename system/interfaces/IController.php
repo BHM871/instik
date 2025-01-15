@@ -10,4 +10,10 @@ abstract class IController {
 	{
 		$this->loader = ViewLoader::instance();
 	}
+
+	protected function redirect($path) {
+		$path = preg_replace("/^(\/)/", "", $path);
+		header("Location: " . BASE_URL . "/$path");
+	}
+
 }
