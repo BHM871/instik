@@ -54,3 +54,4 @@
 ## ./application/init.php
 
  - **If you want perform some configuration os initial setup, uses `./application/init.php`**
+ - **If you want perform some SQL script, uses `Database::instance()->getDefaultConnection()`. This generate a connection in `mysql` database, with this, you can create another database before try connect with `DB_NAME`**
