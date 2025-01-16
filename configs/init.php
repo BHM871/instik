@@ -10,3 +10,5 @@ require_once("./system/Database.php");
 
 ClassLoader::load('./application');
 RouterConfig::configure();
+
+require_once("./application/init.php");

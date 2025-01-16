@@ -48,3 +48,9 @@
  - **To load templates in your views files, use this code `<?php $this->load("view_path") ?>`**
 
  > You can change default views path, in `./configs/constants.php` and update `VIEWS_PATH` constant
+
+<br/>
+
+## ./application/init.php
+
+ - **If you want perform some configuration os initial setup, uses `./application/init.php`**
