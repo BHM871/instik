@@ -16,6 +16,10 @@ class ClassLoader {
 				continue;
 			}
 
+			if ($info->getExtension() != 'php') {
+				continue;
+			}
+
 			$classes[] = $info->getPathname();
 			include($info->getPathname());
 		}
