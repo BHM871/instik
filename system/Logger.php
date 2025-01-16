@@ -10,10 +10,12 @@ class Logger {
 	}
 
 	public function log($message) {
-	    $message = date("H:i:s") . $this->class->getName() . " - $message - ".PHP_EOL;
-	    print($message);
-	    flush();
-	    ob_flush();
+		if (!file_exists(LOG_PATH)) {
+			file_put_contents(LOG_PATH, "");
+		}
+
+	    $message = date("H:i:s") . " - " . $this->class->getFileName() . " - $message - ";
+		file_put_contents(LOG_PATH, file_get_contents(LOG_PATH) . PHP_EOL . $message);
 	}
 
 }

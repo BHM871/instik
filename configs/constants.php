@@ -3,6 +3,7 @@
 define("BASE_URL", "http://localhost:40080/instik");
 
 define("VIEWS_PATH", "./application/views");
+define("LOG_PATH", "./system/log");
 
 define("DB_HOST", "localhost");
 define("DB_PORT", "3306");

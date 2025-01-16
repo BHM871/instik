@@ -12,7 +12,7 @@ class Database {
 	}
 
 	public static function instance() : Database {
-		if (Database::$th == null)
+		if (!isset(Database::$th))
 			Database::$th = new Database();
 
 		return Database::$th;	
@@ -196,7 +196,6 @@ class Database {
 			}
 
 			$query = $insert.') '.$values.')';
-			echo $query;
 			$con->query($query);
 
 			if ($con->inTransaction())
