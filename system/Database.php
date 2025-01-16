@@ -23,7 +23,7 @@ class Database {
 	}
 
 	public function getDefaultConnection() : PDO {
-		return new PDO('mysql:host='.DB_HOST.';port='.DB_PORT.';dbname=mysql');
+		return new PDO('mysql:host='.DB_HOST.';port='.DB_PORT.';dbname=mysql', DB_USER, DB_PASSWORD);
 	}
 
 	/**
@@ -136,7 +136,7 @@ class Database {
 			$col = " * ";
 		} else {
 			for ($i = 0; $i < sizeof($columns); $i++) {
-				$col .= $columns[$i] . ($i == sizeof($columns) - 1) ? " " : ", ";
+				$col .= ($i > 0 ? ", " : "") . $columns[$i];
 			}
 		}
 
@@ -144,7 +144,21 @@ class Database {
 		if ($where != null && sizeof($where) != 0) {
 			$i = 0;
 			foreach ($where as $column => $value) {
-				$whe .= ($i > 0 ? "AND " : "") . $column . "=" . $value;
+				if (is_array($value)) {
+					$whe .= ($i > 0 ? "AND " : "") . "$column IN";
+					
+					$j = 0;
+					$whe .= "(";
+					foreach ($value as $in_value) {
+						$whe .= ($j > 0 ? ", " : "") . "'$in_value'";
+						$j++;
+					}
+					$whe .= ")";
+					
+					continue;
+				}
+
+				$whe .= ($i > 0 ? "AND " : "") . "$column = $value";
 				$i++;
 			}
 		}
@@ -152,7 +166,9 @@ class Database {
 		$con = $this->getConnection();
 
 		try {
-			$rs = $con->query("SELECT $col FROM $table $whe");
+			$query = "SELECT $col FROM $table WHERE $whe";
+			echo $query;
+			$rs = $con->query($query);
 
 			$out = [];
 			while ($row = $rs->fetch(PDO::FETCH_NAMED)) {
