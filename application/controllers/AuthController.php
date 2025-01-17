@@ -32,7 +32,7 @@ class AuthController extends IController {
 
 		$userData = $this->service->getBasicUser($authDto->getEmail());
 
-		if ($userData == null) {
+		if ($userData == null || sizeof($userData) == 0) {
 			$this->loader->load(Pages::login, ["message" => "Usuário inválido"]);
 			return;
 		}

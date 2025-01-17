@@ -19,7 +19,7 @@ class AuthService {
 			return false;
 		}
 
-		if ($password != HashGenerator::generate($dto->getPassword())) {
+		if ($password != HashGenerator::encrypt($dto->getPassword())) {
 			return false;
 		}
 
@@ -33,7 +33,7 @@ class AuthService {
 			return null;
 		}
 
-		return new UserDto($user['id'], $user['email'], $user['username']);
+		return $user;
 	}
 
 }
