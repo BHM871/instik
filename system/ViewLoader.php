@@ -23,6 +23,6 @@ class ViewLoader {
 			return;
 		}
 
-		include(VIEWS_PATH."/errors/".ErrorsPaths::notFound."php");
+		include(VIEWS_PATH."/".ErrorsPaths::notFound.".php");
 	}
 }

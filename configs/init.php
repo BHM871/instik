@@ -9,6 +9,7 @@ require_once("./system/RouterConfig.php");
 require_once("./system/Database.php");
 
 ClassLoader::load('./application');
+ClassLoader::load_env();
 RouterConfig::configure();
 
 require_once("./application/init.php");

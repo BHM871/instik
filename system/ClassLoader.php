@@ -27,4 +27,27 @@ class ClassLoader {
 		return $classes;
 	}
 
+	public static function load_env() {
+		if (!file_exists(ENV_PATH)) {
+			return;
+		}
+
+		$map = [];
+		try {
+			$env = file_get_contents(ENV_PATH);
+			$env = preg_split("/\\n/", $env);
+			$map = [];
+			foreach ($env as $values){
+				$t = preg_split("/\=/", $values);
+				$map[$t[0]] = $t[1];
+			}
+		} catch (\Throwable $t) {
+			(new Logger(new ClassLoader))->log("Cannot load env file");
+
+			$map = [];
+		}
+		
+		define("env", $map);
+	}
+
 }

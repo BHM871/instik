@@ -85,6 +85,8 @@ class RouterConfig {
 				$route[$method][RouterConfig::OBJECT]
 			);
 		} catch (\Throwable $th) {
+			(new Logger(new RouterConfig()))->log($th	);
+
 			RouterConfig::submitView(ErrorsPaths::badRequest, $th->getMessage());
 		}
 	}

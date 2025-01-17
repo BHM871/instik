@@ -59,7 +59,7 @@ class Database {
 
 			return $out;
 		} catch (\Throwable $th) {
-			$this->logger->log($th->getMessage());
+			$this->logger->log($th);
 
 			if ($con->inTransaction())
 				$con->rollBack();
@@ -103,7 +103,7 @@ class Database {
 
 			return true;
 		} catch (\Throwable $th) {
-			$this->logger->log($th->getMessage());
+			$this->logger->log($th);
 
 			if ($con->inTransaction())
 				$con->rollBack();
@@ -158,7 +158,7 @@ class Database {
 					continue;
 				}
 
-				$whe .= ($i > 0 ? "AND " : "") . "$column = $value";
+				$whe .= ($i > 0 ? "AND " : "") . "$column = '$value'";
 				$i++;
 			}
 		}
@@ -167,7 +167,6 @@ class Database {
 
 		try {
 			$query = "SELECT $col FROM $table WHERE $whe";
-			echo $query;
 			$rs = $con->query($query);
 
 			$out = [];
@@ -177,7 +176,7 @@ class Database {
 
 			return $out;
 		} catch (\Throwable $th) {
-			$this->logger->log($th->getMessage());
+			$this->logger->log($th);
 
 			return null;
 		}
@@ -223,7 +222,7 @@ class Database {
 
 			return true;
 		} catch (\Throwable $th) {
-			$this->logger->log($th->getMessage());
+			$this->logger->log($th);
 
 			if ($con->inTransaction())
 				$con->rollBack();
