@@ -26,6 +26,64 @@ class Database {
 		return new PDO('mysql:host='.DB_HOST.';port='.DB_PORT.';dbname=mysql', DB_USER, DB_PASSWORD);
 	}
 
+	public static function setup() {
+		try {
+			$db = Database::instance();
+			$con = $db->getDefaultConnection();
+
+			$con->query(
+				"CREATE TABLE IF NOT EXISTS mysql.operations (" .
+					"id INTEGER PRIMARY KEY AUTO_INCREMENT," .
+					"table_name VARCHAR(100) NOT NULL, " .
+					"operation ENUM('insert', 'update', 'delete') NOT NULL, " .
+					"moment TIMESTAMP DEFAULT CURRENT_TIMESTAMP(), " .
+					"identificator VARCHAR(50) DEFAULT NULL" .
+				")"
+			);
+
+			$result = $con
+				->query("SELECT TABLE_NAME AS 'table' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '".DB_NAME."'")
+				->fetchAll(PDO::FETCH_NAMED);
+
+			if (sizeof($result) > 0) {
+				$con = $db->getConnection();
+			}
+
+			foreach ($result as $row) {	
+				$con->query( 
+					"CREATE TRIGGER IF NOT EXISTS insert_".$row['table']."_trigger AFTER INSERT " . PHP_EOL .
+					"ON `".$row['table']."` " . PHP_EOL .
+					"FOR EACH ROW " . PHP_EOL .
+					"BEGIN " . PHP_EOL .
+						"INSERT INTO mysql.operations(table_name, operation, identificator) VALUES ('".$row['table']."', 'insert', NEW.id); " . PHP_EOL .
+					"END "
+				);
+
+				$con->query( 
+					"CREATE TRIGGER IF NOT EXISTS update_".$row['table']."_trigger AFTER UPDATE " . PHP_EOL .
+					"ON `".$row['table']."` " . PHP_EOL .
+					"FOR EACH ROW " . PHP_EOL .
+					"BEGIN " . PHP_EOL .
+						"INSERT INTO mysql.operations(table_name, operation, identificator) VALUES ('".$row['table']."', 'update', NEW.id); " . PHP_EOL .
+					"END "
+				);
+
+				$con->query( 
+					"CREATE TRIGGER IF NOT EXISTS delete_".$row['table']."_trigger AFTER DELETE " . PHP_EOL .
+					"ON `".$row['table']."` " . PHP_EOL .
+					"FOR EACH ROW " . PHP_EOL .
+					"BEGIN " . PHP_EOL .
+						"INSERT INTO mysql.operations(table_name, operation) VALUES ('".$row['table']."', 'delete'); " . PHP_EOL .
+					"END "
+				);
+			}
+		} catch (Throwable $th) {
+			$logger = (new Logger(Database::instance()));
+			$logger->log("Cannot setup database");
+			$logger->log($th);
+		}
+	}
+
 	/**
 	 * 	Create a conection and execute a query.
 	 * 
@@ -33,7 +91,7 @@ class Database {
 	 * 	@param array $data [optional] the parameters from query is used like, "SELECT * FROM <i>table_name</i> WHERE id = ?, name = ?;"<br>
 	 * 	<i>i</i> param must be in $data[0], <i>name</i> param must be in $data[1].
 	 */
-	public function query(string $query, $data = array()) : array|null {
+	public function query(string $query, $data = array()) : ?array {
 		if ($query == null) {
 			return null;
 		}
@@ -48,11 +106,8 @@ class Database {
 				$stmt->bindParam($i+1, $data[$i]);
 			}
 
-			$out = [];
 			$stmt->execute();
-			while ($row = $stmt->fetch(PDO::FETCH_NAMED)) {
-				$out[] = $row;
-			}
+			$out = $stmt->fetchAll(PDO::FETCH_NAMED);
 
 			if ($con->inTransaction())
 				$con->commit();
@@ -89,10 +144,20 @@ class Database {
 			for ($i = 0; $i < sizeof($queries); $i++) {
 				$query = $queries[$i];
 
+				if ($query == "") continue;
+
 				$stmt = $con->prepare($query);
 
 				for ($j = 0; isset($data[$i]) && $j < sizeof($data[$i]); $j++) {
-					$stmt->bindParam($i+1, $data[$i][$j]);
+					$type = (is_int($data[$i][$j])
+						? PDO::PARAM_INT
+						: (is_bool($data[$i][$j])
+							? PDO::PARAM_BOOL
+							: PDO::PARAM_STR
+						)
+					);
+
+					$stmt->bindParam($j+1, $data[$i][$j]);
 				}
 
 				$stmt->execute();
@@ -126,17 +191,19 @@ class Database {
 	 * 	]
 	 * 	</pre>
 	 */
-	public function get(string $table, $columns = array(), $where = array()) : array|null {
+	public function get(string $table, $columns = array(), $where = array()) : ?array {
 		if ($table == null) {
 			return null;
 		}
 
+		$data = [];
 		$col = "";
 		if ($columns == null || sizeof($columns) == 0) {
 			$col = " * ";
 		} else {
+			$data += $columns;
 			for ($i = 0; $i < sizeof($columns); $i++) {
-				$col .= ($i > 0 ? ", " : "") . $columns[$i];
+				$col .= ($i > 0 ? ", " : "") . "?";
 			}
 		}
 
@@ -145,41 +212,27 @@ class Database {
 			$i = 0;
 			foreach ($where as $column => $value) {
 				if (is_array($value)) {
+					$data += $value;
+
 					$whe .= ($i > 0 ? "AND " : "") . "$column IN";
 					
-					$j = 0;
 					$whe .= "(";
-					foreach ($value as $in_value) {
-						$whe .= ($j > 0 ? ", " : "") . "'$in_value'";
-						$j++;
+					for ($j = 0; $j < sizeof($value); $j++) {
+						$whe .= ($j > 0 ? ", " : "") . "?";
 					}
 					$whe .= ")";
 					
 					continue;
 				}
 
-				$whe .= ($i > 0 ? "AND " : "") . "$column = '$value'";
+				$data[] = $value;
+				$whe .= ($i > 0 ? "AND " : "") . "$column = ?";
 				$i++;
 			}
 		}
 
-		$con = $this->getConnection();
-
-		try {
-			$query = "SELECT $col FROM $table WHERE $whe";
-			$rs = $con->query($query);
-
-			$out = [];
-			while ($row = $rs->fetch(PDO::FETCH_NAMED)) {
-				$out[] = $row;
-			}
-
-			return $out;
-		} catch (\Throwable $th) {
-			$this->logger->log($th);
-
-			return null;
-		}
+		$query = "SELECT $col FROM $table WHERE $whe";
+		return $this->query($query, $data);
 	}
 
 	/**
@@ -194,9 +247,9 @@ class Database {
 	 * 	]
 	 * 	</pre>
 	 */
-	public function insert(string $table, array $data) : bool {
+	public function insert(string $table, array $data) : ?array {
 		if ($table == null || $data == null || sizeof($data) == 0) {
-			return false;
+			return null;
 		}
 
 		$con = $this->getConnection();
@@ -208,26 +261,62 @@ class Database {
 			$values = "VALUES(";
 
 			$i = 0;
-			foreach ($data as $key => $value) {
-				$insert .= $i > 0 ? ", $key" : $key;
-				$values .= $i > 0 ? ", '$value'": "'$value'";
+			$cols = [];
+			$vals = [];
+			foreach ($data as $column => $value) {
+				$insert .= ($i > 0 ? ", " : "") . $column;
+				$values .= ($i > 0 ? ", " : "") . ":$column";
+				
+				$cols[$i] = $column;
+				$vals[$i] = $value;
+				
 				$i++;
 			}
 
 			$query = $insert.') '.$values.')';
-			$con->query($query);
+			$stmt = $con->prepare($query);
+
+			for ($i = 0; $i < sizeof($data); $i++) {
+				$type = (is_int($vals[$i])
+					? PDO::PARAM_INT
+					: (is_bool($vals[$i])
+						? PDO::PARAM_BOOL
+						: PDO::PARAM_STR
+					)
+				);
+
+				$stmt->bindParam($cols[$i], $vals[$i], $type);
+			}
+
+			$stmt->execute();
+			
+			$result = $con->query(
+				"SELECT * " .
+				"FROM $table " .
+				"WHERE id = ".$this->getLastInsertId($con, $table)
+			);
 
 			if ($con->inTransaction())
 				$con->commit();
 
-			return true;
+			return $result->fetch(PDO::FETCH_NAMED);
 		} catch (\Throwable $th) {
 			$this->logger->log($th);
 
 			if ($con->inTransaction())
 				$con->rollBack();
 
-			return false;
+			return null;
 		}
+	}
+
+	private function getLastInsertId(PDO $con, ?string $table = null) : string {
+		$result = $con->query(
+			"SELECT identificator " .
+			"FROM mysql.operations " .
+			"WHERE ".($table != null ? "table_name = '$table' AND " : "")."operation = 'insert' ORDER BY moment DESC LIMIT 1"
+		);
+
+		return $result->fetch(PDO::FETCH_NAMED)['identificator'];
 	}
 }

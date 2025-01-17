@@ -8,8 +8,9 @@ require_once("./system/Instancer.php");
 require_once("./system/RouterConfig.php");
 require_once("./system/Database.php");
 
+require_once("./application/init.php");
+
 ClassLoader::load('./application');
 ClassLoader::load_env();
 RouterConfig::configure();
-
-require_once("./application/init.php");
+Database::setup();
