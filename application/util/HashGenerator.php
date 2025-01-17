@@ -13,9 +13,7 @@ class HashGenerator {
 			throw new Exception("Cannot create hash");
 		}
 
-		$ivlen = openssl_cipher_iv_length(HashGenerator::$cipher);
-		$iv = openssl_random_pseudo_bytes($ivlen);
-		return openssl_encrypt($value, HashGenerator::$cipher, env['HASH_SEED'], 0, $iv);
+		return openssl_encrypt($value, HashGenerator::$cipher, env['HASH_SEED'], 0, HashGenerator::getIv());
 	}
 
 	public static function decrypt($hash) : string {
@@ -27,9 +25,11 @@ class HashGenerator {
 			throw new Exception("Cannot create hash");
 		}
 
-		$ivlen = openssl_cipher_iv_length(HashGenerator::$cipher);
-		$iv = openssl_random_pseudo_bytes($ivlen);
-		return openssl_decrypt($hash, HashGenerator::$cipher, env['HASH_SEED'], 0, $iv);
+		return openssl_decrypt($hash, HashGenerator::$cipher, env['HASH_SEED'], 0, HashGenerator::getIv());
+	}
+
+	private static function getIv() : string {
+		return "WkE}b6Jk-T&6Y%5?"; 	
 	}
 
 }
