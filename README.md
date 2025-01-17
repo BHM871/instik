@@ -16,6 +16,22 @@
 
  - **Contains all configure and initialize scripts**
 
+
+<br/>
+
+ #### ./configs/contants.php
+
+ - **Contais all the system contants, some constants can be changed**
+ 
+ > - `VIEW_PATH` - To default views path
+ > - `ENV_PATH` - To load environment variables
+ > - `LOG_PATH` - To save logs in a file
+ > - `DB_HOST` - Must be updated
+ > - `DB_PORT` - Must be updated if you use a diferent port
+ > - `DB_USER` - Must be updated
+ > - `DB_PASSWORD` - Must be updated
+ > - `DB_NAME` - Must be updated
+
 <br/>
 
 ## ./system/*
@@ -53,5 +69,5 @@
 
 ## ./application/init.php
 
- - **If you want perform some configuration os initial setup, uses `./application/init.php`**
- - **If you want perform some SQL script, uses `Database::instance()->getDefaultConnection()`. This generate a connection in `mysql` database, with this, you can create another database before try connect with `DB_NAME`**
+ - **If you want perform some configuration os initial setup, use `./application/init.php`**
+ - **If you want perform some SQL script, use `Database::instance()->getDefaultConnection()`, this create a connection in `mysql` database with PDO class, so see _[PDO documentation](https://www.php.net/manual/pt_BR/class.pdo.php)_. With this, you can create another database before try connect with `DB_NAME`**
