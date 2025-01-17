@@ -16,7 +16,7 @@ body {
 }
 
 .hide {
-	opacity: 0;
+	opacity: 0 !important;
 }
 
 .collapse {
@@ -25,4 +25,16 @@ body {
 
 .margin-bottom {
 	margin-bottom: 15px;
+}
+
+.message {
+	background-color: var(--thirty-black);
+	opacity: .85;
+	color: orange;
+	font-weight: bold;
+	padding: 5px 25px;
+	border-radius: 15px;
+	position: absolute;
+	top: 50px;
+	transition: 200ms;
 }

@@ -73,8 +73,14 @@
 			</form>
 		</main>
 	</aside>
+	<?php if (isset($message)) : ?>
+		<div id="message" class="message">
+			<p><?= $message ?></p>
+		</div>
+	<?php endif ?>
 </body>
 
-	<script type="text/javascript" src="<?= BASE_URL ?>/assets/js/login.js"></script>
+<script type="text/javascript" src="<?= BASE_URL ?>/assets/js/default.js"></script>
+<script type="text/javascript" src="<?= BASE_URL ?>/assets/js/login.js"></script>
 
 </html>
