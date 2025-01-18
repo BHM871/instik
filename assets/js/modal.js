@@ -4,13 +4,17 @@ const btnsLoad = document.querySelectorAll("a[data-toggle=modal]");
 btnsLoad.forEach((ele) => {
 	const modalId = ele.getAttribute("href");
 
-	ele.addEventListener("click", () => {
+	ele.addEventListener("click", (ev) => {
+		ev.preventDefault();
+
 		const modal = document.querySelector(modalId);
 		modal.classList.add("modal-in");
 
 		const closeModal = document.querySelector(modalId + " [data-dismiss=modal]");
 
-		closeModal.addEventListener("click", (clo) => {
+		closeModal.addEventListener("click", (ev) => {
+			ev.preventDefault();
+
 			modal.classList.remove("modal-in")
 		});
 	});
@@ -18,6 +22,8 @@ btnsLoad.forEach((ele) => {
 
 modals.forEach((ele) => {
 	ele.addEventListener("click", (ev) => {
+		ev.preventDefault();
+
 		if (ev.target == ele)
 			ele.classList.remove("modal-in");
 	});
