@@ -1,0 +1,51 @@
+:root {
+	--color1: #2a52d6;
+	--color2: #8c0dbe;
+	--color3: #db14ff; 
+	--primary-black: #454545; 
+	--secondary-black: #686868; 
+	--thirty-black: #252525;
+	--white: #f4f4f4;
+}
+
+.modal {
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(25, 25, 25, .7);
+	position: absolute;
+	display: none;
+}
+
+.modal-in {
+	display: flex !important;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal-content {
+	min-width: 30vw;
+	padding: 30px 20px;
+	background-color: var(--primary-black);
+	border-radius: 30px;
+}
+
+.modal-header {
+	border-bottom: var(--thirty-black) solid 1px;
+	padding: 0 8px 15px 8px;
+	display: flex;
+	align-items: center;
+}
+
+.modal-close {
+	background: none;
+	border: none;
+	font-size: 1.3rem;
+	font-weight: bold;
+	color: var(--white);
+	transition: 300ms;
+}
+
+.modal-close:hover {
+	cursor: pointer;
+	transform: scale(1.2);
+}

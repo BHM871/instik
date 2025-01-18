@@ -9,6 +9,8 @@
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/login.css" />
+	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/modal.css" />
+
 </head>
 <body>
 	<aside id="left">
@@ -34,6 +36,10 @@
 					<div class="input">
 						<label for="password">Senha</label>
 						<input id="password" name="password" type="password" placeholder="Senha" />
+						
+						<div class="aux">
+							<small><b><a href="#forgot-password-modal" data-toggle="modal" class="link">Esqueci a senha</a></b></small>
+						</div>
 					</div>
 				</div>
 
@@ -50,8 +56,8 @@
 
 				<div class="inputs">
 					<div class="input">
-						<label for="email">Email/Usuário</label>
-						<input id="email" name="email" type="email" placeholder="Email ou nome de usuário" />
+						<label for="email">Email</label>
+						<input id="email" name="email" type="email" placeholder="Email" />
 					</div>
 
 					<div class="input">
@@ -73,6 +79,27 @@
 			</form>
 		</main>
 	</aside>
+
+	<div id="forgot-password-modal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="modal-close" data-dismiss="modal">X</button>
+			</div>
+			<div class="model-body">
+				<form id="register" class="content" action="<?= BASE_URL ?>/auth/change-password" method="POST" target="_blank">
+					<div class="inputs">
+						<div class="input">
+							<label for="email">Email</label>
+							<input id="email" name="email" type="email" placeholder="Email para trocar senha" />
+						</div>
+					</div>
+
+					<input id="register-btn" type="submit" value="Enviar" data-dismiss="modal" />
+				</form>
+			</div>
+		</div>
+	</div>
+	
 	<?php if (isset($message)) : ?>
 		<div id="message" class="message">
 			<p><?= $message ?></p>
@@ -82,5 +109,6 @@
 
 <script type="text/javascript" src="<?= BASE_URL ?>/assets/js/default.js"></script>
 <script type="text/javascript" src="<?= BASE_URL ?>/assets/js/login.js"></script>
+<script type="text/javascript" src="<?= BASE_URL ?>/assets/js/modal.js"></script>
 
 </html>
