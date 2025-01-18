@@ -33,11 +33,11 @@ class AuthModel extends IModel {
 			return null;
 		}
 
-		if ($result['password'] == null || $result['password'] == "") {
+		if ($result[0]['password'] == null || $result[0]['password'] == "") {
 			return null;
 		}
 
-		return $result['password'];
+		return $result[0]['password'];
 	}	
 
 	public function getBasicUser($email) : ?array {
