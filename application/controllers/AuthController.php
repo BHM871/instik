@@ -37,19 +37,33 @@ class AuthController extends IController {
 			return;
 		}
 
-
-		$this->loader->load(Pages::home, get_object_vars($userData));
+		$this->loader->load(Pages::home, $userData);
 	}
 
 	#[Route("/register", Route::POST)]
 	public function register_init() {
-		$email = $_POST["email"];
-		$password = $_POST["password"];
-		$confirmation = $_POST["password-confirm"];
+		$registerDto = new AuthRegisterDto($_POST["email"], $_POST["password"], $_POST["password-confirm"]);
 
-		echo "$email ";
-		echo "$password ";
-		echo "$confirmation ";
+		if ($registerDto->getEmail() == "" || $registerDto->getPassword() == "" || $registerDto->getConfirm() == "") {
+			$this->loader->load(Pages::login, ["message" => "Preencha os campos corretamente"]);
+			return;
+		}
+
+		$isValid = $this->service->validRegister($registerDto);
+
+		if (!$isValid) {
+			$this->loader->load(Pages::login, ["message" => "Email ou senhas inválidas"]);
+			return;
+		}
+
+		$user = $this->service->registerUser($registerDto);
+		
+		if ($user == null || !isset($user['id'])) {
+			$this->loader->load(Pages::login, ["message" => "Houve algum erro ao registrar usuário"]);
+			return;
+		}
+
+		$this->loader->load(Pages::register_confirm, $user);
 	}
 
 }
