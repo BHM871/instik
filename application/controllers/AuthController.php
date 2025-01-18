@@ -7,17 +7,15 @@ require_once("./system/annotations/Route.php");
 #[Routable("/auth")]
 class AuthController extends IController {
 
-	private SessionManager $session;
 	private AuthService $service;
 
 	public function __construct(SessionManager $session, AuthService $service) {
-		parent::__construct();
-		$this->session = $session;
+		parent::__construct($session);
 		$this->service = $service;
 	}
 
 	#[Route("/authenticate", Route::POST)]
-	public function login() {
+	public function authenticate() {
 		$authDto = new AuthLoginDto($_POST['email'], $_POST['password']);
 		
 		if ($authDto->getEmail() == "" || $authDto->getPassword() == "") {

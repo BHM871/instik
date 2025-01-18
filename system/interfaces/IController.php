@@ -4,11 +4,12 @@ abstract class IController {
 	/*
 		system/ViewLoader
 	*/
-	protected $loader;
+	protected ViewLoader $loader;
+	protected SessionManager $session;
 
-	public function __construct()
-	{
+	public function __construct(SessionManager $session) {
 		$this->loader = ViewLoader::instance();
+		$this->session = $session;
 	}
 
 	protected function redirect($path) {
