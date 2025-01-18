@@ -1,6 +1,7 @@
 <?php
 
 define("BASE_URL", "http://localhost:40080/instik");
+define("SESSION_TIME", "90"); // In minutes
 
 define("VIEWS_PATH", "./application/views");
 define("ENV_PATH", "./application/env");
