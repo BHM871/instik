@@ -196,17 +196,16 @@ class Database {
 			return null;
 		}
 
-		$data = [];
 		$col = "";
 		if ($columns == null || sizeof($columns) == 0) {
 			$col = " * ";
 		} else {
-			$data += $columns;
 			for ($i = 0; $i < sizeof($columns); $i++) {
-				$col .= ($i > 0 ? ", " : "") . "?";
+				$col .= ($i > 0 ? ", " : "") . $columns[$i];
 			}
 		}
 
+		$data = [];
 		$whe = "";
 		if ($where != null && sizeof($where) != 0) {
 			$i = 0;
@@ -226,7 +225,7 @@ class Database {
 				}
 
 				$data[] = $value;
-				$whe .= ($i > 0 ? "AND " : "") . "$column = ?";
+				$whe .= ($i > 0 ? " AND " : "") . "$column = ?";
 				$i++;
 			}
 		}
