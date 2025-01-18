@@ -71,3 +71,9 @@
 
  - **If you want perform some configuration os initial setup, use `./application/init.php`**
  - **If you want perform some SQL script, use `Database::instance()->getDefaultConnection()`, this create a connection in `mysql` database with PDO class, so see _[PDO documentation](https://www.php.net/manual/pt_BR/class.pdo.php)_. With this, you can create another database before try connect with `DB_NAME`**
+
+ <br/>
+
+ ## TODO
+
+  - Implements Requests Attributes
