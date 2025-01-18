@@ -7,10 +7,12 @@ require_once("./system/annotations/Route.php");
 #[Routable("/auth")]
 class AuthController extends IController {
 
+	private SessionManager $session;
 	private AuthService $service;
 
-	public function __construct(AuthService $service) {
+	public function __construct(SessionManager $session, AuthService $service) {
 		parent::__construct();
+		$this->session = $session;
 		$this->service = $service;
 	}
 
@@ -37,6 +39,7 @@ class AuthController extends IController {
 			return;
 		}
 
+		$this->session->putUser($userData);
 		$this->loader->load(Pages::home, $userData);
 	}
 

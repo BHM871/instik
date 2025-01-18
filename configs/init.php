@@ -7,6 +7,7 @@ require_once("./system/ViewLoader.php");
 require_once("./system/Instancer.php");
 require_once("./system/RouterConfig.php");
 require_once("./system/Database.php");
+require_once("./system/security/SessionManager.php");
 
 require_once("./application/init.php");
 

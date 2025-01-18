@@ -2,6 +2,9 @@
 
 class TokenManager {
 
+	private const cipher = 'seed-cbc';
+	private const iv = 'z2b/&w*A/tLRWE?C';	
+	
 	private const limit_key = "DATETIME_LIMIT";
 
 	private const date_format = "Y-m-d H:i:s";
@@ -10,6 +13,32 @@ class TokenManager {
 
 	public function __construct() {
 		$this->logger = new Logger($this);		
+	}
+
+	private function encrypt(string $value) : ?string {
+		if ($value == null || !is_string($value) || strlen($value) == 0) {
+			return ""; 
+		}
+
+		if (!isset(env['TOKEN_SEED'])) {
+			$this->logger->log("Cannot use default authentication");
+			return null;
+		}
+
+		return openssl_encrypt($value, TokenManager::cipher, env['TOKEN_SEED'], 0, TokenManager::iv);
+	}
+
+	private function decrypt(string $token) : ?string {
+		if ($token == null || !is_string($token) || strlen($token) == 0) {
+			return null;
+		}
+
+		if (!isset(env['TOKEN_SEED'])) {
+			$this->logger->log("Cannot use default authentication");
+			return null;
+		}
+
+		return openssl_decrypt($token, TokenManager::cipher, env['TOKEN_SEED'], 0, TokenManager::iv);
 	}
 
 	public function generate(object|array $user) : ?string {
@@ -21,7 +50,7 @@ class TokenManager {
 		$content = $this->toString($user);
 		$data = "$header|$content";
 
-		return HashGenerator::encrypt($data);
+		return $this->encrypt($data);
 	}
 
 	public function validate(string $token) : bool {
@@ -29,7 +58,7 @@ class TokenManager {
 			return false;
 		}
 
-		$data = HashGenerator::decrypt($token);
+		$data = $this->decrypt($token);
 		$data = preg_split("/\|/", $data);
 
 		try {
@@ -53,7 +82,7 @@ class TokenManager {
 			return false;
 		}
 
-		$data = HashGenerator::decrypt($token);
+		$data = $this->decrypt($token);
 		$data = preg_split("/\|/", $data);
 
 		return $this->toMap($data[1]);
@@ -133,6 +162,7 @@ class TokenManager {
 
 		try {
 			$innerVals = preg_split("/\;/", $value);
+			$value = [];
 			foreach ($innerVals as $val) {
 				$tmp = preg_split("/\=/", $val);
 				$value[$tmp[0]] = $tmp[1];
