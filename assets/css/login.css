@@ -131,12 +131,12 @@ hr {
 }
 
 .link {
-	color: var(--color1);
+	color: var(--color3);
 }
 
 .link:hover {
 	cursor: pointer;
-	color: var(--color3);
+	color: var(--color2);
 }
 
 .deslocate {
