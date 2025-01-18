@@ -6,8 +6,14 @@ class RouterConfig {
 
 	private const METHOD = 'method';
 	private const OBJECT = 'object';
+	private const SECURITY = 'security';
+
+	private const URI = 'uri';
+	private const TYPES = 'types';
 
 	public static function configure() {
+		;
+
 		foreach (get_declared_classes() as $className) {
 			$class = new ReflectionClass($className);
 			$attributes = $class->getAttributes(Routable::class);
@@ -26,24 +32,46 @@ class RouterConfig {
 				if(empty($attributes) || $method->isConstructor() || $method->isDestructor())
 					continue;
 
-				$arguments = $attributes[0]->getArguments();
+				$route = (new ReflectionClass(Route::class))->newInstanceArgs($attributes[0]->getArguments());				
 
-				$methodUri = preg_replace("/\/$]/", '', preg_replace("/^[^\/]/", '/', $arguments[0]));
+				$methodUri = preg_replace("/\/$]/", '', preg_replace("/^[^\/]/", '/', $route->getValue()));
 				$realPath = $classUri.$methodUri;
-				RouterConfig::add($realPath, $arguments[1], $object, $method);
+
+				$arguments = [
+					RouterConfig::URI 		=> $realPath,
+					RouterConfig::TYPES 	=> $route->getMethods(),
+					RouterConfig::SECURITY	=> $route->getNeedAuthentication()
+				];
+				
+				RouterConfig::add($arguments, $object, $method);
 			}
 		}
 	}
 
-	public static function add(string $uri, string $type, object $object, ReflectionMethod $method) {
-		if(isset(RouterConfig::$route[$uri]) && isset(RouterConfig::$route[$uri][$type])) {
-			throw new Exception("URL is defined more than one way");
+	public static function add(array $arguments, object $object, ReflectionMethod $method) {
+		if (!isset($arguments[RouterConfig::URI]) || !isset($arguments[RouterConfig::TYPES]) || !isset($arguments[RouterConfig::SECURITY])) {
+			throw new Exception("Invalid Params");
 		}
 
-		RouterConfig::$route[$uri][$type] = [
-			RouterConfig::OBJECT => $object,
-			RouterConfig::METHOD => $method
-		];
+		$uri = $arguments[RouterConfig::URI];
+		$types = $arguments[RouterConfig::TYPES];
+		$needAuthentication = $arguments[RouterConfig::SECURITY];
+
+		if (is_string($types)) {
+			$types = [$types];
+		}
+
+		foreach ($types as $type) {
+ 			if (isset(RouterConfig::$route[$uri][$type])) {
+				throw new Exception("URL is defined more than one way");
+			}
+
+			RouterConfig::$route[$uri][$type] = [
+				RouterConfig::OBJECT => $object,
+				RouterConfig::METHOD => $method,
+				RouterConfig::SECURITY => $needAuthentication
+			];
+		}
 	}
 
 	public static function submit($uri) {
@@ -55,14 +83,14 @@ class RouterConfig {
 					$uri = preg_replace($oc, "", $uri);
 				}
 			}
-		} 
+		}
 
 		if ($uri == "/") {
 			RouterConfig::submitView("index");
 			return;
 		}
 
-		if (preg_match("/^(errors)\/.*/", $uri)) {
+		if (preg_match("/.*".preg_replace("/\//", "\/", VIEWS_PATH).".*/", $uri)) {
 			RouterConfig::submitView($uri);
 			return;
 		}
@@ -78,6 +106,13 @@ class RouterConfig {
 		if (!isset($route[$method])) {
 			RouterConfig::submitView(ErrorsPaths::methodNotAllowed);
 			return;
+		}
+
+		if ($route[$method][RouterConfig::SECURITY]) {
+			if (!Instancer::get(SessionManager::class)->isAuthenticated()) {	
+				RouterConfig::submitView(ErrorsPaths::forbbiden);
+				return;
+			}
 		}
 
 		try {
