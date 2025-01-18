@@ -38,3 +38,8 @@ body {
 	top: 50px;
 	transition: 200ms;
 }
+
+.error {
+	border-color: red !important;
+	border-width: 2px !important	;
+}

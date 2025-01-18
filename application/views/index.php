@@ -30,12 +30,12 @@
 				<div class="inputs">
 					<div class="input">
 						<label for="email">Email/Usuário</label>
-						<input id="email" name="email" validate-type="text" placeholder="Email ou nome de usuário" />
+						<input id="email" name="email" validate-type="text" placeholder="Email ou nome de usuário" required />
 					</div>
 
 					<div class="input">
 						<label for="password">Senha</label>
-						<input id="password" name="password" validate-type="password" placeholder="Senha" />
+						<input id="password" name="password" validate-type="password" type="password" placeholder="Senha" required />
 						
 						<div class="aux">
 							<small><b><a href="#forgot-password-modal" data-toggle="modal" class="link">Esqueci a senha</a></b></small>
@@ -57,17 +57,17 @@
 				<div class="inputs">
 					<div class="input">
 						<label for="email">Email</label>
-						<input id="email" name="email" validate-type="email" placeholder="Email" />
+						<input id="email" name="email" validate-type="email" type="email" placeholder="Email" required />
 					</div>
 
 					<div class="input">
 						<label for="password">Senha</label>
-						<input id="password" name="password" validate-type="password" placeholder="Senha" />
+						<input id="password" name="password" validate-type="password" type="password" placeholder="Senha" required />
 					</div>
 
 					<div class="input">
 						<label for="password-confirm">Confirmação</label>
-						<input id="password-confirm" name="password-confirm" validate-type="password" placeholder="Confirmação da senha" />
+						<input id="password-confirm" name="password-confirm" validate-type="password" type="password" placeholder="Confirmação da senha" required />
 					</div>
 				</div>
 
@@ -90,7 +90,7 @@
 					<div class="inputs">
 						<div class="input">
 							<label for="email">Email</label>
-							<input id="email" name="email" validate-type="email" placeholder="Email para trocar senha" />
+							<input id="email" name="email" validate-type="email" type="email" placeholder="Email para trocar senha" required />
 						</div>
 					</div>
 

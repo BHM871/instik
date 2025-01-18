@@ -5,25 +5,19 @@ btnsLoad.forEach((ele) => {
 	const modalId = ele.getAttribute("href");
 
 	ele.addEventListener("click", (ev) => {
-		ev.preventDefault();
-
 		const modal = document.querySelector(modalId);
 		modal.classList.add("modal-in");
 
-		const closeModal = document.querySelector(modalId + " [data-dismiss=modal]");
-
-		closeModal.addEventListener("click", (ev) => {
-			ev.preventDefault();
-
-			modal.classList.remove("modal-in")
+		document.querySelectorAll(modalId + " [data-dismiss=modal]").forEach((el) => {
+			el.addEventListener("click", (ev) => {
+				modal.classList.remove("modal-in")
+			});
 		});
 	});
 });
 
 modals.forEach((ele) => {
 	ele.addEventListener("click", (ev) => {
-		ev.preventDefault();
-
 		if (ev.target == ele)
 			ele.classList.remove("modal-in");
 	});
