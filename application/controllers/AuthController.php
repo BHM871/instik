@@ -91,4 +91,16 @@ class AuthController extends IController {
 		$this->loader->load(Pages::login, ["message" => "Email enviado com sucesso"]);
 	}
 
+	#[Route("/change-password-view")]
+	public function change_password_view() {
+		$hash = $_GET['hash'];
+
+		if ($hash == null || $hash == "") {
+			$this->loader->load(Pages::login, ["message" => "Troca de senha não permitida. Não foi encontrato o validador"]);
+			return;
+		}
+
+		$this->loader->load(Pages::change_password, ["hash" => $hash]);
+	}
+
 }
