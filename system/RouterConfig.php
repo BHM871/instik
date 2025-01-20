@@ -90,7 +90,10 @@ class RouterConfig {
 			return;
 		}
 
-		if (preg_match("/.*".preg_replace("/\//", "\/", VIEWS_PATH).".*/", $uri)) {
+		$views = preg_replace("/\//", "\/", VIEWS_PATH);
+		$views = preg_replace("/\./", "", $views);
+		if (preg_match("/" . $views . ".*/", $uri)) {
+			$uri = preg_replace("/" . $views . "/", "", $uri);
 			RouterConfig::submitView($uri);
 			return;
 		}
