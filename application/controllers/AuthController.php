@@ -84,7 +84,7 @@ class AuthController extends IController {
 		}
 
 		if (!$this->service->sendMailPassword($email)) {
-			$this->loader->load("aaa", ["message" => "Houve algum erro ao enviar email"]);
+			$this->loader->load(Pages::login, ["message" => "Houve algum erro ao enviar email"]);
 			return;
 		}	
 
