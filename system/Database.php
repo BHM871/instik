@@ -355,8 +355,6 @@ class Database {
 				$stmt->bindParam($cols[$i], $vals[$i], $type);
 			}
 
-			echo $query;
-
 			$con->beginTransaction();
 			$stmt->execute();
 			
