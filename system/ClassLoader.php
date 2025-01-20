@@ -38,6 +38,8 @@ class ClassLoader {
 			$env = preg_split("/\\n/", $env);
 			$map = [];
 			foreach ($env as $values){
+				if ($values == "") continue;
+				
 				$t = preg_split("/\=/", $values);
 				$map[$t[0]] = $t[1];
 			}
