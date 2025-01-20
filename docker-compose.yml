@@ -1,0 +1,15 @@
+services:
+  xampp:
+    image: tomsik68/xampp
+    volumes:
+      - "/home/adrian/Documents/Codigos/php:/opt/lampp/htdocs"
+    ports:
+      - "40022:22"
+      - "40080:80"
+      - "43306:3306"
+
+  mail-server:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"

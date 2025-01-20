@@ -67,4 +67,28 @@ class AuthController extends IController {
 		$this->loader->load(Pages::register_confirm, $user);
 	}
 
+	#[Route("/send-password-email", Route::POST)]
+	public function send_password_email() {
+		$email = $_POST['email'];
+		
+		if ($email == "") {
+			$this->loader->load(Pages::login, ["message" => "Preencha os campos corretamente"]);
+			return;
+		}
+
+		$isValid = $this->service->validEmail($email);
+
+		if (!$isValid) {
+			$this->loader->load(Pages::login, ["message" => "Usuário inválido"]);
+			return;
+		}
+
+		if (!$this->service->sendMailPassword($email)) {
+			$this->loader->load("aaa", ["message" => "Houve algum erro ao enviar email"]);
+			return;
+		}	
+
+		$this->loader->load(Pages::login, ["message" => "Email enviado com sucesso"]);
+	}
+
 }

@@ -77,4 +77,10 @@ class AuthModel extends IModel {
 		return $result;
 	}
 
+	public function savePasswordHash(string $email, string $hash) : bool {
+		$result = $this->db->update('user', ['email' => $email, 'hash_change_password' => $hash]);
+
+		return $result != null;
+	}
+
 }

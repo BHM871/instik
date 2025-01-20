@@ -86,7 +86,7 @@
 				<button class="modal-close" data-dismiss="modal">X</button>
 			</div>
 			<div class="model-body">
-				<form id="change-password" class="content" action="<?= BASE_URL ?>/auth/change-password" method="POST" target="_blank">
+				<form id="change-password" class="content" action="<?= BASE_URL ?>/auth/send-password-email" method="POST">
 					<div class="inputs">
 						<div class="input">
 							<label for="email">Email</label>
