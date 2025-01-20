@@ -103,4 +103,34 @@ class AuthController extends IController {
 		$this->loader->load(Pages::change_password, ["hash" => $hash]);
 	}
 
+	#[Route("/change-password", Route::POST)]
+	public function change_password() {
+		$changeDto = new AuthChangePasswordDto($_POST['hash'], $_POST['password'], $_POST['password-confirm']);
+
+		if (
+			$changeDto->getHash() == null || $changeDto->getHash() == ""
+			|| $changeDto->getPassword() == null || $changeDto->getPassword() == ""
+			|| $changeDto->getConfirm() == null || $changeDto->getConfirm() == ""
+		) {
+			$this->loader->load(Pages::change_password, ["message" => "Algum parâmetro obrigatório está faltando"]);
+			return;
+		}
+
+		$isValid = $this->service->validHash($changeDto->getHash());
+
+		if (!$isValid) {
+			$this->loader->load(Pages::change_password, ["message" => "Hash enviado não é válido"]);
+			return;
+		}
+
+		$isSuccess = $this->service->changePassword($changeDto);
+
+		if (!$isSuccess) {
+			$this->loader->load(Pages::change_password, ["message" => "Não foi possível trocar a senha"]);
+			return;
+		}
+
+		$this->loader->load(Pages::login, ["message" => "Senha atualizada com sucesso"]);
+	}
+
 }

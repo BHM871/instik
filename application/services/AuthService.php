@@ -6,11 +6,13 @@ class AuthService {
 
 	private AuthModel $model;
 
+	private Logger $logger;
 	private EmailFacade $mailSender;
 
 	public function __construct(AuthModel $model, EmailFacade $emailFacade) {
 		$this->model = $model;
 		$this->mailSender = $emailFacade;
+		$this->logger = new Logger($this);
 	}
 
 	public function validUser(AuthLoginDto $dto) : bool {
@@ -79,7 +81,7 @@ class AuthService {
 	public function sendMailPassword(string $email) : bool {
 		$limit = (new DateTime)
 			->add(DateInterval::createFromDateString("15 minutes"))
-			->format("Y-m-d+H:i:s");
+			->format("Y-m-d H:i:s");
 
 		$hash = HashGenerator::encrypt($email . "|" . $limit);
 
@@ -87,6 +89,51 @@ class AuthService {
 			return false;
 
 		return $this->mailSender->sendEmail([$email], "Troca de Senha", EmailTemplate::changePassword($hash));	
+	}
+
+	public function validHash(string $hash) : bool {
+		$content = HashGenerator::decrypt($hash);
+		$content = preg_split("/\|/", $content);
+		
+		try {
+			if (sizeof($content) < 2)
+				return false;
+
+			$email = $content[0];
+			$limit = $content[1];
+
+			$limit = new DateTime($limit);
+
+			if ((new DateTime()) > $limit)
+				return false;
+
+			$hashValidator = $this->model->getHashByEmail($email);
+
+			if ($hashValidator == null)
+				return false;
+
+			return $hash == $hashValidator;
+		} catch (\Throwable $th) {
+			$this->logger->log($th);
+
+			return false;
+		}
+	}
+
+	public function changePassword(AuthChangePasswordDto $dto) : bool {
+		if ($dto->getPassword() != $dto->getConfirm())
+			return false;
+
+		$email = HashGenerator::decrypt($dto->getHash());
+		$email = preg_split("/\|/", $email)[0];
+
+		$password = HashGenerator::encrypt($dto->getPassword());
+		$user = $this->model->changePassword($email, $password);
+
+		if ($user == null)
+			return false;
+
+		return true;
 	}
 
 }

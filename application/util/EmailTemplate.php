@@ -3,6 +3,7 @@
 class EmailTemplate {
 
 	public static function changePassword(string $hash) {
+		$hash = urldecode($hash);
 		return 
 			"<style>" .
 				"h1 {text-align: center}" .
