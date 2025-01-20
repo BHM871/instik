@@ -43,7 +43,7 @@
 					</div>
 				</div>
 
-				<input id="login-btn" type="submit" value="Login" />
+				<input id="login-btn" type="submit" class="btn-submit" value="Login" />
 
 				<div class="aux">
 					<small>Não possui conta? <b><span id="register-link" class="link">Cadastre-se</span></b></small>
@@ -71,7 +71,7 @@
 					</div>
 				</div>
 
-				<input id="register-btn" type="submit" value="Registrar" />
+				<input id="register-btn" type="submit" class="btn-submit" value="Registrar" />
 
 				<div class="aux">
 					<small>Já possui conta? <b><span id="login-link" class="link">Faça login</span></b></small>
@@ -94,7 +94,7 @@
 						</div>
 					</div>
 
-					<input id="register-btn" type="submit" value="Enviar" data-dismiss="modal" />
+					<input id="register-btn" type="submit" value="Enviar" class="btn-submit" data-dismiss="modal" />
 				</form>
 			</div>
 		</div>

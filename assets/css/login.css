@@ -16,25 +16,6 @@ main {
 	transition: 1s;
 }
 
-input[type=submit] {
-	width: 18rem;
-	height: 3.5rem;
-	font-size: 1.5rem;
-	font-weight: bold;
-	text-transform: uppercase;
-	background: linear-gradient(135deg, var(--color1), var(--color2));
-	color: var(--white);
-	border-radius: 40px;
-	transition: 1s;
-	border: none;
-	margin: 10px;
-}
-
-input[type=submit]:hover {
-	cursor: pointer;
-	transform: scale(.95);
-}
-
 hr {
 	width: 25rem;
 	height: .5px;
