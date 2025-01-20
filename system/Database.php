@@ -99,13 +99,13 @@ class Database {
 		$con = $this->getConnection();
 
 		try {
-			$con->beginTransaction();
 			$stmt = $con->prepare($query);
 
 			for ($i = 0; $i < sizeof($data); $i++) {
 				$stmt->bindParam($i+1, $data[$i]);
 			}
 
+			$con->beginTransaction();
 			$stmt->execute();
 			$out = $stmt->fetchAll(PDO::FETCH_NAMED);
 
@@ -254,8 +254,6 @@ class Database {
 		$con = $this->getConnection();
 
 		try {
-			$con->beginTransaction();
-
 			$insert = "INSERT INTO $table(";
 			$values = "VALUES(";
 
@@ -287,18 +285,19 @@ class Database {
 				$stmt->bindParam($cols[$i], $vals[$i], $type);
 			}
 
+			$con->beginTransaction();
 			$stmt->execute();
 			
 			$result = $con->query(
 				"SELECT * " .
 				"FROM $table " .
-				"WHERE id = ".$this->getLastInsertId($con, $table)
+				"WHERE id = ".$this->getLastId($con, 'insert', $table)
 			);
 
 			if ($con->inTransaction())
 				$con->commit();
 
-			return $result->fetch(PDO::FETCH_NAMED);
+			return $result->fetchAll(PDO::FETCH_NAMED);
 		} catch (\Throwable $th) {
 			$this->logger->log($th);
 
@@ -309,13 +308,100 @@ class Database {
 		}
 	}
 
-	private function getLastInsertId(PDO $con, ?string $table = null) : string {
+	public function update(string $table, array $data) : ?array {
+		if ($table == null || !is_string($table) || trim($table) == "" || $data == null || !is_array($data) || sizeof($data) == 0)
+			return null;
+
+		$con = $this->getConnection();
+
+		try {
+			$uniqueColumn = $this->existsAnUniqueColumn($con, $table, $data);
+
+			if ($uniqueColumn == null) {
+				$this->logger->log("An unique column wasn't inform");
+				return null;
+			}
+
+			$query = "UPDATE $table SET ";
+
+			$i = 0;
+			$isFirst = true;
+			$cols = [];
+			$vals = [];
+			foreach ($data as $column => $value) {
+				if ($column != $uniqueColumn) {
+					$query .= ($isFirst ? "" : ", ") . "$column = :$column";
+					$isFirst = false;
+				}
+				
+				$cols[$i] = $column;
+				$vals[$i] = $value;
+				
+				$i++;
+			}
+
+			$query .= " WHERE $uniqueColumn = :$uniqueColumn";
+			$stmt = $con->prepare($query);
+
+			for ($i = 0; $i < sizeof($data); $i++) {
+				$type = (is_int($vals[$i])
+					? PDO::PARAM_INT
+					: (is_bool($vals[$i])
+						? PDO::PARAM_BOOL
+						: PDO::PARAM_STR
+					)
+				);
+
+				$stmt->bindParam($cols[$i], $vals[$i], $type);
+			}
+
+			echo $query;
+
+			$con->beginTransaction();
+			$stmt->execute();
+			
+			$result = $con->query(
+				"SELECT * " .
+				"FROM $table " .
+				"WHERE id = ".$this->getLastId($con, 'update', $table)
+			);
+
+			if ($con->inTransaction())
+				$con->commit();
+
+			return $result->fetchAll(PDO::FETCH_NAMED);
+		} catch (Throwable $th) {
+			$this->logger->log($th);
+
+			return null;
+		}
+	}
+
+	private function getLastId(PDO $con, string $operation, ?string $table = null) : string {
 		$result = $con->query(
 			"SELECT identificator " .
 			"FROM mysql.operations " .
-			"WHERE ".($table != null ? "table_name = '$table' AND " : "")."operation = 'insert' ORDER BY moment DESC LIMIT 1"
+			"WHERE ".($table != null ? "table_name = '$table' AND " : "")."operation = '$operation' ORDER BY moment DESC LIMIT 1"
 		);
 
 		return $result->fetch(PDO::FETCH_NAMED)['identificator'];
+	}
+
+	private function existsAnUniqueColumn(PDO $con, string $table, array $data) : ?string {
+		$rs = $con->query(
+			"SELECT CL.COLUMN_NAME " .
+			"FROM INFORMATION_SCHEMA.COLUMNS CL " .
+			"WHERE CL.TABLE_NAME = '$table' " .
+				"AND CL.TABLE_SCHEMA = '" . DB_NAME . "' " .
+				"AND CL.COLUMN_KEY IN('PRI', 'UNI')"
+		);
+
+		while($row = $rs->fetch(PDO::FETCH_NAMED)) {
+			if (isset($data[$row['COLUMN_NAME']])) {
+				return $row['COLUMN_NAME'];
+			}
+		}
+
+		return null;
 	}
 }
