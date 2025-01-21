@@ -74,7 +74,11 @@ class AuthModel extends IModel {
 		}
 		
 		$result = $this->db->insert('user', $user);
-		return $result;
+
+		if ($result == null || sizeof($result) == 0)
+			return null;
+
+		return $result[0];
 	}
 
 	public function savePasswordHash(string $email, string $hash) : bool {

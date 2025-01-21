@@ -7,7 +7,7 @@ body {
 
 main {
 	width: 40vw;
-	height: 60vh;
+	height: 93vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -20,6 +20,59 @@ hr {
 	height: .5px;
 	margin: 40px;
 	color: var(--white);
+}
+
+input[type=file] {
+	display: none;
+}
+
+p {
+	width: 100%;
+	text-align: center;
+}
+
+.input-image {
+	width: 20vw;
+	aspect-ratio: 1;
+	position: relative;
+	border: 2px solid var(--white);
+	border-radius: 50%;
+	background-color: var(--secondary-black);
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	img {
+		width: 100%;
+		aspect-ratio: 1;
+		overflow: hidden;
+		object-fit: cover;
+		object-position: center;
+	}
+}
+
+.person::after {
+	content: "";
+	width: 35%;
+	aspect-ratio: 1;
+	top: calc(20%);
+	right: calc(32%);
+	display: block;
+	position: absolute;
+	border-radius: 50%;
+	background-color: var(--thirty-black);
+}
+
+.person::before {
+	content: "";
+	width: 100%;
+	aspect-ratio: 1;
+	top: 60%;
+	display: block;
+	position: absolute;
+	border-radius: 40%;
+	background-color: var(--thirty-black);
 }
 
 .content {
