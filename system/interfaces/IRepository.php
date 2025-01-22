@@ -1,8 +1,10 @@
 <?php
 
-require_once("./system/Database.php");
+namespace System\Interfaces;
 
-abstract class IModel {
+use System\Database;
+
+abstract class IRepository {
 
 	protected Database $db;
 

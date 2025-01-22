@@ -1,6 +1,9 @@
 <?php
 
-require_once("./system/Logger.php");
+namespace System;
+
+use PDO;
+use Throwable;
 
 class Database {
 

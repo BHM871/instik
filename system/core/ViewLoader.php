@@ -1,5 +1,9 @@
 <?php
 
+namespace System\Core;
+
+use Configs\ErrorsPaths;
+
 class ViewLoader {
 
 	private static $ths;

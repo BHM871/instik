@@ -1,5 +1,9 @@
 <?php
 
+namespace System\Annotations;
+
+use Attribute;
+
 #[Attribute(Attribute::TARGET_METHOD)]
 class Route {
 

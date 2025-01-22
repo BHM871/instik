@@ -1,5 +1,11 @@
 <?php
 
+namespace System\Core;
+
+use System\Logger;
+
+use DirectoryIterator;
+
 class ClassLoader {
 
 	public static function load($path) : array {

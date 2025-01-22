@@ -1,16 +1,16 @@
 <?php
 
+namespace System\Security;
+
 require_once("./system/security/TokenManager.php");
 
 class SessionManager {
 
 	private const token_key = "_PHP_TOKEN_SESSION";
 
-	public TokenManager $tokenManager;
-
-	public function __construct(TokenManager $tokenManager) {
-		$this->tokenManager = $tokenManager;
-	}
+	public function __construct(
+		private readonly TokenManager $tokenManager
+	) {}
 
 	public function isAuthenticated() : bool {
 		if (!isset($_COOKIE[SessionManager::token_key])) {

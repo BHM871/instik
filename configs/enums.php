@@ -1,5 +1,7 @@
 <?php
 
+namespace Configs;
+
 class ErrorsPaths {
 	const badRequest = "errors/BadRequest";
 	const forbbiden = "errors/Forbbiden";

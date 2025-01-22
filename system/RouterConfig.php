@@ -1,5 +1,18 @@
 <?php
 
+namespace System;
+
+use Configs\ErrorsPaths;
+use System\Annotations\Routable;
+use System\Annotations\Route;
+use System\Core\Instancer;
+use System\Core\ViewLoader;
+use System\Security\SessionManager;
+
+use Exception;
+use ReflectionClass;
+use ReflectionMethod;
+
 class RouterConfig {
 
 	private static $route = array();
@@ -10,6 +23,8 @@ class RouterConfig {
 
 	private const URI = 'uri';
 	private const TYPES = 'types';
+
+	private function __construct() {}
 
 	public static function configure() {
 		;

@@ -1,5 +1,10 @@
 <?php
 
+namespace System\Interfaces;
+
+use System\Core\ViewLoader;
+use System\Security\SessionManager;
+
 abstract class IController {
 	/*
 		system/ViewLoader

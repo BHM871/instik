@@ -1,5 +1,9 @@
 <?php
 
+namespace System;
+
+use ReflectionClass;
+
 class Logger {
 
 	private ReflectionClass $class;

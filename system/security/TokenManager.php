@@ -1,5 +1,13 @@
 <?php
 
+namespace System\Security;
+
+use System\Logger;
+
+use DateTime;
+use DateInterval;
+use Throwable;
+
 class TokenManager {
 
 	private const cipher = 'seed-cbc';

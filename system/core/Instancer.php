@@ -1,5 +1,10 @@
 <?php
 
+namespace System\Core;
+
+use ReflectionClass;
+use Exception;
+
 class Instancer {
 
 	private static $instances = array();
