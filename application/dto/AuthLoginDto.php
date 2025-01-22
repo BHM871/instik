@@ -1,5 +1,7 @@
 <?php 
 
+namespace Instik\DTO;
+
 class AuthLoginDto {
 
 	private string $email;

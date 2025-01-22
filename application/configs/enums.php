@@ -1,5 +1,6 @@
-
 <?php
+
+namespace Instik\Configs;
 
 class Templates {
 	const head_links = "templates/head_links";

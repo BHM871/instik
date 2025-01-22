@@ -1,5 +1,7 @@
 <?php
 
+namespace Instik\Util;
+
 class EmailTemplate {
 
 	public static function changePassword(string $hash) {

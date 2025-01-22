@@ -1,17 +1,26 @@
 <?php
 
-require_once("./system/interfaces/IController.php");
-require_once("./system/annotations/Routable.php");
-require_once("./system/annotations/Route.php");
+namespace Instik\Controllers;
+
+use Instik\Configs\Pages;
+use Instik\DTO\AuthLoginDto;
+use Instik\DTO\AuthRegisterDto;
+use Instik\DTO\AuthChangePasswordDto;
+use Instik\Services\AuthService;
+
+use System\Annotations\Routable;
+use System\Annotations\Route;
+use System\Interfaces\IController;
+use System\Security\SessionManager;
 
 #[Routable("/auth")]
 class AuthController extends IController {
 
-	private AuthService $service;
-
-	public function __construct(SessionManager $session, AuthService $service) {
+	public function __construct(
+		private readonly AuthService $service,
+		SessionManager $session
+	) {
 		parent::__construct($session);
-		$this->service = $service;
 	}
 
 	#[Route("/authenticate", Route::POST)]

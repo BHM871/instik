@@ -1,5 +1,9 @@
 <?php
 
+namespace Instik\Util;
+
+use Exception;
+
 class HashGenerator {
 
 	private static string $cipher = 'seed-cbc';

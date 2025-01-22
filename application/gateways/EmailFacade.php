@@ -1,8 +1,11 @@
 <?php
 
+namespace Instik\Gateways;
+
+use System\Logger;
+
 use PHPMailer\PHPMailer\PHPMailer;
 
-require("./libs/PHPMailer/src/PHPMailer.php");
 require("/opt/lampp/phpmyadmin/vendor/autoload.php");
 
 class EmailFacade {

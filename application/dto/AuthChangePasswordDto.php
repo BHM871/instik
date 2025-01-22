@@ -1,5 +1,7 @@
 <?php
 
+namespace Instik\DTO;
+
 class AuthChangePasswordDto {
 
 	private string $hash;

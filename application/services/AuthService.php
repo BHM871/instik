@@ -1,42 +1,34 @@
 <?php
 
-require_once("./application/gateways/EmailFacade.php");
+namespace Instik\Services;
+
+use Instik\DTO\AuthChangePasswordDto;
+use Instik\DTO\AuthRegisterDto;
+use Instik\Entity\User;
+use Instik\Gateways\EmailFacade;
+use Instik\Repository\AuthRepository;
+use Instik\Util\HashGenerator;
+
+use System\Logger;
+
+use DateInterval;
+use DateTime;
 
 class AuthService {
 
-	private AuthModel $model;
-
 	private Logger $logger;
-	private EmailFacade $mailSender;
 
-	public function __construct(AuthModel $model, EmailFacade $emailFacade) {
-		$this->model = $model;
-		$this->mailSender = $emailFacade;
+	public function __construct(
+		private readonly AuthRepository $repository,
+		private readonly Notificator $notificator
+	) {
 		$this->logger = new Logger($this);
 	}
 
-	public function validUser(AuthLoginDto $dto) : bool {
-		$password = $this->model->validUserByEmail($dto->getEmail());
+	public function getUserByEmail(string $email) : ?User {
+		$user = $this->repository->getUserByEmail($email);
 
-		if ($password == null || $password == "") {
-			$password = $this->model->validUserByUsername($dto->getEmail());
-		}
-
-		if ($password == null || $password == "") {
-			return false;
-		}
-
-		if ($password != HashGenerator::encrypt($dto->getPassword())) {
-			return false;
-		}
-
-		return true;
-	}
-
-	public function getBasicUser($email) : ?array {
-		$user = $this->model->getBasicUser($email);
-
-		if ($user == null || sizeof($user) == 0) {
+		if ($user == null || $user->getId() == null) {
 			return null;
 		}
 
@@ -44,9 +36,9 @@ class AuthService {
 	}
 
 	public function validRegister(AuthRegisterDto $dto) : bool {
-		$isValid = $this->model->validEmailFree($dto->getEmail());
+		$user = $this->repository->getUserByEmail($dto->getEmail());
 
-		if (!$isValid) {
+		if ($user != null && $user->getId() != null) {
 			return false;
 		}
 
@@ -57,25 +49,19 @@ class AuthService {
 		return true;
 	}
 
-	public function registerUser(AuthRegisterDto $dto) : ?array {
+	public function registerUser(AuthRegisterDto $dto) : ?User {
 		$user = [
 			"email" => $dto->getEmail(),
 			"password" => HashGenerator::encrypt($dto->getPassword())
 		];
 
-		$user = $this->model->registerUser($user);
+		$user = $this->repository->registerUser(User::instancer($user));
 
-		if ($user == null || sizeof($user) == 0) {
+		if ($user == null || $user->getId() == null) {
 			return null;
 		}
 
 		return $user;
-	}
-
-	public function validEmail(string $email) : bool {
-		$password = $this->model->validUserByEmail($email);
-		
-		return $password != null && $password != "";
 	}
 
 	public function sendMailPassword(string $email) : bool {
@@ -85,10 +71,10 @@ class AuthService {
 
 		$hash = HashGenerator::encrypt($email . "|" . $limit);
 
-		if (!$this->model->savePasswordHash($email, $hash))
+		if (!$this->repository->savePasswordHash($email, $hash))
 			return false;
 
-		return $this->mailSender->sendEmail([$email], "Troca de Senha", EmailTemplate::changePassword($hash));	
+		return $this->notificator->changePassword($email, "Troca de Senha", $hash);
 	}
 
 	public function validHash(string $hash) : bool {
@@ -107,12 +93,12 @@ class AuthService {
 			if ((new DateTime()) > $limit)
 				return false;
 
-			$hashValidator = $this->model->getHashByEmail($email);
+			$user = $this->repository->getUserByEmail($email, ['hash_change_password']);
 
-			if ($hashValidator == null)
+			if ($user == null || $user->getHash() == null)
 				return false;
 
-			return $hash == $hashValidator;
+			return $hash == $user->getHash();
 		} catch (\Throwable $th) {
 			$this->logger->log($th);
 
@@ -128,7 +114,7 @@ class AuthService {
 		$email = preg_split("/\|/", $email)[0];
 
 		$password = HashGenerator::encrypt($dto->getPassword());
-		$user = $this->model->changePassword($email, $password);
+		$user = $this->repository->changePassword($email, $password);
 
 		if ($user == null)
 			return false;
