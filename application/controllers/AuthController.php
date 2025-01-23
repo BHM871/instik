@@ -14,7 +14,7 @@ use System\Annotations\Route;
 use System\Interfaces\IController;
 use System\Security\SessionManager;
 
-#[Routable]
+#[Routable('/auth')]
 class AuthController extends IController {
 
 	public function __construct(
@@ -37,7 +37,7 @@ class AuthController extends IController {
 		$isValid = $this->validator->validToLogin($authDto);
 
 		if (!$isValid) {
-			$this->redirect("/", ["message" => "Usuário inválido"]);
+			$this->loader->load(Pages::login, ["message" => "Usuário inválido"]);
 			return;
 		}
 
