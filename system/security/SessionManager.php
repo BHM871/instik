@@ -2,8 +2,6 @@
 
 namespace System\Security;
 
-require_once("./system/security/TokenManager.php");
-
 class SessionManager {
 
 	private const token_key = "_PHP_TOKEN_SESSION";
@@ -27,7 +25,7 @@ class SessionManager {
 	}
 
 	public function putUser(object|array $user) : bool {
-		if ($user == null || (!is_object($user) && !is_array($user)) || sizeof($user) == 0) {
+		if ($user == null || (!is_object($user) && !is_array($user)) || (is_array($user) && sizeof($user) == 0)) {
 			return false;
 		}
 		

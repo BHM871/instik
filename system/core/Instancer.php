@@ -9,7 +9,11 @@ class Instancer {
 
 	private static $instances = array();
 
-	public static function get($class) {
+	public static function get($class, $counter = 0) {
+		if ($counter > 50) {
+			throw new Exception("Many recursion");
+		}
+
 		if (!is_string($class) && !is_object($class) && !preg_match("/ReflectionClass/", get_class($class))) {
 			throw new Exception("Parameter type is invalid");
 		}
@@ -27,7 +31,7 @@ class Instancer {
 				$reflec = new ReflectionClass($clazz);
 
 				if ($reflec->getParentClass() != false && $reflec->getParentClass()->getName() == $reflection->getName()) {
-					return Instancer::get($reflec->getName());
+					return Instancer::get($reflec->getName(), $counter+1);
 				}
 			}
 
@@ -40,7 +44,7 @@ class Instancer {
 
 		$dependencies = array();
 		foreach ($reflection->getConstructor()->getParameters() as $parameter) {
-			$dependencies[] = Instancer::get($parameter->getType()->getName());
+			$dependencies[] = Instancer::get($parameter->getType()->getName(), $counter+1);
 		}
 
 		return Instancer::instance($reflection, $dependencies);

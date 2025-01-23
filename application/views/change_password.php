@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Instik - Trocar Senha</title>
 
-	<?php $this->load(Templates::head_links) ?>
+	<?php $this->load(Instik\Configs\Templates::head_links) ?>
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/change_password.css" />

@@ -41,7 +41,7 @@ class AuthRepository extends IRepository {
 			return null;
 		}
 		
-		$result = $this->db->insert('user', get_object_vars($user));
+		$result = $this->db->insert('user', $user->toArray());
 
 		if ($result == null || sizeof($result) == 0)
 			return null;

@@ -27,7 +27,6 @@ class RouterConfig {
 	private function __construct() {}
 
 	public static function configure() {
-		;
 
 		foreach (get_declared_classes() as $className) {
 			$class = new ReflectionClass($className);
@@ -39,7 +38,8 @@ class RouterConfig {
 
 			$object = Instancer::get($class);
 
-			$classUri = preg_replace("/\/$/", '', preg_replace("/^[^\/]/", '/', $attributes[0]->getArguments()[0]));
+			$routable = (new ReflectionClass(Routable::class))->newInstanceArgs($attributes[0]->getArguments());
+			$classUri = preg_replace("/\/$/", '', preg_replace("/^[^\/]/", '/', $routable->name));
 
 			foreach ($class->getMethods() as $method) {
 				$attributes = $method->getAttributes(Route::class);
@@ -100,11 +100,6 @@ class RouterConfig {
 			}
 		}
 
-		if ($uri == "/") {
-			RouterConfig::submitView("index");
-			return;
-		}
-
 		$views = preg_replace("/\//", "\/", VIEWS_PATH);
 		$views = preg_replace("/\./", "", $views);
 		if (preg_match("/" . $views . ".*/", $uri)) {
@@ -114,6 +109,11 @@ class RouterConfig {
 		}
 
 		if (!isset(RouterConfig::$route[$uri])) {
+			if ($uri == "/") {
+				RouterConfig::submitView("index");
+				return;
+			}
+
 			RouterConfig::submitView(ErrorsPaths::notFound);
 			return;
 		}
@@ -138,7 +138,7 @@ class RouterConfig {
 				$route[$method][RouterConfig::OBJECT]
 			);
 		} catch (\Throwable $th) {
-			(new Logger(new RouterConfig()))->log($th	);
+			(new Logger(new RouterConfig()))->log($th);
 
 			RouterConfig::submitView(ErrorsPaths::badRequest, $th->getMessage());
 		}

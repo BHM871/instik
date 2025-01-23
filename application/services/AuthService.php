@@ -13,6 +13,7 @@ use System\Logger;
 
 use DateInterval;
 use DateTime;
+use Instik\DTO\AuthLoginDto;
 
 class AuthService {
 
@@ -25,8 +26,12 @@ class AuthService {
 		$this->logger = new Logger($this);
 	}
 
-	public function getUserByEmail(string $email) : ?User {
-		$user = $this->repository->getUserByEmail($email);
+	public function getUserToLogin(string $emailOrUsername) : ?User {
+		$user = $this->repository->getUserByEmail($emailOrUsername);
+
+		if ($user == null || $user->getId() == null) {
+			$user = $this->repository->getUserByUsername($emailOrUsername);
+		}
 
 		if ($user == null || $user->getId() == null) {
 			return null;
@@ -35,18 +40,14 @@ class AuthService {
 		return $user;
 	}
 
-	public function validRegister(AuthRegisterDto $dto) : bool {
-		$user = $this->repository->getUserByEmail($dto->getEmail());
+	public function getUserByEmail(string $email) : ?User {
+		$user = $this->repository->getUserByEmail($email);
 
-		if ($user != null && $user->getId() != null) {
-			return false;
+		if ($user == null || $user->getId() == null) {
+			return null;
 		}
 
-		if (HashGenerator::encrypt($dto->getPassword()) != HashGenerator::encrypt($dto->getConfirm())) {
-			return false;
-		}
-
-		return true;
+		return $user;
 	}
 
 	public function registerUser(AuthRegisterDto $dto) : ?User {
@@ -74,36 +75,7 @@ class AuthService {
 		if (!$this->repository->savePasswordHash($email, $hash))
 			return false;
 
-		return $this->notificator->changePassword($email, "Troca de Senha", $hash);
-	}
-
-	public function validHash(string $hash) : bool {
-		$content = HashGenerator::decrypt($hash);
-		$content = preg_split("/\|/", $content);
-		
-		try {
-			if (sizeof($content) < 2)
-				return false;
-
-			$email = $content[0];
-			$limit = $content[1];
-
-			$limit = new DateTime($limit);
-
-			if ((new DateTime()) > $limit)
-				return false;
-
-			$user = $this->repository->getUserByEmail($email, ['hash_change_password']);
-
-			if ($user == null || $user->getHash() == null)
-				return false;
-
-			return $hash == $user->getHash();
-		} catch (\Throwable $th) {
-			$this->logger->log($th);
-
-			return false;
-		}
+		return $this->notificator->changePassword($email, $hash);
 	}
 
 	public function changePassword(AuthChangePasswordDto $dto) : bool {

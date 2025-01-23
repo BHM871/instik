@@ -5,11 +5,17 @@ namespace System\Core;
 use System\Logger;
 
 use DirectoryIterator;
+use Exception;
 
 class ClassLoader {
 
-	public static function load($path) : array {
+	public static function load($path, $counter = 0) : array {
+		if ($counter > 50) {
+			throw new Exception("Cannot load all classes");
+		}
+
 		$classes = [];
+		$tryAgain = [];
 		$iterator = new DirectoryIterator($path);
 
 		foreach ($iterator as $info) {
@@ -22,12 +28,20 @@ class ClassLoader {
 				continue;
 			}
 
-			if ($info->getExtension() != 'php') {
+			if ($info->getExtension() != 'php' || $info->getFilename() == "ClassLoader.php") {
 				continue;
 			}
 
-			$classes[] = $info->getPathname();
-			include($info->getPathname());
+			try {
+				include_once($info->getPathname());
+				$classes[$info->getPath()][] = $info->getPathname();
+			} catch (\Throwable $th) {
+				$tryAgain[] = $info->getPath();
+			}
+		}
+
+		foreach ($tryAgain as $path) {
+			ClassLoader::load($path, $counter+1);
 		}
 
 		return $classes;

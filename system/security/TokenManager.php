@@ -50,7 +50,7 @@ class TokenManager {
 	}
 
 	public function generate(object|array $user) : ?string {
-		if ($user == null || (!is_array($user) && !is_object($user)) || sizeof($user) == 0) {
+		if ($user == null || (!is_array($user) && !is_object($user)) || (is_array($user) && sizeof($user) == 0)) {
 			return null;
 		}
 
@@ -143,13 +143,11 @@ class TokenManager {
 	}
 
 	private function toString(object|array $obj) : string {
-		if ($obj == null || (!is_array($obj) && !is_object($obj)) || sizeof($obj) == 0) {
+		if ($obj == null || (!is_array($obj) && !is_object($obj)) || (is_array($obj) && sizeof($obj) == 0)) {
 			return null;
 		}
 
-		$obj = is_array($obj)
-			? $obj
-			: get_object_vars($obj);
+		$obj = (array) $obj;
 
 		$str = "";
 		foreach ($obj as $key => $value) {

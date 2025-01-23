@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Instik - Login</title>
 
-	<?php $this->load(Templates::head_links) ?>
+	<?php $this->load(Instik\Configs\Templates::head_links) ?>
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/login.css" />
@@ -22,7 +22,7 @@
 	</aside>
 	<aside id="rigth">
 		<main id="main">
-			<form id="login" class="content" action="<?= BASE_URL ?>/auth/authenticate" method="POST">
+			<form id="login" class="content" action="<?= BASE_URL ?>/authenticate" method="POST">
 				<h1 class="title">Conectar-se</h1>
 
 				<hr />

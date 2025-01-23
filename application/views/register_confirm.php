@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Instik - Criar Usuário</title>
 
-	<?php $this->load(Templates::head_links) ?>
+	<?php $this->load(Instik\Configs\Templates::head_links) ?>
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/register_confirm.css" />
@@ -18,9 +18,9 @@
 			<hr />
 
 			<div class="inputs">
-				<input name="user-id" type="hidden" value="<?= $id ?>" required />
+				<input name="user-id" type="hidden" value="<?= $user['id'] ?>" required />
 
-				<p><?= $email ?></p>
+				<p><?= $user['email'] ?></p>
 
 				<div class="input">
 					<label for="profile-image" class="input-image person"><img /></label>
@@ -28,7 +28,7 @@
 				</div>
 				
 				<div class="input">
-					<label for="username">Node de Usuário</label>
+					<label for="username">Nome de Usuário</label>
 					<input id="username" name="username" validate-type="username" type="username" placeholder="Escolha o seu nome de usuário" required />
 				</div>
 			</div>

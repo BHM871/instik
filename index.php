@@ -1,4 +1,7 @@
 <?php
+
+use System\RouterConfig;
+
 require_once("./configs/init.php");
 
 $uri = $_SERVER['REQUEST_URI'];

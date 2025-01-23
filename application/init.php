@@ -2,6 +2,8 @@
 
 // Setup your application here
 
+use System\Database;
+
 $db = Database::instance();
 $db->getDefaultConnection()->query(
 	"CREATE DATABASE IF NOT EXISTS instik CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
