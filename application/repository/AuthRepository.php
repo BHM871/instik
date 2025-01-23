@@ -7,6 +7,20 @@ use Instik\Entity\User;
 use System\Interfaces\IRepository;
 
 class AuthRepository extends IRepository {
+	
+	public function getUserById(int $id, array $infos = ["*"]) : ?User {
+		if ($id == null || $id <= 0) {
+			return null;
+		}
+
+		$result = $this->db->get('user', $infos, ['id' => $id, 'is_valid' => 1]);
+
+		if ($result == null || sizeof($result) == 0) {
+			return null;
+		}
+
+		return User::instancer($result[0]);
+	}
 
 	public function getUserByEmail(string $email, array $infos = ["*"]) : ?User {
 		if ($email == null || $email == "") {
@@ -28,6 +42,20 @@ class AuthRepository extends IRepository {
 		}
 
 		$result = $this->db->get('user', $infos, ['username' => $username, 'is_valid' => 1]);
+
+		if ($result == null || sizeof($result) == 0) {
+			return null;
+		}
+
+		return User::instancer($result[0]);
+	}
+
+	public function getInvalidUserByEmail(string $email) : ?User {
+		if ($email == null || $email == "") {
+			return null;
+		}
+
+		$result = $this->db->get('user', ['id', 'email', 'username'], ['email' => $email]);
 
 		if ($result == null || sizeof($result) == 0) {
 			return null;

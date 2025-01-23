@@ -68,6 +68,13 @@ class AuthController extends IController {
 			return;
 		}
 
+		$user = $this->service->getInvalidUser($registerDto->getEmail());
+
+		if ($user != null && $user->getId() != null) {
+			$this->loader->load(Pages::register_confirm, ["user" => $user->toArray()]);
+			return;
+		}
+
 		$user = $this->service->registerUser($registerDto);
 		
 		if ($user == null || $user->getId() == null) {

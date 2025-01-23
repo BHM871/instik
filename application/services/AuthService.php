@@ -5,7 +5,6 @@ namespace Instik\Services;
 use Instik\DTO\AuthChangePasswordDto;
 use Instik\DTO\AuthRegisterDto;
 use Instik\Entity\User;
-use Instik\Gateways\EmailFacade;
 use Instik\Repository\AuthRepository;
 use Instik\Util\HashGenerator;
 
@@ -13,7 +12,6 @@ use System\Logger;
 
 use DateInterval;
 use DateTime;
-use Instik\DTO\AuthLoginDto;
 
 class AuthService {
 
@@ -40,8 +38,26 @@ class AuthService {
 		return $user;
 	}
 
-	public function getUserByEmail(string $email) : ?User {
-		$user = $this->repository->getUserByEmail($email);
+	public function getUser(string|int $identificator) : ?User {
+		$user = $this->repository->getUserById($identificator);
+
+		if ($user == null || $user->getId() == null) {
+			$user = $this->repository->getUserByEmail($identificator);
+		}
+
+		if ($user == null || $user->getId() == null) {
+			$user = $this->repository->getUserByUsername($identificator);
+		}
+
+		if ($user == null || $user->getId() == null) {
+			return null;
+		}
+
+		return $user;
+	}
+
+	public function getInvalidUser(string $identificator) : ?User {
+		$user = $this->repository->getInvalidUserByEmail($identificator);
 
 		if ($user == null || $user->getId() == null) {
 			return null;
