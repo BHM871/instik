@@ -99,7 +99,6 @@ class AuthRepository extends IRepository {
 		$user = $user->toArray();
 		$user['is_valid'] = true;
 		$result = $this->db->update('user', $user);
-		echo var_dump($result);
 
 		if ($result == null || sizeof($result) == 0)
 			return null;
