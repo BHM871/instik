@@ -22,7 +22,7 @@
 	</aside>
 	<aside id="rigth">
 		<main id="main">
-			<form id="login" class="content" action="<?= BASE_URL ?>/authenticate" method="POST">
+			<form id="login" class="content" action="<?= BASE_URL ?>/auth/authenticate" method="POST">
 				<h1 class="title">Conectar-se</h1>
 
 				<hr />

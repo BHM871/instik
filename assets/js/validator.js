@@ -41,7 +41,7 @@ function isValid(input) {
 	if (type == "email") {
 		let regex = /[a-z0-9\._-]{5,40}\@[a-z0-9]{2,10}(\.[a-z]{2,10})+/i;
 		if (!value.match(regex)) {
-			notify("Algum campo é maior do que o permitido");
+			notify("Algum campo de email está incorreto");
 			error(input);
 			return false;
 		}
