@@ -12,3 +12,9 @@ class Pages {
 	const change_password = "change_password";
 	const home = "feed"; // to test
 }
+
+class Icons {
+	const search = "svgs/search-icon";
+	const replay = "svgs/replay-icon";
+	const favorite = "svgs/favorite-icon";
+}
