@@ -50,6 +50,20 @@ class AuthRepository extends IRepository {
 		return User::instancer($result[0]);
 	}
 
+	public function getInvalidUserById(int $id) : ?User {
+		if ($id == null || $id <= 0) {
+			return null;
+		}
+
+		$result = $this->db->get('user', ['id', 'email', 'username'], ['id' => $id]);
+
+		if ($result == null || sizeof($result) == 0) {
+			return null;
+		}
+
+		return User::instancer($result[0]);
+	}
+
 	public function getInvalidUserByEmail(string $email) : ?User {
 		if ($email == null || $email == "") {
 			return null;
@@ -70,6 +84,22 @@ class AuthRepository extends IRepository {
 		}
 		
 		$result = $this->db->insert('user', $user->toArray());
+
+		if ($result == null || sizeof($result) == 0)
+			return null;
+
+		return User::instancer($result[0]);
+	}
+
+	public function confirmRegister(User $user) : ?User {
+		if ($user == null || !is_object($user) || !($user instanceof User)) {
+			return null;
+		}
+		
+		$user = $user->toArray();
+		$user['is_valid'] = true;
+		$result = $this->db->update('user', $user);
+		echo var_dump($result);
 
 		if ($result == null || sizeof($result) == 0)
 			return null;

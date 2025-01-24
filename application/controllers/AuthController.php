@@ -2,6 +2,7 @@
 
 namespace Instik\Controllers;
 
+use AuthConfirmRegisterDto;
 use Instik\Configs\Pages;
 use Instik\DTO\AuthLoginDto;
 use Instik\DTO\AuthRegisterDto;
@@ -83,6 +84,38 @@ class AuthController extends IController {
 		}
 
 		$this->loader->load(Pages::register_confirm, ['user' => $user->toArray()]);
+	}
+
+	#[Route("/confirm-register", Route::POST)]
+	public function confirm_register() {
+		$confirmDto = new AuthConfirmRegisterDto($_POST["user-id"], $_POST["username"]);
+		$profile = $_FILES['profile'];
+
+		if ($confirmDto->getId() == "" || $confirmDto->getUsername() == "") {
+			$this->loader->load(Pages::login, ["message" => "Preencha os campos corretamente"]);
+			return;
+		}
+
+		$isValid = $this->validator->validUserId($confirmDto->getId());
+
+		if (!$isValid) {
+			$this->loader->load(Pages::login, ["message" => "Id enviado é inválido"]);
+			return;
+		}
+		
+		$user = $this->service->confirmRegister($confirmDto, $profile);
+
+		if ($user == null || $user->getId() == null) {
+			$user = $this->service->getInvalidUser($confirmDto->getId());
+
+			$this->loader->load(Pages::register_confirm, [
+				"message" => "Erro ao salvar usuário, tente novamente mais tarde", 
+				"user" => $user->toArray()
+			]);
+			return;
+		}
+
+		$this->loader->load(Pages::home, ['user' => $user->toArray()]);
 	}
 
 	#[Route("/send-password-email", Route::POST)]

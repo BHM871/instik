@@ -86,4 +86,18 @@ class AuthValidator {
 		}
 	}
 
+	public function validUserId(int $id) : bool {
+		if ($id == null || $id <= 0)
+			return false;
+
+		$user = $this->repository->getUserById($id, ['id']);
+
+		if ($user == null || $user->getId() == null)
+			$user = $this->repository->getInvalidUserById($id, ['id']);
+
+		if ($user == null || $user->getId() == null)
+			return false;
+
+		return true;
+	}
 }

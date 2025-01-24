@@ -2,6 +2,7 @@
 
 namespace Instik\Services;
 
+use AuthConfirmRegisterDto;
 use Instik\DTO\AuthChangePasswordDto;
 use Instik\DTO\AuthRegisterDto;
 use Instik\Entity\User;
@@ -12,6 +13,7 @@ use System\Logger;
 
 use DateInterval;
 use DateTime;
+use FileService;
 
 class AuthService {
 
@@ -19,7 +21,8 @@ class AuthService {
 
 	public function __construct(
 		private readonly AuthRepository $repository,
-		private readonly Notificator $notificator
+		private readonly Notificator $notificator,
+		private readonly FileService $fileService
 	) {
 		$this->logger = new Logger($this);
 	}
@@ -77,6 +80,24 @@ class AuthService {
 		if ($user == null || $user->getId() == null) {
 			return null;
 		}
+
+		return $user;
+	}
+
+	public function confirmRegister(AuthConfirmRegisterDto $dto, array $profile = null) : ?User {
+		$imagePath = null;
+		if ($profile != null && is_array($profile) && isset($profile['type']) && preg_match("/image/", $profile['type'])) {
+			$filename = $dto->getId() . "_profile_image";
+			$filename .= "." . preg_split("/\//", $profile['type'])[1];
+
+			$imagePath = $this->fileService->upload($profile, $filename);
+		}
+
+		$user = new User($dto->getId(), $dto->getUsername(), null, null, true, $imagePath);
+		$user = $this->repository->confirmRegister($user);
+
+		if ($user == null || $user->getId() == null)
+			return null;
 
 		return $user;
 	}

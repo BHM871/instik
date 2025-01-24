@@ -11,8 +11,8 @@ class User {
 		private ?string $username = null,
 		private ?string $email = null,
 		private ?string $password = null,
-		private ?int $is_valid = null,
-		private ?string $imagePath = null,
+		private ?bool $is_valid = null,
+		private ?string $image_path = null,
 		private ?string $hash_change_password = null
 	) {}
 
@@ -23,11 +23,11 @@ class User {
 		$username = isset($user['username']) ? $user['username'] : null;
 		$email = isset($user['email']) ? $user['email'] : null;
 		$password = isset($user['password']) ? $user['password'] : null;
-		$isValid = isset($user['is_valid']) ? $user['is_valid'] : null;
-		$imagePath = isset($user['image_path']) ? $user['image_path'] : null;
+		$is_valid = isset($user['is_valid']) ? $user['is_valid'] : null;
+		$image_path = isset($user['image_path']) ? $user['image_path'] : null;
 		$hash = isset($user['hash_change_password']) ? $user['hash_change_password'] : null;
 
-		return new User($id, $username, $email, $password, $isValid, $imagePath, $hash);
+		return new User($id, $username, $email, $password, $is_valid, $image_path, $hash);
 	}
 
 	public function toArray() : array {
@@ -64,7 +64,7 @@ class User {
 	}
 
 	function getImagePath() : ?string {
-		return $this->imagePath;
+		return $this->image_path;
 	}
 
 	function getHash() : ?string {

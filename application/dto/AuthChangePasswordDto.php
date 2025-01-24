@@ -4,15 +4,11 @@ namespace Instik\DTO;
 
 class AuthChangePasswordDto {
 
-	private string $hash;
-	private string $password;
-	private string $confirm;
-
-	public function __construct(string $hash, string $password, string $confirm) {
-		$this->hash = $hash;
-		$this->password = $password;
-		$this->confirm = $confirm;
-	}
+	public function __construct(
+		private readonly string $hash, 
+		private readonly string $password, 
+		private readonly string $confirm
+	) {}
 
 	public function getHash() : string {
 		return $this->hash;
