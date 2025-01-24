@@ -115,6 +115,7 @@ class AuthController extends IController {
 			return;
 		}
 
+		$this->session->putUser($user);
 		$this->loader->load(Pages::home, ['user' => $user->toArray()]);
 	}
 
