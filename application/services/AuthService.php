@@ -90,7 +90,7 @@ class AuthService {
 			$filename = $dto->getId() . "_profile_image";
 			$filename .= "." . preg_split("/\//", $profile['type'])[1];
 
-			$imagePath = $this->fileService->upload($profile, $filename);
+			$imagePath = $this->fileService->upload($profile, $filename, DEFAULT_UPLOADS_PATH . "/profile");
 		}
 
 		$user = new User($dto->getId(), $dto->getUsername(), null, null, true, $imagePath);
