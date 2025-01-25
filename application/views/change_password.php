@@ -12,7 +12,7 @@
 </head>
 <body>
 	<main id="main">
-		<form class="content" action="<?= BASE_URL ?>/auth/change-password" method="POST">
+		<form class="content" action="<?= BASE_URL . Instik\Configs\Navigation::change_password ?>" method="POST">
 			<h1 class="title">Trocar Senha</h1>
 
 			<hr />

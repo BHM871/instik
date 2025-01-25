@@ -22,7 +22,7 @@
 	</aside>
 	<aside id="rigth">
 		<main id="main">
-			<form id="login" class="content" action="<?= BASE_URL ?>/auth/authenticate" method="POST">
+			<form id="login" class="content" action="<?= BASE_URL . Instik\Configs\Navigation::authenticate ?>" method="POST">
 				<h1 class="title">Conectar-se</h1>
 
 				<hr />
@@ -49,7 +49,7 @@
 					<small>Não possui conta? <b><span id="register-link" class="link">Cadastre-se</span></b></small>
 				</div>
 			</form>
-			<form id="register" class="content" action="<?= BASE_URL ?>/auth/register" method="POST">
+			<form id="register" class="content" action="<?= BASE_URL . Instik\Configs\Navigation::register ?>" method="POST">
 				<h1 class="title">Registrar-se</h1>
 
 				<hr />
@@ -86,7 +86,7 @@
 				<button class="modal-close" data-dismiss="modal">X</button>
 			</div>
 			<div class="model-body">
-				<form id="change-password" class="content" action="<?= BASE_URL ?>/auth/send-password-email" method="POST">
+				<form id="change-password" class="content" action="<?= BASE_URL . Instik\Configs\Navigation::send_password_email ?>" method="POST">
 					<div class="inputs">
 						<div class="input">
 							<label for="email">Email</label>

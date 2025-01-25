@@ -12,7 +12,7 @@
 </head>
 <body>
 	<main id="main">
-		<form class="content" action="<?= BASE_URL ?>/auth/confirm-register" method="POST" enctype="multipart/form-data">
+		<form class="content" action="<?= BASE_URL . Instik\Configs\Navigation::confirm_register ?>" method="POST" enctype="multipart/form-data">
 			<h1 class="title">Criar Usuário</h1>
 
 			<hr />
