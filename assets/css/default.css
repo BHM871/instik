@@ -8,6 +8,11 @@
 	--white: #f4f4f4;
 }
 
+* {
+	font-family: "Montserrat", serif;
+	font-optical-sizing: auto;
+}
+
 body {
 	width: 100vw;
 	height: 100vh;
