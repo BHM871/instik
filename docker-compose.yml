@@ -1,6 +1,6 @@
 services:
   xampp:
-    image: tomsik68/xampp
+    build: .
     volumes:
       - "/home/adrian/Documents/Codigos/php:/opt/lampp/htdocs"
     ports:
