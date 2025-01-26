@@ -7,7 +7,7 @@ define("VIEWS_PATH", "./application/views");
 define("ENV_PATH", "./application/env");
 define("LOG_PATH", "./system/log");
 
-define("DEFAULT_UPLOADS_PATH", "/home/instik/uploads");
+define("DEFAULT_UPLOADS_PATH", "bucket");
 
 define("DB_HOST", "localhost");
 define("DB_PORT", "3306");

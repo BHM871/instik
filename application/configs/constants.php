@@ -1,3 +1,3 @@
 <?php
 
-define("BASE_PATH", "instik");
+define("BASE_PATH", "/instik");
