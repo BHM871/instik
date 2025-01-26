@@ -140,7 +140,7 @@ body {
 }
 
 #navbar:hover #options, #options:hover {
-	height: fit-content;
+	height: 290px;
 }
 
 #feed {
