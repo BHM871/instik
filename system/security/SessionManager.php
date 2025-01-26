@@ -31,7 +31,10 @@ class SessionManager {
 		
 		$token = $this->tokenManager->generate($user);
 
-		setcookie(SessionManager::token_key, $token, (time() + (SESSION_TIME * 60)), ("/".BASE_PATH));
+		if (isset($_COOKIE[SessionManager::token_key]))
+			unset($_COOKIE[SessionManager::token_key]);
+		
+		setcookie(SessionManager::token_key, $token, (time() + (SESSION_TIME * 60)), "/");
 
 		return true;
 	}
@@ -59,7 +62,10 @@ class SessionManager {
 			return false;
 		}
 
-		setcookie($key, $value, (time() + ($time * 60)), ("/".BASE_PATH));
+		if (isset($_COOKIE[$key]))
+			unset($_COOKIE[$key]);
+
+		setcookie($key, $value, (time() + ($time * 60)), "/");
 		return true;
 	}
 

@@ -6,6 +6,7 @@ use System\Logger;
 
 use DateTime;
 use DateInterval;
+use ReflectionClass;
 use Throwable;
 
 class TokenManager {
@@ -147,15 +148,23 @@ class TokenManager {
 			return null;
 		}
 
-		$obj = (array) $obj;
-
 		$str = "";
-		foreach ($obj as $key => $value) {
-			if (strlen($key) == 0 || strlen($value) == 0) {
-				continue;
-			}
+		if (is_array($obj)) {
+			foreach ($obj as $key => $value) {
+				if (strlen($key) == 0 || strlen($value) == 0) {
+					continue;
+				}
 
-			$str .= (strlen($str) != 0 ? ";" : "") . "$key=$value";
+				$str .= (strlen($str) != 0 ? ";" : "") . "$key=$value";
+			}
+		} else {
+			$reflection = new ReflectionClass(get_class($obj));
+
+			foreach ($reflection->getProperties() as $property) {
+				if ($property->getValue($obj) != null) {
+					$str .= (strlen($str) != 0 ? ";" : "") . $property->getName() . "=" . (string) $property->getValue($obj);
+				}
+			}
 		}
 
 		return $str;
