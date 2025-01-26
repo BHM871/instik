@@ -19,22 +19,23 @@ class ClassLoader {
 		$iterator = new DirectoryIterator($path);
 
 		foreach ($iterator as $info) {
-			if ($info->getFilename() == '.' || $info->getFilename() == '..' || preg_match("/".str_replace("/", "\/", VIEWS_PATH)."/", $info->getPathname())) {
+			if ($info->getFilename() == '.' || $info->getFilename() == '..' || preg_match("/".str_replace("/", "\/", VIEWS_PATH)."/", $info->getPathname()))
 				continue;
-			}
 
 			if ($info->isDir()) {
 				ClassLoader::load($info->getPathname());
 				continue;
 			}
 
-			if ($info->getExtension() != 'php' || $info->getFilename() == "ClassLoader.php") {
+			if ($info->getExtension() != 'php' || $info->getFilename() == "ClassLoader.php")
 				continue;
-			}
+
+			if (isset($classes[$info->getPath()][$info->getPathname()]))
+				continue;
 
 			try {
 				include_once($info->getPathname());
-				$classes[$info->getPath()][] = $info->getPathname();
+				$classes[$info->getPath()][$info->getPathname()] = $info->getPathname();
 			} catch (\Throwable $th) {
 				$tryAgain[] = $info->getPath();
 			}
