@@ -9,6 +9,7 @@
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/feed.css" />
+	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/post.css" />
 </head>
 <body>
 	<section id="navbar">
@@ -27,26 +28,38 @@
 	<section id="main">
 		<section id="searcher">
 			<form id="finder" action="<?= BASE_URL ?>/feed/search">
-				<input id="search" name="search" type="text" class="input-black"  value="<? //$filters['text'] ?>"/>
+				<input id="search" name="search" type="text" class="input-black" placeholder="Pesquise..." value="<?= isset($filters) && isset($filters['text']) ? $filters['text'] : "" ?>"/>
 				<button id="btn-search" type="submit">
 					<?php $this->load(Instik\Configs\Icons::search) ?>
 				</button>
 			</form>
 			<div id="filters">
 				<label>Filtros:</label>
-				<select class="filter">
+				<select class="filter" value="<?= isset($filters) && isset($filters['order_by']) ? $filters['order_by'] : "" ?>">
 					<option value="">Ordernar Por</option>
 					<option value="title">Título</option>
 					<option value="date">Data</option>
 				</select>
-				<select class="filter">
+				<select class="filter" value="<?= isset($filters) && isset($filters['order']) ? $filters['order'] : "" ?>">
 					<option value="DESC">Descressente</option>
 					<option value="ASC">Assendente</option>
 				</select>
 			</div>
 		</section>
 
-		<section id="feed"></section>
+		<section id="feed">
+			<main>
+				<?php
+					if (isset($posts) && sizeof($posts) > 0) {
+						foreach ($posts as $post) {
+							$this->load(\Instik\Configs\Templates::post, $post);
+						}
+					} else {
+						echo '<h1 style="text-align: center">Não há publicações</h1>';
+					}
+				?>
+			</main>
+		</section>
 	</section>
 	
 	<?php if (isset($message)) : ?>

@@ -67,3 +67,23 @@ body {
 	border-color: red !important;
 	border-width: 2px !important	;
 }
+
+.input-black {
+	padding: 0 10px;
+	font-size: .9rem;
+	color: var(--white);
+	background-color: var(--secondary-black);
+	border-radius: 10px 10px 0 0;
+	border: none;
+	border-bottom: 2px solid var(--thirty-black);
+}
+
+.profile {
+	height: 70%;
+	aspect-ratio: 1;
+	object-fit: cover;
+	object-position: center;
+	border-radius: 50%;
+	border: 1px solid var(--thirty-black);
+	overflow: hidden;
+}

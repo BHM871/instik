@@ -9,9 +9,8 @@ body {
 	width: 55vw;
 	height: 100vh;
 	display: grid;
-	grid-template-columns: 50vw;
-	grid-template-rows: 10vh 87vh;
-	gap: 3vh;
+	grid-template-columns: 55vw;
+	grid-template-rows: 13vh 87vh;
 }
 
 #searcher {
@@ -38,13 +37,6 @@ body {
 	input {
 		width: 80%;
 		height: 50%;
-		padding: 0 10px;
-		font-size: .9rem;
-		color: var(--white);
-		background-color: var(--secondary-black);
-		border-radius: 10px 10px 0 0;
-		border: none;
-		border-bottom: 2px solid var(--thirty-black);
 	}
 
 	button {
@@ -89,7 +81,7 @@ body {
 
 #navbar {
 	position: fixed;
-	top: calc(13vh - (9vh / 2));
+	top: calc(13vh - (9vh / 2) + (1.5vh / 2));
 	left: 0;
 	color: white;
 }
@@ -104,14 +96,7 @@ body {
 	border-radius: 0 5vh 5vh 0;
 
 	img {
-		height: 70%;
-		aspect-ratio: 1;
 		margin: 0 0 0 30px;
-		object-fit: cover;
-		object-position: center;
-		border-radius: 50%;
-		border: 1px solid var(--thirty-black);
-		overflow: hidden;
 	}
 
 	p {
@@ -156,4 +141,25 @@ body {
 
 #navbar:hover #options, #options:hover {
 	height: fit-content;
+}
+
+#feed {
+	width: 55vw;
+	height: 86vh;
+	display: flex;
+	justify-content: center;
+	align-items: start;
+	position: fixed;
+	top: 14.5vh;
+	background-color: var(--primary-black);
+	border-radius: 50px 50px 0 0;
+	color: var(--white);
+	overflow-y: scroll;
+	scrollbar-width: thin;
+	scrollbar-color: var(--secondary-black);
+
+	main {
+		width: 55%;
+		max-height: 100%;
+	}
 }

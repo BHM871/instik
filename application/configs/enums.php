@@ -14,6 +14,9 @@ class Navigation {
 
 class Templates {
 	const head_links = "templates/head_links";
+	
+	const post = "templates/post";
+	const comment = "templates/comment";
 }
 
 class Pages {
@@ -27,4 +30,5 @@ class Icons {
 	const search = "svgs/search-icon";
 	const replay = "svgs/replay-icon";
 	const favorite = "svgs/favorite-icon";
+	const share = "svgs/share-icon";
 }
