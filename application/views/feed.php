@@ -11,7 +11,18 @@
 	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/feed.css" />
 </head>
 <body>
-	<section id="navbar"></section>
+	<section id="navbar">
+		<div id="head">
+			<img class="profile" src="<?= BASE_PATH . "/" . $user['image_path'] ?>" />
+			<p><?= $user['username'] ?></p>
+		</div>
+		<ul id="options">
+			<li><a>Adicionar Post</a></li>
+			<li><a>Perfil</a></li>
+			<li><a>Trocar Senha</a></li>
+			<li><a>Sair</a></li>
+		</ul>
+	</section>
 	
 	<section id="main">
 		<section id="searcher">

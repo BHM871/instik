@@ -6,7 +6,7 @@ body {
 }
 
 #main {
-	width: 50vw;
+	width: 55vw;
 	height: 100vh;
 	display: grid;
 	grid-template-columns: 50vw;
@@ -15,8 +15,8 @@ body {
 }
 
 #searcher {
-	width: 50vw;
-	height: 10vh;
+	width: 55vw;
+	height: 13vh;
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
@@ -32,8 +32,6 @@ body {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-
-	
 }
 
 #finder {
@@ -87,4 +85,75 @@ body {
 		border-bottom: 2px solid var(--thirty-black);
 		cursor: pointer;
 	}
+}
+
+#navbar {
+	position: fixed;
+	top: calc(13vh - (9vh / 2));
+	left: 0;
+	color: white;
+}
+
+#navbar #head {
+	width: calc((100vw - 55vw) / 2);
+	height: 9vh;
+	display: flex;
+	justify-content: start;
+	align-items: center;
+	background-color: var(--primary-black);
+	border-radius: 0 5vh 5vh 0;
+
+	img {
+		height: 70%;
+		aspect-ratio: 1;
+		margin: 0 0 0 30px;
+		object-fit: cover;
+		object-position: center;
+		border-radius: 50%;
+		border: 1px solid var(--thirty-black);
+		overflow: hidden;
+	}
+
+	p {
+		max-width: 70%;
+		margin: 0 0 0 15px;
+		overflow-x: hidden;
+		text-overflow: ellipsis;
+		font-weight: bold;
+		letter-spacing: 1px;
+	}
+}
+
+#navbar #options {
+	width: 75%;
+	height: 0;
+	margin: 0;
+	background-color: var(--thirty-black);
+	border-radius: 0 0 25px 0;
+	overflow: hidden;
+	text-decoration: none;
+	list-style-type: none;
+	transition: 600ms;
+
+	li:first-child {
+		border: none;
+	}
+
+	li {
+		padding: 25px 0;
+		margin: 0 40px 0 0;
+		font-weight: 600;
+		border-top: 2px solid var(--secondary-black);
+	}
+}
+
+#options li {
+	a:hover {
+		text-decoration: underline;
+		cursor: pointer;
+	}
+}
+
+#navbar:hover #options, #options:hover {
+	height: fit-content;
 }
