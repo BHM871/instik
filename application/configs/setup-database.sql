@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS post (
 	caption VARCHAR(1536) DEFAULT NULL,
 	image_path VARCHAR(255) DEFAULT NULL,
 	`like` INTEGER DEFAULT 0,
-	id_publicher INTEGER NOT NULL,
+	id_publisher INTEGER NOT NULL,
 	FOREIGN KEY (id_publicher) REFERENCES user(id)
 );
 

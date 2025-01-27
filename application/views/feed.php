@@ -29,21 +29,21 @@
 		<section id="searcher">
 			<form id="filters-form" action="<?= BASE_URL . \Instik\Configs\Navigation::feed ?>">
 				<div id="finder">
-					<input id="search" name="search" type="text" class="input-black" placeholder="Pesquise..." value="<?= isset($filters) && isset($filters['text']) ? $filters['text'] : "" ?>"/>
+					<input id="search" name="search" type="text" class="input-black" placeholder="Pesquise..." value="<?= isset($filters['text']) ? $filters['text'] : "" ?>"/>
 					<button id="btn-search" type="submit">
 						<?php $this->load(Instik\Configs\Icons::search) ?>
 					</button>
 				</div>
 				<div id="filters">
 					<label>Filtros:</label>
-					<select name="orderBy" class="filter" value="<?= isset($filters) && isset($filters['order_by']) ? $filters['order_by'] : "" ?>">
+					<select name="orderBy" class="filter">
 						<option value="">Ordernar Por</option>
-						<option value="caption">Descrição</option>
-						<option value="posted_date">Data</option>
+						<option value="caption" <?= isset($filters['orderBy']) && $filters['orderBy'] == 'caption' ? 'selected' : '' ?>>Descrição</option>
+						<option value="posted_date" <?= isset($filters['orderBy']) && $filters['orderBy'] == 'posted_date' ? 'selected' : '' ?>>Data</option>
 					</select>
-					<select name="order" class="filter" value="<?= isset($filters) && isset($filters['order']) ? $filters['order'] : "" ?>">
-						<option value="DESC">Descressente</option>
-						<option value="ASC">Assendente</option>
+					<select name="order" class="filter">
+						<option value="DESC" <?= isset($filters['order']) && $filters['order'] == 'DESC' ? 'selected' : '' ?>>Descressente</option>
+						<option value="ASC" <?= isset($filters['order']) && $filters['order'] == 'ASC' ? 'selected' : '' ?>>Assendente</option>
 					</select>
 				</div>
 			</form>
@@ -54,7 +54,7 @@
 				<?php
 					if (isset($posts) && sizeof($posts) > 0) {
 						foreach ($posts as $post) {
-							$this->load(\Instik\Configs\Templates::post, $post);
+							$this->load(\Instik\Configs\Templates::post, ['post' => $post]);
 						}
 					} else {
 						echo '<h1 style="text-align: center">Não há publicações</h1>';

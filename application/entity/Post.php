@@ -39,8 +39,12 @@ class Post {
 		$reflection = new ReflectionClass($this);
 		foreach ($reflection->getProperties() as $property) {
 			$value = $property->getValue($this);
-			if ($value != null)
-				$array[$property->getName()] = $value;
+			if ($value != null) {
+				if ($value instanceof User)
+					$array[$property->getName()] = $value->toArray();
+				else
+					$array[$property->getName()] = $value;
+			}
 		}
 
 		return $array;
@@ -55,7 +59,7 @@ class Post {
 
 		$value = $post['posted_date'];
 		if (is_string($value))
-			return DateTime::createFromFormat($value, Post::DATE_FORMAT);
+			return DateTime::createFromFormat(Post::DATE_FORMAT, $value);
 		
 		if ($value instanceof DateTime)
 			return $value;

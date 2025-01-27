@@ -3,6 +3,7 @@
 namespace Instik\Controllers;
 
 use Instik\Configs\Pages;
+use Instik\DTO\FeedFiltersDto;
 use Instik\Services\PostService;
 
 use System\Annotations\Route\Routable;
@@ -30,9 +31,31 @@ class FeedController extends IController {
 		if ($user == null || $user['id'] == null)
 			$this->redirect("/");
 
-		$posts = $this->postService->getFeed($user['id']);
+		$filters = $this->getFilters();
+		$posts = $this->postService->getFeed($user['id'], $filters);
 
-		$this->loader->load(Pages::home, ['user' => $user, 'posts' => $posts]);
+		if ($posts != null) {
+			$postsObj = $posts;
+			$posts = [];
+			foreach ($postsObj as $post) $posts[] = $post->toArray();
+		}
+
+		$this->loader->load(Pages::home, ['user' => $user, 'filters' => $filters->toArray(), 'posts' => $posts]);
+	}
+
+	private function getFilters() : FeedFiltersDto {
+		$text = null; $orderBy = null; $order = null;
+		
+		if (isset($_GET['search']))
+			$text = $_GET['search'];
+
+		if (isset($_GET['orderBy']))
+			$orderBy = $_GET['orderBy'];
+
+		if (isset($_GET['order']))
+			$order = $_GET['order'];
+
+		return new FeedFiltersDto($text, $orderBy, $order);
 	}
 
 }

@@ -1,12 +1,12 @@
 <div class="post">
 	<div class="post-head">
 		<div class="post-user">
-			<img class="profile" src="<?= BASE_PATH . "/" . $post['user']['image_path'] ?>" />
-			<p><a href="<?= BASE_URL . "/user?id=" . $post['user']['id'] ?>"><?= $post['user']['username'] ?></a></p>
+			<img class="profile" src="<?= BASE_PATH . "/" . $post['publisher']['image_path'] ?>" />
+			<p><a href="<?= BASE_URL . "/user?id=" . $post['publisher']['id'] ?>"><?= $post['publisher']['username'] ?></a></p>
 		</div>
 	</div>
 	<div class="post-body">
-		<p><?= isset($post['content']) ? $post['content'] : "" ?></p>
+		<p><?= isset($post['caption']) ? $post['caption'] : "" ?></p>
 		<img src="<?= isset($post['image_path']) ? BASE_PATH . "/" . $post['image_path'] : "" ?>">
 	</div>
 	<div class="post-iteractions">
