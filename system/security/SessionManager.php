@@ -4,18 +4,18 @@ namespace System\Security;
 
 class SessionManager {
 
-	private const token_key = "_PHP_TOKEN_SESSION";
+	private const TOKEN_KEY = "_PHP_TOKEN_SESSION";
 
 	public function __construct(
 		private readonly TokenManager $tokenManager
 	) {}
 
 	public function isAuthenticated() : bool {
-		if (!isset($_COOKIE[SessionManager::token_key])) {
+		if (!isset($_COOKIE[SessionManager::TOKEN_KEY])) {
 			return false;
 		}
 		
-		$token = $_COOKIE[SessionManager::token_key];
+		$token = $_COOKIE[SessionManager::TOKEN_KEY];
 
 		if ($token == null || strlen($token) == 0) {
 			return false;
@@ -31,20 +31,20 @@ class SessionManager {
 		
 		$token = $this->tokenManager->generate($user);
 
-		if (isset($_COOKIE[SessionManager::token_key]))
-			unset($_COOKIE[SessionManager::token_key]);
+		if (isset($_COOKIE[SessionManager::TOKEN_KEY]))
+			unset($_COOKIE[SessionManager::TOKEN_KEY]);
 		
-		setcookie(SessionManager::token_key, $token, (time() + (SESSION_TIME * 60)), "/");
+		setcookie(SessionManager::TOKEN_KEY, $token, (time() + (SESSION_TIME * 60)), "/");
 
 		return true;
 	}
 
 	public function getUser() : object|array|null {
-		if (!isset($_COOKIE[SessionManager::token_key])) {
+		if (!isset($_COOKIE[SessionManager::TOKEN_KEY])) {
 			return null;
 		}
 		
-		$token = $_COOKIE[SessionManager::token_key];
+		$token = $_COOKIE[SessionManager::TOKEN_KEY];
 
 		if ($token == null || strlen($token) == 0) {
 			return null;

@@ -11,12 +11,12 @@ use Throwable;
 
 class TokenManager {
 
-	private const cipher = 'seed-cbc';
-	private const iv = 'z2b/&w*A/tLRWE?C';	
+	private const CIPHER = 'seed-cbc';
+	private const IV = 'z2b/&w*A/tLRWE?C';	
 	
-	private const limit_key = "DATETIME_LIMIT";
+	private const LIMIT_KEY = "DATETIME_LIMIT";
 
-	private const date_format = "Y-m-d H:i:s";
+	private const DATE_FORMAT = "Y-m-d H:i:s";
 
 	private Logger $logger;
 
@@ -34,7 +34,7 @@ class TokenManager {
 			return null;
 		}
 
-		return openssl_encrypt($value, TokenManager::cipher, env['TOKEN_SEED'], 0, TokenManager::iv);
+		return openssl_encrypt($value, TokenManager::CIPHER, env['TOKEN_SEED'], 0, TokenManager::IV);
 	}
 
 	private function decrypt(string $token) : ?string {
@@ -47,7 +47,7 @@ class TokenManager {
 			return null;
 		}
 
-		return openssl_decrypt($token, TokenManager::cipher, env['TOKEN_SEED'], 0, TokenManager::iv);
+		return openssl_decrypt($token, TokenManager::CIPHER, env['TOKEN_SEED'], 0, TokenManager::IV);
 	}
 
 	public function generate(object|array $user) : ?string {
@@ -100,9 +100,9 @@ class TokenManager {
 	private function getHeader() : string {
 		$limit = (new DateTime())
 			->add(DateInterval::createFromDateString(SESSION_TIME." minutes"))
-			->format(TokenManager::date_format);
+			->format(TokenManager::DATE_FORMAT);
 		
-		return $this->toString([TokenManager::limit_key => $limit]);
+		return $this->toString([TokenManager::LIMIT_KEY => $limit]);
 	}
 
 	private function validHeader(array $header) : bool {
@@ -110,17 +110,17 @@ class TokenManager {
 			return false;
 		}
 
-		if (!isset($header[TokenManager::limit_key])) {
+		if (!isset($header[TokenManager::LIMIT_KEY])) {
 			return false;
 		}
 
-		$limit = $header[TokenManager::limit_key];
+		$limit = $header[TokenManager::LIMIT_KEY];
 
 		if ($limit == null || strlen($limit) == 0) {
 			return false;
 		}
 
-		$limit = DateTime::createFromFormat(TokenManager::date_format, $limit);
+		$limit = DateTime::createFromFormat(TokenManager::DATE_FORMAT, $limit);
 
 		if ((new DateTime()) > $limit) {
 			return false;
