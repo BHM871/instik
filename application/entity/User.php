@@ -19,13 +19,13 @@ class User {
 	public static function instancer(array $user) : ?self {
 		if ($user == null) return null;
 
-		$id = isset($user['id']) ? $user['id'] : null;
-		$username = isset($user['username']) ? $user['username'] : null;
-		$email = isset($user['email']) ? $user['email'] : null;
-		$password = isset($user['password']) ? $user['password'] : null;
-		$is_valid = isset($user['is_valid']) ? $user['is_valid'] : null;
-		$image_path = isset($user['image_path']) ? $user['image_path'] : null;
-		$hash = isset($user['hash_change_password']) ? $user['hash_change_password'] : null;
+		$id = User::getValueFromArray($user, 'id');
+		$username = User::getValueFromArray($user, 'username');
+		$email = User::getValueFromArray($user, 'email');
+		$password = User::getValueFromArray($user, 'password');
+		$is_valid = User::getValueFromArray($user, 'is_valid');
+		$image_path = User::getValueFromArray($user, 'image_path');
+		$hash = User::getValueFromArray($user, 'hash_change_password');
 
 		return new User($id, $username, $email, $password, $is_valid, $image_path, $hash);
 	}
@@ -41,6 +41,10 @@ class User {
 		}
 
 		return $array;
+	}
+
+	private static function getValueFromArray(array $user, string $key) : mixed {
+		return isset($user[$key]) ? $user[$key] : null;
 	}
 
 	function getId() : ?int {

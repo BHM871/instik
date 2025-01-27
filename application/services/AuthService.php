@@ -93,7 +93,7 @@ class AuthService {
 			$imagePath = $this->fileService->upload($profile, $filename, DEFAULT_UPLOADS_PATH . "/profile");
 		}
 
-		$user = new User($dto->getId(), $dto->getUsername(), null, null, true, $imagePath);
+		$user = new User(id: $dto->getId(), username: $dto->getUsername(), image_path: $imagePath);
 		$user = $this->repository->confirmRegister($user);
 
 		if ($user == null || $user->getId() == null)
