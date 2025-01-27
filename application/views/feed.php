@@ -37,7 +37,7 @@
 				<label>Filtros:</label>
 				<select class="filter" value="<?= isset($filters) && isset($filters['order_by']) ? $filters['order_by'] : "" ?>">
 					<option value="">Ordernar Por</option>
-					<option value="title">Título</option>
+					<option value="caption">Descrição</option>
 					<option value="date">Data</option>
 				</select>
 				<select class="filter" value="<?= isset($filters) && isset($filters['order']) ? $filters['order'] : "" ?>">

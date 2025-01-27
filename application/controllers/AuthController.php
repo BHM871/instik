@@ -3,6 +3,7 @@
 namespace Instik\Controllers;
 
 use AuthConfirmRegisterDto;
+use Instik\Configs\Navigation;
 use Instik\Configs\Pages;
 use Instik\DTO\AuthLoginDto;
 use Instik\DTO\AuthRegisterDto;
@@ -50,7 +51,7 @@ class AuthController extends IController {
 		}
 
 		$this->session->putUser($user);
-		$this->loader->load(Pages::home, ['user' => $user->toArray()]);
+		$this->redirect(Navigation::feed);
 	}
 
 	#[Route("/register", Route::POST)]
@@ -116,7 +117,7 @@ class AuthController extends IController {
 		}
 
 		$this->session->putUser($user);
-		$this->loader->load(Pages::home, ['user' => $user->toArray()]);
+		$this->redirect(Navigation::feed);
 	}
 
 	#[Route("/send-password-email", Route::POST)]
