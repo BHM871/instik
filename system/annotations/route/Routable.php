@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Annotations;
+namespace System\Annotations\Route;
 
 use Attribute;
 

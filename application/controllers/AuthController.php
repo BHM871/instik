@@ -10,8 +10,8 @@ use Instik\DTO\AuthChangePasswordDto;
 use Instik\Services\AuthService;
 use Instik\Validators\AuthValidator;
 
-use System\Annotations\Routable;
-use System\Annotations\Route;
+use System\Annotations\Route\Routable;
+use System\Annotations\Route\Route;
 use System\Interfaces\IController;
 use System\Security\SessionManager;
 

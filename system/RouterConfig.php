@@ -3,8 +3,8 @@
 namespace System;
 
 use Configs\ErrorsPaths;
-use System\Annotations\Routable;
-use System\Annotations\Route;
+use System\Annotations\Route\Routable;
+use System\Annotations\Route\Route;
 use System\Core\Instancer;
 use System\Core\ViewLoader;
 use System\Security\SessionManager;
@@ -38,7 +38,7 @@ class RouterConfig {
 
 			$object = Instancer::get($class);
 
-			$routable = (new ReflectionClass(Routable::class))->newInstanceArgs($attributes[0]->getArguments());
+			$routable = Instancer::getByReflectionAttribute($attributes[0]);
 			$classUri = preg_replace("/\/$/", '', preg_replace("/^[^\/]/", '/', $routable->name));
 
 			foreach ($class->getMethods() as $method) {
@@ -47,7 +47,7 @@ class RouterConfig {
 				if(empty($attributes) || $method->isConstructor() || $method->isDestructor())
 					continue;
 
-				$route = (new ReflectionClass(Route::class))->newInstanceArgs($attributes[0]->getArguments());				
+				$route = Instancer::getByReflectionAttribute($attributes[0]);
 
 				$methodUri = preg_replace("/\/$]/", '', preg_replace("/^[^\/]/", '/', $route->getValue()));
 				$realPath = $classUri.$methodUri;

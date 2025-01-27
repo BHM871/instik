@@ -4,6 +4,7 @@ namespace System\Core;
 
 use ReflectionClass;
 use Exception;
+use ReflectionAttribute;
 
 class Instancer {
 
@@ -48,6 +49,14 @@ class Instancer {
 		}
 
 		return Instancer::instance($reflection, $dependencies);
+	}
+	
+	public static function getByReflectionAttribute(ReflectionAttribute $reflection) : object {
+		if ($reflection == null)
+			return null;
+
+		$class = new ReflectionClass($reflection->getName());
+		return $class->newInstanceArgs($reflection->getArguments());
 	}
 
 	private static function instance(ReflectionClass $reflection, array $dependencies = array()) {
