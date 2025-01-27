@@ -228,7 +228,7 @@ class Database {
 				}
 
 				$data[] = $value;
-				$whe .= ($i > 0 ? " AND " : "") . "$column = ?";
+				$whe .= ($i > 0 ? " AND " : "") . (is_string($value) ? "$column LIKE ?" : "$column = ?");
 				$i++;
 			}
 		}
