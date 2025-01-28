@@ -10,6 +10,7 @@
 	<!-- CSS -->
 	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/feed.css" />
 	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/post.css" />
+	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/modal.css" />
 </head>
 <body>
 	<section id="navbar">
@@ -20,7 +21,7 @@
 		<ul id="options">
 			<li><a>Adicionar Post</a></li>
 			<li><a>Perfil</a></li>
-			<li><a>Trocar Senha</a></li>
+			<li><a href="#forgot-password-modal" data-toggle="modal">Trocar Senha</a></li>
 			<li><a href="<?= BASE_URL . \Instik\Configs\Navigation::logout ?>">Sair</a></li>
 		</ul>
 	</section>
@@ -63,6 +64,26 @@
 			</main>
 		</section>
 	</section>
+
+	<div id="forgot-password-modal" class="modal">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="modal-close" data-dismiss="modal">X</button>
+			</div>
+			<div class="model-body">
+				<form id="change-password" class="content" action="<?= BASE_URL . Instik\Configs\Navigation::send_password_email ?>" method="POST">
+					<div class="inputs">
+						<div class="input">
+							<label for="email">Email</label>
+							<input id="email" name="email" validate-type="email" type="email" placeholder="Email para trocar senha" required />
+						</div>
+					</div>
+
+					<input id="register-btn" type="submit" value="Enviar" class="btn-submit" data-dismiss="modal" />
+				</form>
+			</div>
+		</div>
+	</div>
 	
 	<?php if (isset($message)) : ?>
 		<div id="message" class="message">
@@ -73,6 +94,7 @@
 
 <script type="text/javascript" src="<?= BASE_URL ?>/assets/js/default.js"></script>
 <script type="text/javascript" src="<?= BASE_URL ?>/assets/js/feed.js"></script>
+<script type="text/javascript" src="<?= BASE_URL ?>/assets/js/modal.js"></script>
 <script type="text/javascript" src="<?= BASE_URL ?>/assets/js/validator.js"></script>
 
 </html>

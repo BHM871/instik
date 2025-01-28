@@ -29,6 +29,13 @@
 	border-radius: 30px;
 }
 
+.content {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
 .modal-header {
 	border-bottom: var(--thirty-black) solid 1px;
 	padding: 0 8px 15px 8px;
@@ -48,4 +55,28 @@
 .modal-close:hover {
 	cursor: pointer;
 	transform: scale(1.2);
+}
+
+.inputs {
+	margin: 0 0 35px 0;
+
+	.input {
+		margin: 15px;
+		display: flex;
+		flex-direction: column;
+
+		label {
+			margin: 10px 5px;
+			font-size: 1.15rem;
+			color: var(--white);
+		}
+
+		input {
+			width: 20rem;
+			height: 3.5rem;
+			border-radius: 10px;
+			border: 1px solid var(--thirty-black);
+			padding: 0 10px 0 10px;
+		}
+	}
 }
