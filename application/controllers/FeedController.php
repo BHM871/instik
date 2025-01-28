@@ -21,11 +21,8 @@ class FeedController extends IController {
 		parent::__construct($session);
 	}
 
-	#[Route("/")]
+	#[Route("/", Route::GET, true)]
 	public function feed() {
-		if (!$this->session->isAuthenticated())
-			$this->redirect("/");
-
 		$user = $this->session->getUser();
 
 		if ($user == null || $user['id'] == null)

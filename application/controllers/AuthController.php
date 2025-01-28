@@ -58,6 +58,11 @@ class AuthController extends IController {
 	public function register_init() {
 		$registerDto = new AuthRegisterDto($_POST["email"], $_POST["password"], $_POST["password-confirm"]);
 
+		if ($this->session->isAuthenticated() && $this->session->getUser()['email'] == $registerDto->getEmail()) {
+			$this->redirect(Navigation::feed);
+			return;
+		}
+
 		if ($registerDto->getEmail() == "" || $registerDto->getPassword() == "" || $registerDto->getConfirm() == "") {
 			$this->loader->load(Pages::login, ["message" => "Preencha os campos corretamente"]);
 			return;
@@ -91,6 +96,11 @@ class AuthController extends IController {
 	public function confirm_register() {
 		$confirmDto = new AuthConfirmRegisterDto($_POST["user-id"], $_POST["username"]);
 		$profile = $_FILES['profile'];
+
+		if ($this->session->isAuthenticated() && $this->session->getUser()['id'] == $confirmDto->getId()) {
+			$this->redirect(Navigation::feed);
+			return;
+		}
 
 		if ($confirmDto->getId() == "" || $confirmDto->getUsername() == "") {
 			$this->loader->load(Pages::login, ["message" => "Preencha os campos corretamente"]);
@@ -141,7 +151,10 @@ class AuthController extends IController {
 			return;
 		}	
 
-		$this->loader->load(Pages::login, ["message" => "Email enviado com sucesso"]);
+		if ($this->session->isAuthenticated())
+			$this->loader->load(Pages::home);
+		else
+			$this->loader->load(Pages::login, ["message" => "Email enviado com sucesso"]);
 	}
 
 	#[Route("/change-password-view")]
