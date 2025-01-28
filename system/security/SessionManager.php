@@ -57,6 +57,11 @@ class SessionManager {
 		return $this->tokenManager->getContent($token);
 	}
 
+	public function removeUser() {
+		if (isset($_COOKIE[SessionManager::TOKEN_KEY]))
+			unset($_COOKIE[SessionManager::TOKEN_KEY]);
+	}
+
 	public function put(string $key, string $value, int $time = SESSION_TIME) : bool {
 		if ($key == null) {
 			return false;
