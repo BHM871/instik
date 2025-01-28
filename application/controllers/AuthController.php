@@ -186,4 +186,11 @@ class AuthController extends IController {
 		$this->loader->load(Pages::login, ["message" => "Senha atualizada com sucesso"]);
 	}
 
+	#[Route("/logout", [Route::GET, Route::POST])]
+	public function logou() {
+		$this->session->removeUser();
+
+		$this->redirect("/");
+	}
+
 }

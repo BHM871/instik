@@ -10,6 +10,7 @@ class Navigation {
 	const send_password_email = "/auth/send-password-email";
 	const change_password_view = "/auth/change-password-view";
 	const change_password = "/auth/change-password";
+	const logout = "/auth/logout";
 
 	//FeedController
 	const feed = "/feed/";

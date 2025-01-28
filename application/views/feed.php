@@ -21,7 +21,7 @@
 			<li><a>Adicionar Post</a></li>
 			<li><a>Perfil</a></li>
 			<li><a>Trocar Senha</a></li>
-			<li><a>Sair</a></li>
+			<li><a href="<?= BASE_URL . \Instik\Configs\Navigation::logout ?>">Sair</a></li>
 		</ul>
 	</section>
 	
