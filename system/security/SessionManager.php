@@ -59,7 +59,7 @@ class SessionManager {
 
 	public function removeUser() {
 		if (isset($_COOKIE[SessionManager::TOKEN_KEY]))
-			unset($_COOKIE[SessionManager::TOKEN_KEY]);
+			setcookie(SessionManager::TOKEN_KEY, "", -1, "/");
 	}
 
 	public function put(string $key, string $value, int $time = SESSION_TIME) : bool {
