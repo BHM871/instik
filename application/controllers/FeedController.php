@@ -3,6 +3,7 @@
 namespace Instik\Controllers;
 
 use Instik\Configs\Pages;
+use Instik\DTO\Entity\PostDto;
 use Instik\DTO\FeedFiltersDto;
 use Instik\Services\PostService;
 
@@ -32,9 +33,8 @@ class FeedController extends IController {
 		$posts = $this->postService->getFeed($user['id'], $filters);
 
 		if ($posts != null) {
-			$postsObj = $posts;
-			$posts = [];
-			foreach ($postsObj as $post) $posts[] = $post->toArray();
+			$postsObj = $posts; $posts = [];
+			foreach ($postsObj as $post) $posts[] = PostDto::by($post)->toArray();
 		}
 
 		$this->loader->load(Pages::home, ['user' => $user, 'filters' => $filters->toArray(), 'posts' => $posts]);
