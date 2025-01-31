@@ -8,6 +8,7 @@ use Instik\Configs\Pages;
 use Instik\DTO\AuthLoginDto;
 use Instik\DTO\AuthRegisterDto;
 use Instik\DTO\AuthChangePasswordDto;
+use Instik\DTO\Entity\UserDto;
 use Instik\Services\AuthService;
 use Instik\Validators\AuthValidator;
 
@@ -50,7 +51,7 @@ class AuthController extends IController {
 			return;
 		}
 
-		$this->session->putUser($user);
+		$this->session->putUser(UserDto::by($user));
 		$this->redirect(Navigation::feed);
 	}
 
@@ -78,7 +79,7 @@ class AuthController extends IController {
 		$user = $this->service->getInvalidUser($registerDto->getEmail());
 
 		if ($user != null && $user->getId() != null) {
-			$this->loader->load(Pages::register_confirm, ["user" => $user->toArray()]);
+			$this->loader->load(Pages::register_confirm, ["user" => ['id' => $user->getId(), 'email' => $user->getEmail()]]);
 			return;
 		}
 
@@ -89,7 +90,7 @@ class AuthController extends IController {
 			return;
 		}
 
-		$this->loader->load(Pages::register_confirm, ['user' => $user->toArray()]);
+		$this->loader->load(Pages::register_confirm, ['user' => ['id' => $user->getId(), 'email' => $user->getEmail()]]);
 	}
 
 	#[Route("/confirm-register", Route::POST)]
@@ -126,7 +127,7 @@ class AuthController extends IController {
 			return;
 		}
 
-		$this->session->putUser($user);
+		$this->session->putUser(UserDto::by($user));
 		$this->redirect(Navigation::feed);
 	}
 
