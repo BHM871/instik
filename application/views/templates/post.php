@@ -10,8 +10,9 @@
 		<img src="<?= isset($post['image_path']) ? BASE_PATH . "/" . $post['image_path'] : "" ?>">
 	</div>
 	<div class="post-iteractions">
-		<button id="<?= $post['id'] ?>" type="like">
+		<button id="<?= $post['id'] ?>" type="like" <?= isset($post['isLiked']) && $post['isLiked'] ? 'liked="true"' : '' ?>>
 			<?php $this->load(\Instik\Configs\Icons::favorite) ?>
+			<small><?= isset($post['like']) ? $post['like'] : 0 ?></small>
 		</button>
 		<button id="<?= $post['id'] ?>" type="comment">
 			<?php $this->load(\Instik\Configs\Icons::share) ?>

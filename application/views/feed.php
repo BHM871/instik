@@ -13,6 +13,8 @@
 	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/modal.css" />
 </head>
 <body>
+	<input id="userId" type="hidden" value="<?= $user['id'] ?>" />
+	<input id="ctx" type="hidden" value="<?= BASE_URL ?>" />
 	<section id="navbar">
 		<div id="head">
 			<img class="profile" src="<?= BASE_PATH . "/" . $user['image_path'] ?>" />
@@ -94,6 +96,7 @@
 
 <script type="text/javascript" src="<?= BASE_URL ?>/assets/js/default.js"></script>
 <script type="text/javascript" src="<?= BASE_URL ?>/assets/js/feed.js"></script>
+<script type="text/javascript" src="<?= BASE_URL ?>/assets/js/post.js"></script>
 <script type="text/javascript" src="<?= BASE_URL ?>/assets/js/modal.js"></script>
 <script type="text/javascript" src="<?= BASE_URL ?>/assets/js/validator.js"></script>
 

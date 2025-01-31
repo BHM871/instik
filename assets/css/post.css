@@ -106,6 +106,20 @@
 	}
 }
 
+button[type="like"], button[type="comment"] {
+	height: inherit;
+	color: var(--white);
+
+	small {
+		text-align: center;
+		font-size: .9rem;
+	}
+}
+
+button[liked="true"] svg path {
+	fill: red;
+}
+
 .post-comment {
 	width: 80%;
 	max-height: 45vh;

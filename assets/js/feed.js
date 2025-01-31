@@ -1,5 +1,3 @@
-const ctx = document.getElementById("ctx");
-
 const filtersForm = document.getElementById("filters-form");
 const filtersSelects = document.querySelectorAll("select.filter");
 
