@@ -311,31 +311,23 @@ class Database {
 		}
 	}
 
-	public function update(string $table, array $data) : ?array {
+	public function update(string $table, array $data, array $where) : ?array {
 		if ($table == null || !is_string($table) || trim($table) == "" || $data == null || !is_array($data) || sizeof($data) == 0)
 			return null;
 
 		$con = $this->getConnection();
 
 		try {
-			$uniqueColumn = $this->existsAnUniqueColumn($con, $table, $data);
-
-			if ($uniqueColumn == null) {
-				$this->logger->log("An unique column wasn't inform");
-				return null;
-			}
-
-			$query = "UPDATE $table SET ";
+			$set = "";
+			$whe = "";
 
 			$i = 0;
 			$isFirst = true;
 			$cols = [];
 			$vals = [];
 			foreach ($data as $column => $value) {
-				if ($column != $uniqueColumn) {
-					$query .= ($isFirst ? "" : ", ") . "`$column` = :$column";
-					$isFirst = false;
-				}
+				$set .= ($isFirst ? "" : ", ") . "`$column` = :$column";
+				$isFirst = false;
 				
 				$cols[$i] = $column;
 				$vals[$i] = $value;
@@ -343,10 +335,21 @@ class Database {
 				$i++;
 			}
 
-			$query .= " WHERE `$uniqueColumn` = :$uniqueColumn";
+			$isFirst = true;
+			foreach ($data as $column => $value) {
+				$whe .= ($isFirst ? "" : ", ") . "`$column` = :$column";
+				$isFirst = false;
+				
+				$cols[$i] = $column;
+				$vals[$i] = $value;
+				
+				$i++;
+			}
+
+			$query = "UPDATE `$table` SET $set WHERE $whe";
 			$stmt = $con->prepare($query);
 
-			for ($i = 0; $i < sizeof($data); $i++) {
+			for ($i = 0; $i < sizeof($data) + sizeof($where); $i++) {
 				$type = (is_int($vals[$i])
 					? PDO::PARAM_INT
 					: (is_bool($vals[$i])
@@ -376,6 +379,65 @@ class Database {
 
 			return null;
 		}
+	}
+
+	public function delete(string $table, array $data) : array {
+		if ($table == null || !is_string($table) || trim($table) == "" || $data == null || !is_array($data) || sizeof($data) == 0)
+			return null;
+
+		$con = $this->getConnection();
+
+		try {
+			$where = "";
+
+			$i = 0;
+			$isFirst = true;
+			$cols = [];
+			$vals = [];
+			foreach ($data as $column => $value) {
+				$where .= ($isFirst ? "" : ", ") . "`$column` = :$column";
+				$isFirst = false;
+				
+				$cols[$i] = $column;
+				$vals[$i] = $value;
+				
+				$i++;
+			}
+
+			$query = "DELETE FROM `$table` WHERE $where";
+			$stmt = $con->prepare($query);
+
+			for ($i = 0; $i < sizeof($data); $i++) {
+				$type = (is_int($vals[$i])
+					? PDO::PARAM_INT
+					: (is_bool($vals[$i])
+						? PDO::PARAM_BOOL
+						: PDO::PARAM_STR
+					)
+				);
+
+				$stmt->bindParam($cols[$i], $vals[$i], $type);
+			}
+
+			$con->beginTransaction();
+			$stmt->execute();
+			
+			$result = $con->query(
+				"SELECT * " .
+				"FROM `$table` " .
+				"WHERE id = ".$this->getLastId($con, 'delete', $table)
+			);
+
+			if ($con->inTransaction())
+				$con->commit();
+
+			return $result->fetchAll(PDO::FETCH_NAMED);
+		} catch (Throwable $th) {
+			$this->logger->log($th);
+
+			return null;
+		}
+
 	}
 
 	private function getLastId(PDO $con, string $operation, ?string $table = null) : string {
