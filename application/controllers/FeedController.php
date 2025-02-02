@@ -28,8 +28,10 @@ class FeedController extends IController {
 	public function feed() {
 		$user = $this->session->getUser();
 
-		if ($user == null || $user['id'] == null)
+		if ($user == null || $user['id'] == null) {
 			$this->redirect("/");
+			return;
+		}
 
 		$filters = $this->getFilters();
 		$posts = $this->postService->getFeed($user['id'], $filters);
@@ -39,7 +41,7 @@ class FeedController extends IController {
 			foreach ($postsObj as $post) $posts[] = PostDto::by($post)->toArray();
 		}
 
-		$this->loader->load(Pages::home, ['user' => $user, 'filters' => $filters->toArray(), 'posts' => $posts]);
+		return $this->returnPage(Pages::home, ['user' => $user, 'filters' => $filters->toArray(), 'posts' => $posts]);
 	}
 
 	private function getFilters() : FeedFiltersDto {

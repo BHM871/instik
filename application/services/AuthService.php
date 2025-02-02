@@ -2,8 +2,8 @@
 
 namespace Instik\Services;
 
-use AuthConfirmRegisterDto;
 use Instik\DTO\AuthChangePasswordDto;
+use Instik\DTO\AuthConfirmRegisterDto;
 use Instik\DTO\AuthRegisterDto;
 use Instik\Entity\User;
 use Instik\Repository\AuthRepository;

@@ -2,19 +2,18 @@
 
 namespace Instik\Controllers;
 
-use AuthConfirmRegisterDto;
 use Instik\Configs\Navigation;
 use Instik\Configs\Pages;
 use Instik\DTO\AuthLoginDto;
 use Instik\DTO\AuthRegisterDto;
 use Instik\DTO\AuthChangePasswordDto;
+use Instik\DTO\AuthConfirmRegisterDto;
 use Instik\DTO\Entity\UserDto;
 use Instik\Services\AuthService;
 use Instik\Validators\AuthValidator;
 
 use System\Annotations\Route\Routable;
 use System\Annotations\Route\Route;
-use System\Annotations\Security\Authenticated;
 use System\Interfaces\Application\IController;
 use System\Security\SessionManager;
 
@@ -34,26 +33,24 @@ class AuthController extends IController {
 		$authDto = new AuthLoginDto($_POST['email'], $_POST['password']);
 		
 		if ($authDto->getEmail() == "" || $authDto->getPassword() == "") {
-			$this->loader->load(Pages::login, ["message" => "Preencha os campos corretamente"]);
-			return;
+			return $this->returnPage(Pages::login, ["message" => "Preencha os campos corretamente"]);
 		}
 
 		$isValid = $this->validator->validToLogin($authDto);
 
 		if (!$isValid) {
-			$this->loader->load(Pages::login, ["message" => "Usuário inválido"]);
-			return;
+			return $this->returnPage(Pages::login, ["message" => "Usuário inválido"]);
 		}
 
 		$user = $this->service->getUserToLogin($authDto->getEmail());
 
 		if ($user == null || $user->getId() == null) {
-			$this->loader->load(Pages::login, ["message" => "Usuário inválido"]);
-			return;
+			return $this->returnPage(Pages::login, ["message" => "Usuário inválido"]);
 		}
 
 		$this->session->putUser(UserDto::by($user));
 		$this->redirect(Navigation::feed);
+		echo "teste";
 	}
 
 	#[Route("/register", Route::POST)]
@@ -66,32 +63,28 @@ class AuthController extends IController {
 		}
 
 		if ($registerDto->getEmail() == "" || $registerDto->getPassword() == "" || $registerDto->getConfirm() == "") {
-			$this->loader->load(Pages::login, ["message" => "Preencha os campos corretamente"]);
-			return;
+			return $this->returnPage(Pages::login, ["message" => "Preencha os campos corretamente"]);
 		}
 
 		$isValid = $this->validator->validToRegister($registerDto);
 
 		if (!$isValid) {
-			$this->loader->load(Pages::login, ["message" => "Email ou senhas inválidas"]);
-			return;
+			return $this->returnPage(Pages::login, ["message" => "Email ou senhas inválidas"]);
 		}
 
 		$user = $this->service->getInvalidUser($registerDto->getEmail());
 
 		if ($user != null && $user->getId() != null) {
-			$this->loader->load(Pages::register_confirm, ["user" => ['id' => $user->getId(), 'email' => $user->getEmail()]]);
-			return;
+			return $this->returnPage(Pages::register_confirm, ["user" => ['id' => $user->getId(), 'email' => $user->getEmail()]]);
 		}
 
 		$user = $this->service->registerUser($registerDto);
 		
 		if ($user == null || $user->getId() == null) {
-			$this->loader->load(Pages::login, ["message" => "Houve algum erro ao registrar usuário"]);
-			return;
+			return $this->returnPage(Pages::login, ["message" => "Houve algum erro ao registrar usuário"]);
 		}
 
-		$this->loader->load(Pages::register_confirm, ['user' => ['id' => $user->getId(), 'email' => $user->getEmail()]]);
+		return $this->returnPage(Pages::register_confirm, ['user' => ['id' => $user->getId(), 'email' => $user->getEmail()]]);
 	}
 
 	#[Route("/confirm-register", Route::POST)]
@@ -105,15 +98,13 @@ class AuthController extends IController {
 		}
 
 		if ($confirmDto->getId() == "" || $confirmDto->getUsername() == "") {
-			$this->loader->load(Pages::login, ["message" => "Preencha os campos corretamente"]);
-			return;
+			return $this->returnPage(Pages::login, ["message" => "Preencha os campos corretamente"]);
 		}
 
 		$isValid = $this->validator->validUserId($confirmDto->getId());
 
 		if (!$isValid) {
-			$this->loader->load(Pages::login, ["message" => "Id enviado é inválido"]);
-			return;
+			return $this->returnPage(Pages::login, ["message" => "Id enviado é inválido"]);
 		}
 		
 		$user = $this->service->confirmRegister($confirmDto, $profile);
@@ -121,11 +112,10 @@ class AuthController extends IController {
 		if ($user == null || $user->getId() == null) {
 			$user = $this->service->getInvalidUser($confirmDto->getId());
 
-			$this->loader->load(Pages::register_confirm, [
+			return $this->returnPage(Pages::register_confirm, [
 				"message" => "Erro ao salvar usuário, tente novamente mais tarde", 
 				"user" => $user->toArray()
 			]);
-			return;
 		}
 
 		$this->session->putUser(UserDto::by($user));
@@ -137,26 +127,23 @@ class AuthController extends IController {
 		$email = $_POST['email'];
 		
 		if ($email == "") {
-			$this->loader->load(Pages::login, ["message" => "Preencha os campos corretamente"]);
-			return;
+			return $this->returnPage(Pages::login, ["message" => "Preencha os campos corretamente"]);
 		}
 
 		$isValid = $this->validator->validToEmail($email);
 
 		if (!$isValid) {
-			$this->loader->load(Pages::login, ["message" => "Usuário inválido"]);
-			return;
+			return $this->returnPage(Pages::login, ["message" => "Usuário inválido"]);
 		}
 
 		if (!$this->service->sendMailPassword($email)) {
-			$this->loader->load(Pages::login, ["message" => "Houve algum erro ao enviar email"]);
-			return;
+			return $this->returnPage(Pages::login, ["message" => "Houve algum erro ao enviar email"]);
 		}	
 
 		if ($this->session->isAuthenticated())
-			$this->loader->load(Pages::home);
+			$this->redirect(Navigation::feed);
 		else
-			$this->loader->load(Pages::login, ["message" => "Email enviado com sucesso"]);
+			return $this->returnPage(Pages::login, ["message" => "Email enviado com sucesso"]);
 	}
 
 	#[Route("/change-password-view")]
@@ -164,11 +151,10 @@ class AuthController extends IController {
 		$hash = $_GET['hash'];
 
 		if ($hash == null || $hash == "") {
-			$this->loader->load(Pages::login, ["message" => "Troca de senha não permitida. Não foi encontrato o validador"]);
-			return;
+			return $this->returnPage(Pages::login, ["message" => "Troca de senha não permitida. Não foi encontrato o validador"]);
 		}
 
-		$this->loader->load(Pages::change_password, ["hash" => $hash]);
+		return $this->returnPage(Pages::change_password, ["hash" => $hash]);
 	}
 
 	#[Route("/change-password", Route::POST)]
@@ -180,25 +166,22 @@ class AuthController extends IController {
 			|| $changeDto->getPassword() == null || $changeDto->getPassword() == ""
 			|| $changeDto->getConfirm() == null || $changeDto->getConfirm() == ""
 		) {
-			$this->loader->load(Pages::change_password, ["message" => "Algum parâmetro obrigatório está faltando"]);
-			return;
+			return $this->returnPage(Pages::change_password, ["message" => "Algum parâmetro obrigatório está faltando"]);
 		}
 
 		$isValid = $this->validator->validHashToChangePassword($changeDto->getHash());
 
 		if (!$isValid) {
-			$this->loader->load(Pages::change_password, ["message" => "Hash enviado não é válido"]);
-			return;
+			return $this->returnPage(Pages::change_password, ["message" => "Hash enviado não é válido"]);
 		}
 
 		$isSuccess = $this->service->changePassword($changeDto);
 
 		if (!$isSuccess) {
-			$this->loader->load(Pages::change_password, ["message" => "Não foi possível trocar a senha"]);
-			return;
+			return $this->returnPage(Pages::change_password, ["message" => "Não foi possível trocar a senha"]);
 		}
 
-		$this->loader->load(Pages::login, ["message" => "Senha atualizada com sucesso"]);
+		return $this->returnPage(Pages::login, ["message" => "Senha atualizada com sucesso"]);
 	}
 
 	#[Route("/logout", [Route::GET, Route::POST])]

@@ -1,5 +1,7 @@
 <?php
 
+namespace Instik\DTO;
+
 class AuthConfirmRegisterDto {
 
 	public function __construct(
