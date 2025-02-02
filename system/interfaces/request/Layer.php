@@ -2,10 +2,10 @@
 
 namespace System\Interfaces\Request;
 
-abstract class Chain {
+abstract class Layer {
 
 	public function __construct(
-		protected readonly ?Chain $next = null
+		protected readonly ?Layer $next = null
 	) {}
 
 	public function configure() : bool {

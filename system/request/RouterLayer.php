@@ -1,20 +1,20 @@
 <?php
 
-namespace System\Core;
+namespace System\Request;
 
 use Configs\ErrorsPaths;
 use System\Annotations\Route\Routable;
 use System\Annotations\Route\Route;
 use System\Core\Instancer;
 use System\Core\ViewLoader;
-use System\Interfaces\Request\Chain;
+use System\Interfaces\Request\Layer;
 use System\Logger;
 
 use Exception;
 use ReflectionClass;
 use ReflectionMethod;
 
-class RouterManager extends Chain {
+class RouterLayer extends Layer {
 
 	private array $visitedClass = [];
 	private static $route = array();
@@ -59,11 +59,11 @@ class RouterManager extends Chain {
 				$realPath = $classUri.$methodUri;
 
 				$arguments = [
-					RouterManager::URI 	=> $realPath,
-					RouterManager::TYPES=> $route->getMethods(),
+					RouterLayer::URI 	=> $realPath,
+					RouterLayer::TYPES=> $route->getMethods(),
 				];
 
-				RouterManager::add($arguments, $object, $method);
+				RouterLayer::add($arguments, $object, $method);
 			}
 		}
 
@@ -71,25 +71,25 @@ class RouterManager extends Chain {
 	}
 
 	public static function add(array $arguments, object $object, ReflectionMethod $method) {
-		if (!isset($arguments[RouterManager::URI]) || !isset($arguments[RouterManager::TYPES])) {
+		if (!isset($arguments[RouterLayer::URI]) || !isset($arguments[RouterLayer::TYPES])) {
 			throw new Exception("Invalid Params");
 		}
 
-		$uri = $arguments[RouterManager::URI];
-		$types = $arguments[RouterManager::TYPES];
+		$uri = $arguments[RouterLayer::URI];
+		$types = $arguments[RouterLayer::TYPES];
 
 		if (is_string($types)) {
 			$types = [$types];
 		}
 
 		foreach ($types as $type) {
- 			if (isset(RouterManager::$route[$uri][$type])) {
+ 			if (isset(RouterLayer::$route[$uri][$type])) {
 				throw new Exception("URL is defined more than one way");
 			}
 
-			RouterManager::$route[$uri][$type] = [
-				RouterManager::OBJECT => $object,
-				RouterManager::METHOD => $method,
+			RouterLayer::$route[$uri][$type] = [
+				RouterLayer::OBJECT => $object,
+				RouterLayer::METHOD => $method,
 			];
 		}
 	}
@@ -101,37 +101,37 @@ class RouterManager extends Chain {
 		$views = preg_replace("/\./", "", $views);
 		if (preg_match("/" . $views . ".*/", $url)) {
 			$uri = preg_replace("/" . $views . "/", "", $url);
-			RouterManager::submitView($uri);
+			RouterLayer::submitView($uri);
 			return null;
 		}
 
-		if (!isset(RouterManager::$route[$url])) {
+		if (!isset(RouterLayer::$route[$url])) {
 			if ($url == "/") {
-				RouterManager::submitView("index");
+				RouterLayer::submitView("index");
 				return null;
 			}
 
-			RouterManager::submitView(ErrorsPaths::notFound);
+			RouterLayer::submitView(ErrorsPaths::notFound);
 			return null;
 		}
 
-		$route = RouterManager::$route[$url];
+		$route = RouterLayer::$route[$url];
 		$method = $_SERVER['REQUEST_METHOD'];
 
 		if (!isset($route[$method])) {
-			RouterManager::submitView(ErrorsPaths::methodNotAllowed);
+			RouterLayer::submitView(ErrorsPaths::methodNotAllowed);
 			return null;
 		}
 
 		try {
-			return $route[$method][RouterManager::METHOD]->invokeArgs(
-				$route[$method][RouterManager::OBJECT],
+			return $route[$method][RouterLayer::METHOD]->invokeArgs(
+				$route[$method][RouterLayer::OBJECT],
 				$params
 			);
 		} catch (\Throwable $th) {
-			(new Logger(new RouterManager()))->log($th);
+			(new Logger(new RouterLayer()))->log($th);
 
-			RouterManager::submitView(ErrorsPaths::badRequest, $th->getMessage());
+			RouterLayer::submitView(ErrorsPaths::badRequest, $th->getMessage());
 			return null;
 		}
 	}

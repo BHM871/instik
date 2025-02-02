@@ -6,31 +6,31 @@ use Configs\ErrorsPaths;
 
 use System\Core\Instancer;
 use System\Core\ViewLoader;
-use System\Interfaces\Request\Chain;
+use System\Interfaces\Request\Layer;
 use System\Logger;
 
-class RequestManager {
+class RequestChain {
 
-	private static ?Chain $first = null;
+	private static ?Layer $first = null;
 	private static bool $isConfigured = false;
 
 	public static function configure() {
-		if (RequestManager::$isConfigured)
+		if (RequestChain::$isConfigured)
 			return;
 
-		RequestManager::$first = Instancer::get(ResponseManager::class);
+		RequestChain::$first = Instancer::get(ResponseLayer::class);
 
-		if (RequestManager::$first == null)
+		if (RequestChain::$first == null)
 			return;
 
-		RequestManager::$isConfigured = RequestManager::$first->configure();
+		RequestChain::$isConfigured = RequestChain::$first->configure();
 	}
 
 	public static function submit() : mixed {
-		if (!RequestManager::$isConfigured)
-			RequestManager::configure();
+		if (!RequestChain::$isConfigured)
+			RequestChain::configure();
 
-		if (RequestManager::$first == null) {
+		if (RequestChain::$first == null) {
 			ViewLoader::instance()->load(ErrorsPaths::internalServerError);
 			return null;
 		}
@@ -49,9 +49,9 @@ class RequestManager {
 				}
 			}
 
-			return RequestManager::$first->execute($uri);
+			return RequestChain::$first->execute($uri);
 		} catch (\Throwable $th) {
-			(new Logger(new RequestManager))->log($th);
+			(new Logger(new RequestChain))->log($th);
 			ViewLoader::instance()->load(ErrorsPaths::internalServerError);
 		}
 	}

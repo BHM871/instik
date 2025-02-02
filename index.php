@@ -1,7 +1,7 @@
 <?php
 
-use System\Request\RequestManager;
+use System\Request\RequestChain;
 
 require_once("./configs/init.php");
 
-RequestManager::submit();
+RequestChain::submit();

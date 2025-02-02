@@ -5,20 +5,20 @@ namespace System\Request;
 use System\Annotations\Request\ResponseBody;
 use System\Annotations\Route\Routable;
 use System\Annotations\Route\Route;
-use System\Interfaces\Request\Chain;
-use System\Security\SecurityManager;
+use System\Core\ViewLoader;
+use System\Interfaces\Request\Layer;
+use System\Security\SecurityLayer;
 
 use ReflectionClass;
-use System\Core\ViewLoader;
 
-class ResponseManager extends Chain {
+class ResponseLayer extends Layer {
 
 	private array $visitedClass = [];
 	private array $routes = [];
 	private ViewLoader $loader;
 
 	public function __construct(
-		SecurityManager $next
+		SecurityLayer $next
 	) {
 		$this->loader = ViewLoader::instance();
 		parent::__construct($next);

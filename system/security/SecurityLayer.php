@@ -7,19 +7,18 @@ use Configs\ErrorsPaths;
 use System\Annotations\Route\Routable;
 use System\Annotations\Route\Route;
 use System\Annotations\Security\Authenticated;
-use System\Core\RouterManager;
-use System\Core\ViewLoader;
-use System\Interfaces\Request\Chain;
+use System\Interfaces\Request\Layer;
+use System\Request\RouterLayer;
 
 use ReflectionClass;
 
-class SecurityManager extends Chain {
+class SecurityLayer extends Layer {
 
 	private array $visitedClass = [];
 	private array $routes = [];
 
 	public function __construct(
-		RouterManager $next,
+		RouterLayer $next,
 		private readonly SessionManager $session
 	) {
 		parent::__construct($next);
