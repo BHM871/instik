@@ -36,8 +36,6 @@ class PostController extends IController {
 
 		$success = $this->service->likePost($postId, $user['id']);
 
-		echo var_dump($success);
-
 		return $this->returnJson(['success' => $success]);
 	}
 

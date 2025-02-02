@@ -73,9 +73,15 @@ class PostRepository extends IRepository {
 		if ($postId == null)
 			return null;
 
-		$result = $this->db->query("UPDATE `post` SET `like` = `like` + 1 WHERE id = $postId");
+		$result = $this->db->get('post', ['id', 'like'], ['id' => $postId]);
 
-		if ($result == null)
+		if ($result == null || empty($result))
+			return null;
+
+		$result[0]['like'] = $result[0]['like'] + 1;
+		$result = $this->db->update('post', $result[0]);
+
+		if ($result == null || empty($result))
 			return null;
 
 		return Post::instancer(['id' => $postId]);
