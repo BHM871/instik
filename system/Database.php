@@ -257,7 +257,7 @@ class Database {
 		$con = $this->getConnection();
 
 		try {
-			$insert = "INSERT INTO $table(";
+			$insert = "INSERT INTO `$table`(";
 			$values = "VALUES(";
 
 			$i = 0;
