@@ -216,7 +216,7 @@ class Database {
 				if (is_array($value)) {
 					$data += $value;
 
-					$whe .= ($i > 0 ? "AND " : "") . "$column IN";
+					$whe .= ($i > 0 ? "AND " : "") . "`$column` IN";
 					
 					$whe .= "(";
 					for ($j = 0; $j < sizeof($value); $j++) {
@@ -228,12 +228,12 @@ class Database {
 				}
 
 				$data[] = $value;
-				$whe .= ($i > 0 ? " AND " : "") . (is_string($value) ? "$column LIKE ?" : "$column = ?");
+				$whe .= ($i > 0 ? " AND " : "") . (is_string($value) ? "`$column` LIKE ?" : "`$column` = ?");
 				$i++;
 			}
 		}
 
-		$query = "SELECT $col FROM $table WHERE $whe";
+		$query = "SELECT $col FROM `$table` WHERE $whe";
 		return $this->query($query, $data);
 	}
 
@@ -264,7 +264,7 @@ class Database {
 			$cols = [];
 			$vals = [];
 			foreach ($data as $column => $value) {
-				$insert .= ($i > 0 ? ", " : "") . $column;
+				$insert .= ($i > 0 ? ", " : "") . "`$column`";
 				$values .= ($i > 0 ? ", " : "") . ":$column";
 				
 				$cols[$i] = $column;
@@ -293,7 +293,7 @@ class Database {
 			
 			$result = $con->query(
 				"SELECT * " .
-				"FROM $table " .
+				"FROM `$table` " .
 				"WHERE id = ".$this->getLastId($con, 'insert', $table)
 			);
 
@@ -333,7 +333,7 @@ class Database {
 			$vals = [];
 			foreach ($data as $column => $value) {
 				if ($column != $uniqueColumn) {
-					$query .= ($isFirst ? "" : ", ") . "$column = :$column";
+					$query .= ($isFirst ? "" : ", ") . "`$column` = :$column";
 					$isFirst = false;
 				}
 				
@@ -343,7 +343,7 @@ class Database {
 				$i++;
 			}
 
-			$query .= " WHERE $uniqueColumn = :$uniqueColumn";
+			$query .= " WHERE `$uniqueColumn` = :$uniqueColumn";
 			$stmt = $con->prepare($query);
 
 			for ($i = 0; $i < sizeof($data); $i++) {
@@ -363,7 +363,7 @@ class Database {
 			
 			$result = $con->query(
 				"SELECT * " .
-				"FROM $table " .
+				"FROM `$table` " .
 				"WHERE id = ".$this->getLastId($con, 'update', $table)
 			);
 
