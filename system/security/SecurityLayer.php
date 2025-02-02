@@ -77,7 +77,7 @@ class SecurityLayer extends Layer {
 			return parent::execute($url, $params);
 		
 		if (!$this->session->isAuthenticated())
-			return ErrorsPaths::forbbiden;
+			return ['page' => ErrorsPaths::forbbiden, 'data' => []];
 
 		return parent::execute($url, $params); 
 	}

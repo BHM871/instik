@@ -53,6 +53,7 @@ class RequestChain {
 		} catch (\Throwable $th) {
 			(new Logger(new RequestChain))->log($th);
 			ViewLoader::instance()->load(ErrorsPaths::internalServerError);
+			return null;
 		}
 	}
 
