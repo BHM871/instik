@@ -38,7 +38,12 @@ class FeedController extends IController {
 
 		if ($posts != null) {
 			$postsObj = $posts; $posts = [];
-			foreach ($postsObj as $post) $posts[] = PostDto::by($post)->toArray();
+			foreach ($postsObj as $post) {
+				$postDto = PostDto::by($post)->toArray();
+				$postDto['isLiked'] = $this->postService->postIsLikedByUser($postDto['id'], $user['id']);
+
+				$posts[] = $postDto;
+			}
 		}
 
 		return $this->returnPage(Pages::home, ['user' => $user, 'filters' => $filters->toArray(), 'posts' => $posts]);

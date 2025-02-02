@@ -69,5 +69,16 @@ class PostRepository extends IRepository {
 		return $posts;
 	}
 
+	public function postIsLikedByUser(int $postId, int $userId) : bool {
+		if ($postId == null || $userId == null)
+			return false;
+
+		$result = $this->db->get('like', ['1'], ['id_post' => $postId, 'id_liker' => $userId]);
+		
+		if ($result == null || empty($result))
+			return false;
+
+		return true;
+	}
 
 }

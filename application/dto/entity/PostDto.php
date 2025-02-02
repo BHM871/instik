@@ -40,7 +40,6 @@ class PostDto {
 				else
 					$array[$property->getName()] = $value;
 			}
-			$array['isLiked'] = true;
 		}
 
 		return $array;

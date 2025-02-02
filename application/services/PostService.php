@@ -22,4 +22,11 @@ class PostService {
 
 		return $posts;
 	}
+
+	public function postIsLikedByUser(int $postId, int $userId) : bool {
+		if ($postId == null || $userId == null)
+			return false;
+
+		return $this->repository->postIsLikedByUser($postId, $userId);
+	}
 }
