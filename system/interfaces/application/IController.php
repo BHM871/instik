@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Interfaces;
+namespace System\Interfaces\Application;
 
 use System\Core\ViewLoader;
 use System\Security\SessionManager;

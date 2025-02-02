@@ -9,7 +9,8 @@ use Instik\Services\PostService;
 
 use System\Annotations\Route\Routable;
 use System\Annotations\Route\Route;
-use System\Interfaces\IController;
+use System\Annotations\Security\Authenticated;
+use System\Interfaces\Application\IController;
 use System\Security\SessionManager;
 
 #[Routable("/feed")]
@@ -22,7 +23,8 @@ class FeedController extends IController {
 		parent::__construct($session);
 	}
 
-	#[Route("/", Route::GET, true)]
+	#[Route("/", Route::GET)]
+	#[Authenticated]
 	public function feed() {
 		$user = $this->session->getUser();
 

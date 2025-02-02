@@ -14,7 +14,8 @@ use Instik\Validators\AuthValidator;
 
 use System\Annotations\Route\Routable;
 use System\Annotations\Route\Route;
-use System\Interfaces\IController;
+use System\Annotations\Security\Authenticated;
+use System\Interfaces\Application\IController;
 use System\Security\SessionManager;
 
 #[Routable('/auth')]
@@ -201,7 +202,7 @@ class AuthController extends IController {
 	}
 
 	#[Route("/logout", [Route::GET, Route::POST])]
-	public function logou() {
+	public function logout() {
 		$this->session->removeUser();
 
 		$this->redirect("/");

@@ -5,7 +5,7 @@ namespace Instik\Repository;
 use Instik\DTO\FeedFiltersDto;
 use Instik\Entity\Post;
 
-use System\Interfaces\IRepository;
+use System\Interfaces\Application\IRepository;
 
 class PostRepository extends IRepository {
 

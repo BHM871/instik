@@ -7,10 +7,12 @@ use Attribute;
 #[Attribute(Attribute::TARGET_CLASS)]
 class Routable {
 
-	public string $name;
+	public function __construct(
+		private readonly string $name = "/"
+	) {}
 
-	public function __construct(string $name = "/") {
-		$this->name = $name;
+	public function getName() : string {
+		return $this->name;
 	}
 
 }

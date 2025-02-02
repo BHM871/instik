@@ -4,7 +4,7 @@ namespace Instik\Repository;
 
 use Instik\Entity\User;
 
-use System\Interfaces\IRepository;
+use System\Interfaces\Application\IRepository;
 
 class AuthRepository extends IRepository {
 	

@@ -2,7 +2,7 @@
 
 use System\Core\ClassLoader;
 use System\Database;
-use System\RouterConfig;
+use System\Request\RequestManager;
 
 require_once("./configs/constants.php");
 require_once("./configs/enums.php");
@@ -13,7 +13,8 @@ ClassLoader::load('./system');
 ClassLoader::load('./libs');
 ClassLoader::load('./application');
 ClassLoader::load_env();
-RouterConfig::configure();
-Database::setup();
+RequestManager::configure();
 
 require_once("./application/init.php");
+
+Database::setup();
