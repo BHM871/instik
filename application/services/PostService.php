@@ -3,12 +3,15 @@
 namespace Instik\Services;
 
 use Instik\DTO\FeedFiltersDto;
+use Instik\Entity\Post;
+use Instik\Repository\LikeRepository;
 use Instik\Repository\PostRepository;
 
 class PostService {
 
 	public function __construct(
-		private readonly PostRepository $repository
+		private readonly PostRepository $repository,
+		private readonly LikeRepository $likeRepository
 	) {}
 
 	public function getFeed(int $userId, ?FeedFiltersDto $filters = null) : ?array {
@@ -27,6 +30,21 @@ class PostService {
 		if ($postId == null || $userId == null)
 			return false;
 
-		return $this->repository->postIsLikedByUser($postId, $userId);
+		return $this->likeRepository->postIsLikedByUser($postId, $userId);
+	}
+
+	public function likePost(int $postId, int $userId) : bool {
+		if ($postId == null || $userId == null)
+			return false;
+
+		if ($this->postIsLikedByUser($postId, $userId))
+			return false;
+
+		if (!$this->likeRepository->addLike($postId, $userId))
+			return false;
+		
+		$post = $this->repository->addLike($postId);
+
+		return $post != null && $post->getId() != null;
 	}
 }

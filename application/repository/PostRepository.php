@@ -49,7 +49,7 @@ class PostRepository extends IRepository {
 		
 		$result = $this->db->query($query, $datas);
 
-		if ($result == null || sizeof($result) == 0)
+		if ($result == null || empty($result))
 			return null;
 
 		$posts = [];
@@ -69,16 +69,16 @@ class PostRepository extends IRepository {
 		return $posts;
 	}
 
-	public function postIsLikedByUser(int $postId, int $userId) : bool {
-		if ($postId == null || $userId == null)
-			return false;
+	public function addLike(int $postId) : ?Post {
+		if ($postId == null)
+			return null;
 
-		$result = $this->db->get('like', ['1'], ['id_post' => $postId, 'id_liker' => $userId]);
-		
-		if ($result == null || empty($result))
-			return false;
+		$result = $this->db->query("UPDATE `post` SET `like` = `like` + 1 WHERE id = $postId");
 
-		return true;
+		if ($result == null)
+			return null;
+
+		return Post::instancer(['id' => $postId]);
 	}
 
 }
