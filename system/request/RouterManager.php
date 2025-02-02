@@ -16,6 +16,7 @@ use ReflectionMethod;
 
 class RouterManager extends Chain {
 
+	private array $visitedClass = [];
 	private static $route = array();
 
 	private const METHOD = 'method';
@@ -28,8 +29,12 @@ class RouterManager extends Chain {
 
 	#[\Override]
 	public function configure() : bool {
-
 		foreach (get_declared_classes() as $className) {
+			if (isset($this->visitedClass[$className]) && $this->visitedClass[$className])
+				continue;
+
+			$this->visitedClass[$className] = true;
+
 			$class = new ReflectionClass($className);
 			$attributes = $class->getAttributes(Routable::class);
 			

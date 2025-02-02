@@ -1,27 +1,26 @@
 <?php
 
-namespace System\Security;
+namespace System\Request;
 
-use Configs\ErrorsPaths;
-
+use System\Annotations\Request\ResponseBody;
 use System\Annotations\Route\Routable;
 use System\Annotations\Route\Route;
-use System\Annotations\Security\Authenticated;
-use System\Core\RouterManager;
-use System\Core\ViewLoader;
 use System\Interfaces\Request\Chain;
+use System\Security\SecurityManager;
 
 use ReflectionClass;
+use System\Core\ViewLoader;
 
-class SecurityManager extends Chain {
+class ResponseManager extends Chain {
 
 	private array $visitedClass = [];
 	private array $routes = [];
+	private ViewLoader $loader;
 
 	public function __construct(
-		RouterManager $next,
-		private readonly SessionManager $session
+		SecurityManager $next
 	) {
+		$this->loader = ViewLoader::instance();
 		parent::__construct($next);
 	}
 
@@ -43,7 +42,7 @@ class SecurityManager extends Chain {
 			$uri = preg_replace("/^[^\/]/", "/", $uri);
 
 			foreach ($reflection->getMethods() as $method) {
-				$attributes = $method->getAttributes(Authenticated::class);
+				$attributes = $method->getAttributes(ResponseBody::class);
 
 				if (empty($attributes))
 					continue;
@@ -71,26 +70,19 @@ class SecurityManager extends Chain {
 
 	#[\Override]
 	public function execute(string $url, array $params = []) : mixed {
-		if (!isset($this->routes[$_SERVER['REQUEST_METHOD']]))
-			return parent::execute($url, $params);
-		
-		if (!$this->existsUrl($_SERVER['REQUEST_METHOD'], $url))
-			return parent::execute($url, $params);
-		
-		if (!$this->session->isAuthenticated())
-			return ErrorsPaths::forbbiden;
+		$response = parent::execute($url, $params);
 
-		return parent::execute($url, $params); 
-	}
-
-	private function addRoute(string $method, string $route) {
-		if ($method == null || $route == null)
-			return;
-
-		if (!isset($this->routes[$method]))
-			$this->routes[$method] = [];
+		if (!isset($response) || $response == null)
+			return null;
 		
-		$this->routes[$method][] = $route;
+		if ($this->existsUrl($_SERVER['REQUEST_METHOD'], $url)) {
+			header("Content-Type: application/json; charset=UTF-8");
+			echo $response;	
+		} else {
+			$this->loader->load($response['page'], $response['data']);
+		}
+
+		return $response;
 	}
 
 	private function existsUrl(string $method, string $url) : bool {
@@ -105,6 +97,16 @@ class SecurityManager extends Chain {
 		}
 
 		return false;
+	}
+
+	private function addRoute(string $method, string $route) {
+		if ($method == null || $route == null)
+			return;
+
+		if (!isset($this->routes[$method]))
+			$this->routes[$method] = [];
+		
+		$this->routes[$method][] = $route;
 	}
 
 }

@@ -3,11 +3,11 @@
 namespace System\Request;
 
 use Configs\ErrorsPaths;
+
 use System\Core\Instancer;
 use System\Core\ViewLoader;
 use System\Interfaces\Request\Chain;
 use System\Logger;
-use System\Security\SecurityManager;
 
 class RequestManager {
 
@@ -18,7 +18,7 @@ class RequestManager {
 		if (RequestManager::$isConfigured)
 			return;
 
-		RequestManager::$first = Instancer::get(SecurityManager::class);
+		RequestManager::$first = Instancer::get(ResponseManager::class);
 
 		if (RequestManager::$first == null)
 			return;
