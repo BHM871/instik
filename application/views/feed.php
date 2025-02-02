@@ -13,7 +13,6 @@
 	<link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/modal.css" />
 </head>
 <body>
-	<input id="userId" type="hidden" value="<?= $user['id'] ?>" />
 	<input id="ctx" type="hidden" value="<?= BASE_URL ?>" />
 	<section id="navbar">
 		<div id="head">
