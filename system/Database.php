@@ -204,7 +204,7 @@ class Database {
 			$col = " * ";
 		} else {
 			for ($i = 0; $i < sizeof($columns); $i++) {
-				$col .= ($i > 0 ? ", " : "") . $columns[$i];
+				$col .= ($i > 0 ? ", " : "") . "`$columns[$i]`";
 			}
 		}
 
