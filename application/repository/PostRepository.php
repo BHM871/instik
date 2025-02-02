@@ -79,7 +79,7 @@ class PostRepository extends IRepository {
 			return null;
 
 		$result[0]['like'] = $result[0]['like'] + 1;
-		$result = $this->db->update('post', $result[0]);
+		$result = $this->db->update('post', ['like' => $result[0]['like'] + 1], ['id' => $postId]);
 
 		if ($result == null || empty($result))
 			return null;
