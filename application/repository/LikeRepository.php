@@ -30,4 +30,16 @@ class LikeRepository extends IRepository {
 		return true;
 	}
 
+	public function removeLike(int $postId, int $userId) : bool {
+		if ($postId == null || $userId == null)
+			return false;
+
+		$result = $this->db->delete('like', ['id_post' => $postId, 'id_liker' => $userId]);
+		
+		if ($result == null || !$result)
+			return false;
+
+		return true;
+	}
+
 }

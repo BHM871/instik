@@ -39,17 +39,24 @@ class PostController extends IController {
 		return $this->returnJson(['success' => $success]);
 	}
 
-	#[Route('/unlike', Route::POST, true)]
+	#[Route('/unlike', Route::POST)]
 	#[Authenticated]
 	#[ResponseBody]
 	public function unlike() {
 		$user = $this->session->getUser();
 		if ($user == null || !isset($user['id']) || $user['id'] == null) {
-			$this->redirect("/");
-			return;	
+			return "Usuário não autenticado, faça login";
 		}
 
-		return $this->returnJson(['message' => 'Sucesso']);
+		$postId = $_POST['postId'];
+
+		if ($postId == null || $postId == '') return "ID do post não informado";
+
+		$postId = (int) $postId;
+
+		$success = $this->service->unlikePost($postId, $user['id']);
+
+		return $this->returnJson(['success' => $success]);
 	}
 
 }
