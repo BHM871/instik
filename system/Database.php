@@ -72,7 +72,7 @@ class Database {
 				);
 
 				$con->query( 
-					"CREATE TRIGGER IF NOT EXISTS delete_".$row['table']."_trigger AFTER DELETE " . PHP_EOL .
+					"CREATE TRIGGER IF NOT EXISTS delete_".$row['table']."_trigger BEFORE DELETE " . PHP_EOL .
 					"ON `".$row['table']."` " . PHP_EOL .
 					"FOR EACH ROW " . PHP_EOL .
 					"BEGIN " . PHP_EOL .
@@ -336,7 +336,7 @@ class Database {
 			}
 
 			$isFirst = true;
-			foreach ($data as $column => $value) {
+			foreach ($where as $column => $value) {
 				$whe .= ($isFirst ? "" : ", ") . "`$column` = :$column";
 				$isFirst = false;
 				
@@ -381,9 +381,9 @@ class Database {
 		}
 	}
 
-	public function delete(string $table, array $data) : array {
+	public function delete(string $table, array $data) : bool {
 		if ($table == null || !is_string($table) || trim($table) == "" || $data == null || !is_array($data) || sizeof($data) == 0)
-			return null;
+			return false;
 
 		$con = $this->getConnection();
 
@@ -395,7 +395,7 @@ class Database {
 			$cols = [];
 			$vals = [];
 			foreach ($data as $column => $value) {
-				$where .= ($isFirst ? "" : ", ") . "`$column` = :$column";
+				$where .= ($isFirst ? "" : " AND ") . "`$column` = :$column";
 				$isFirst = false;
 				
 				$cols[$i] = $column;
@@ -421,21 +421,15 @@ class Database {
 
 			$con->beginTransaction();
 			$stmt->execute();
-			
-			$result = $con->query(
-				"SELECT * " .
-				"FROM `$table` " .
-				"WHERE id = ".$this->getLastId($con, 'delete', $table)
-			);
 
 			if ($con->inTransaction())
 				$con->commit();
 
-			return $result->fetchAll(PDO::FETCH_NAMED);
+			return true;
 		} catch (Throwable $th) {
 			$this->logger->log($th);
 
-			return null;
+			return false;
 		}
 
 	}
