@@ -54,13 +54,13 @@ class ResponseLayer extends Layer {
 
 				$route = (new ReflectionClass(Route::class))->newInstanceArgs($attributes[0]->getArguments());
 
-				$uri .= preg_replace("/^[^\/]/", "/", $route->getValue());
+				$final = $uri . preg_replace("/^[^\/]/", "/", $route->getValue());
 
 				if (is_string($route->getMethods())) {
-					$this->addRoute($route->getMethods(), $uri);
+					$this->addRoute($route->getMethods(), $final);
 				} else if (is_array($route->getMethods())) {
 					foreach ($route->getMethods() as $met)
-						$this->addRoute($met, $uri);
+						$this->addRoute($met, $final);
 				}
 			}
 		}
