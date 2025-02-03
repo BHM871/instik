@@ -16,7 +16,7 @@
 	<input id="ctx" type="hidden" value="<?= BASE_URL ?>" />
 	<section id="navbar">
 		<div id="head">
-			<img class="profile" src="<?= BASE_PATH . "/" . $user['image_path'] ?>" />
+			<img class="profile" src="<?= isset($user['image-Path']) ? (BASE_PATH . "/" . $user['image_path']) : '' ?>" />
 			<p><?= $user['username'] ?></p>
 		</div>
 		<ul id="options">

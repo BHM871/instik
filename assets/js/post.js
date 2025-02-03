@@ -55,21 +55,40 @@ likeBtns.forEach((btn) => {
 		} else {
 			fetch(ctx.value + "/post/unlike", {
 				method: "POST",
-				body: {
+				headers: headers,
+				body: new URLSearchParams(Object.entries({
 					postId: postId
+				})).toString()
+			})
+			.then(async (res) => {
+				const type = res.headers.get('Content-Type');
+
+				if (!res.ok || type == null) {
+					notify("Houve algum erro ao curtir vídeo");
+					return;
+				}
+
+				if (!type.includes('json')) {
+					throw new Error(await res.text());
+				}
+
+				const copy = res.clone();
+
+				try {
+					await copy.json();
+					return res.json();
+				} catch (error) {
+					throw new Error(await res.text());
 				}
 			})
-			.then(res => {
-				if (!res.ok)
-					return;
-
+			.then(json => {
 				btn.removeAttribute("liked");
 				
 				const amount = btn.querySelector("small").innerHTML;
 				btn.querySelector("small").innerHTML = Number(amount) - 1;
 			})
 			.catch(error => {
-				notify("Houve algum erro ao curtir vídeo");
+				notify(error.message);
 			});
 		}
 	});
