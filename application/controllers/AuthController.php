@@ -50,7 +50,6 @@ class AuthController extends IController {
 
 		$this->session->putUser(UserDto::by($user));
 		$this->redirect(Navigation::feed);
-		echo "teste";
 	}
 
 	#[Route("/register", Route::POST)]
