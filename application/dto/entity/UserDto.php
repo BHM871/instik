@@ -11,6 +11,7 @@ class UserDto {
 	public function __construct(
 		private readonly int $id,
 		private readonly string $username,
+		private readonly string $email,
 		private readonly ?string $image_path = null
 	) {}
 
@@ -18,6 +19,7 @@ class UserDto {
 		return new UserDto(
 			id: $user->getId(),
 			username: $user->getUsername(),
+			email: $user->getEmail(),
 			image_path: $user->getImagePath()
 		);
 	}
