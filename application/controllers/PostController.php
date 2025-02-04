@@ -1,5 +1,6 @@
 <?php
 
+use Instik\Services\LikeService;
 use Instik\Services\PostService;
 
 use System\Annotations\Request\ResponseBody;
@@ -14,6 +15,7 @@ class PostController extends IController {
 
 	public function __construct(
 		private readonly PostService $service,
+		private readonly LikeService $likeService,
 		SessionManager $session
 	) {
 		parent::__construct($session);
@@ -34,7 +36,7 @@ class PostController extends IController {
 
 		$postId = (int) $postId;
 
-		$success = $this->service->likePost($postId, $user['id']);
+		$success = $this->likeService->likePost($postId, $user['id']);
 
 		return $this->returnJson(['success' => $success]);
 	}
@@ -54,7 +56,29 @@ class PostController extends IController {
 
 		$postId = (int) $postId;
 
-		$success = $this->service->unlikePost($postId, $user['id']);
+		$success = $this->likeService->unlikePost($postId, $user['id']);
+
+		return $this->returnJson(['success' => $success]);
+	}
+
+	#[Route('/comment', Route::POST)]
+	#[Authenticated]
+	#[ResponseBody]
+	public function comment() {
+		$user = $this->session->getUser();
+		if ($user == null || !isset($user['id']) || $user['id'] == null) {
+			return "Usuário não autenticado, faça login";
+		}
+
+		$postId = $_POST['postId'];
+		$comment = $_POST['comment'];
+
+		if ($postId == null || $postId == '') return "ID do post não informado";
+		if ($comment == null || $comment == '') return "Comentário vazio";
+
+		$postId = (int) $postId;
+
+		$success = $this->likeService->unlikePost($postId, $user['id']);
 
 		return $this->returnJson(['success' => $success]);
 	}

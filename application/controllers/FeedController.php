@@ -5,6 +5,7 @@ namespace Instik\Controllers;
 use Instik\Configs\Pages;
 use Instik\DTO\Entity\PostDto;
 use Instik\DTO\FeedFiltersDto;
+use Instik\Services\LikeService;
 use Instik\Services\PostService;
 
 use System\Annotations\Route\Routable;
@@ -18,6 +19,7 @@ class FeedController extends IController {
 
 	public function __construct(
 		private readonly PostService $postService,
+		private readonly LikeService $likeService,
 		SessionManager $session
 	) {
 		parent::__construct($session);
@@ -40,7 +42,7 @@ class FeedController extends IController {
 			$postsObj = $posts; $posts = [];
 			foreach ($postsObj as $post) {
 				$postDto = PostDto::by($post)->toArray();
-				$postDto['isLiked'] = $this->postService->postIsLikedByUser($postDto['id'], $user['id']);
+				$postDto['isLiked'] = $this->likeService->postIsLikedByUser($postDto['id'], $user['id']);
 
 				$posts[] = $postDto;
 			}

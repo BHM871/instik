@@ -25,41 +25,4 @@ class PostService {
 
 		return $posts;
 	}
-
-	public function postIsLikedByUser(int $postId, int $userId) : bool {
-		if ($postId == null || $userId == null)
-			return false;
-
-		return $this->likeRepository->postIsLikedByUser($postId, $userId);
-	}
-
-	public function likePost(int $postId, int $userId) : bool {
-		if ($postId == null || $userId == null)
-			return false;
-
-		if ($this->postIsLikedByUser($postId, $userId))
-			return false;
-
-		if (!$this->likeRepository->addLike($postId, $userId))
-			return false;
-		
-		$post = $this->repository->addLike($postId);
-
-		return $post != null && $post->getId() != null;
-	}
-
-	public function unlikePost(int $postId, int $userId) : bool {
-		if ($postId == null || $userId == null)
-			return false;
-
-		if (!$this->postIsLikedByUser($postId, $userId))
-			return false;
-
-		if (!$this->likeRepository->removeLike($postId, $userId))
-			return false;
-		
-		$post = $this->repository->removeLike($postId);
-
-		return $post != null && $post->getId() != null;
-	}
 }
