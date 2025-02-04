@@ -127,6 +127,7 @@ button[liked="true"] svg path {
 	flex-direction: column;
 	justify-content: start;
 	align-items: center;
+	padding-bottom: 20px;
 	background-color: var(--thirty-black);
 	border-radius: 20px;
 	overflow: scroll;
