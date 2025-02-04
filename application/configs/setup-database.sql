@@ -16,8 +16,8 @@ CREATE TABLE IF NOT EXISTS follow (
 	follow_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
 	id_followed INTEGER NOT NULL,
 	id_follower INTEGER NOT NULL,
-	FOREIGN KEY (id_followed) REFERENCES user(id),
-	FOREIGN KEY (id_follower) REFERENCES user(id)
+	FOREIGN KEY (id_followed) REFERENCES user(id) ON DELETE CASCADE,
+	FOREIGN KEY (id_follower) REFERENCES user(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS notify (
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS notify (
 	content VARCHAR(512) NOT NULL,
 	`type` ENUM('follower', 'comment', 'answer'),
 	id_notified INTEGER NOT NULL,
-	FOREIGN KEY (id_notified) REFERENCES user(id)
+	FOREIGN KEY (id_notified) REFERENCES user(id) ON DELETE CASCADE
 );
 
 
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS post (
 	image_path VARCHAR(255) DEFAULT NULL,
 	`like` INTEGER DEFAULT 0,
 	id_publisher INTEGER NOT NULL,
-	FOREIGN KEY (id_publisher) REFERENCES user(id)
+	FOREIGN KEY (id_publisher) REFERENCES user(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `like` (
@@ -48,8 +48,8 @@ CREATE TABLE IF NOT EXISTS `like` (
 	like_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
 	id_liker INTEGER NOT NULL,
 	id_post INTEGER NOT NULL,
-	FOREIGN KEY (id_liker) REFERENCES user(id),
-	FOREIGN KEY (id_post) REFERENCES post(id)
+	FOREIGN KEY (id_liker) REFERENCES user(id) ON DELETE CASCADE,
+	FOREIGN KEY (id_post) REFERENCES post(id) ON DELETE CASCADE
 );
 
 
@@ -62,8 +62,8 @@ CREATE TABLE IF NOT EXISTS comment (
 	content VARCHAR(1536) NOT NULL,
 	id_commenter INTEGER NOT NULL,
 	id_post INTEGER NOT NULL,
-	FOREIGN KEY (id_commenter) REFERENCES user(id),
-	FOREIGN KEY (id_post) REFERENCES post(id)
+	FOREIGN KEY (id_commenter) REFERENCES user(id) ON DELETE CASCADE,
+	FOREIGN KEY (id_post) REFERENCES post(id) ON DELETE CASCADE
 );
 
 
@@ -76,8 +76,8 @@ CREATE TABLE IF NOT EXISTS answer (
 	content VARCHAR(1536) NOT NULL,
 	id_answer INTEGER NOT NULL,
 	id_comment INTEGER NOT NULL,
-	FOREIGN KEY (id_answer) REFERENCES user(id),
-	FOREIGN KEY (id_comment) REFERENCES comment(id)
+	FOREIGN KEY (id_answer) REFERENCES user(id) ON DELETE CASCADE,
+	FOREIGN KEY (id_comment) REFERENCES comment(id) ON DELETE CASCADE
 );
 
 COMMIT;
