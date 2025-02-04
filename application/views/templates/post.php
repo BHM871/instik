@@ -11,21 +11,26 @@
 	</div>
 	<div class="post-iteractions">
 		<button id="<?= $post['id'] ?>" type="like" <?= isset($post['isLiked']) && $post['isLiked'] ? 'liked="true"' : '' ?>>
-			<?php $this->load(\Instik\Configs\Icons::favorite) ?>
+			<?php $this->load(Instik\Configs\Icons::favorite) ?>
 			<small><?= isset($post['likes']) ? $post['likes'] : 0 ?></small>
 		</button>
-		<button id="<?= $post['id'] ?>" type="comment">
-			<?php $this->load(\Instik\Configs\Icons::share) ?>
+		<button id="<?= $post['id'] ?>" type="share">
+			<?php $this->load(Instik\Configs\Icons::share) ?>
 		</button>
 	</div>
 	<div class="post-comment">
-		<input id="<?= $post['id'] ?>" type="text" class="input-black" placeholder="Comente..." />
-		<?php 
-			if (isset($post['comments'])) {
-		 		foreach($post['comments'] as $comment) {
-					$this->load(\Instik\Configs\Templates::comment, $comment);
+		<div class="commenter">
+			<input id="<?= $post['id'] ?>" type="text" class="input-black" placeholder="Comente..." />
+			<button class="send-comment"><?php $this->load(Instik\Configs\Icons::send) ?></button>
+		</div>
+		<div class="comments">
+			<?php 
+				if (isset($post['comments'])) {
+			 		foreach($post['comments'] as $comment) {
+						$this->load(Instik\Configs\Templates::comment, $comment);
+					}
 				}
-			}
-		?>
+			?>
+		</div>
 	</div>
 </div>

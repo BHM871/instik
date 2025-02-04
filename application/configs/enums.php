@@ -35,4 +35,5 @@ class Icons {
 	const replay = "svgs/replay-icon";
 	const favorite = "svgs/favorite-icon";
 	const share = "svgs/share-icon";
+	const send = "svgs/send-icon";
 }
