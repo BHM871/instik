@@ -1,5 +1,6 @@
 <?php
 
+use Instik\Services\CommentService;
 use Instik\Services\LikeService;
 use Instik\Services\PostService;
 
@@ -16,6 +17,7 @@ class PostController extends IController {
 	public function __construct(
 		private readonly PostService $service,
 		private readonly LikeService $likeService,
+		private readonly CommentService $commentService,
 		SessionManager $session
 	) {
 		parent::__construct($session);
@@ -78,7 +80,7 @@ class PostController extends IController {
 
 		$postId = (int) $postId;
 
-		$success = $this->likeService->unlikePost($postId, $user['id']);
+		$success = $this->commentService->commentPost($user['id'], $postId, $comment);
 
 		return $this->returnJson(['success' => $success]);
 	}
