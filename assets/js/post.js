@@ -139,15 +139,17 @@ commentBtns.forEach((btn) => {
 			comment.innerHTML = comment.innerHTML +
 			'<div class="comment">' +
 				'<div class="comment-user">' + 
-					'<img class="profile" src="' + ctx.value + '/' + json.user.image_path + '" />' +
-					'<small><a>' + json.user.username + '</a></small>' +
+					'<img class="profile" src="' + ctx.value + '/' + json.comment.user.image_path + '" />' +
+					'<small><a>' + json.comment.user.username + '</a></small>' +
 				'</div>' +
 				'<div class="comment-content">' +
-					'<small>' + json.content + '</small>' +
+					'<small>' + json.comment.content + '</small>' +
 				'</div>' +
 				'<div class="comment-replies">' +
 				'</div>' +
 			'</div>';
+
+			input.value = "";
 		})
 		.catch(error => {
 			notify(error.message);
