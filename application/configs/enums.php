@@ -14,6 +14,12 @@ class Navigation {
 
 	//FeedController
 	const feed = "/feed/";
+
+	//PostController
+	const like = "/post/like";
+	const unlike = "/post/unlike";
+	const comment = "/post/comment";
+	const post = "/post/post";
 }
 
 class Templates {
@@ -36,4 +42,5 @@ class Icons {
 	const favorite = "svgs/favorite-icon";
 	const share = "svgs/share-icon";
 	const send = "svgs/send-icon";
+	const arrow_back = "svgs/arrow-back-icon";
 }
