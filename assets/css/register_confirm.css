@@ -52,7 +52,7 @@ p {
 	}
 }
 
-.person::after {
+.placeholder-image::after {
 	content: "";
 	width: 35%;
 	aspect-ratio: 1;
@@ -64,7 +64,7 @@ p {
 	background-color: var(--thirty-black);
 }
 
-.person::before {
+.placeholder-image::before {
 	content: "";
 	width: 100%;
 	aspect-ratio: 1;

@@ -27,7 +27,7 @@
 			<div id="content">
 				<textarea id="post-caption" name="caption" class="input-black" placeholder="Escreva seus pensamentos aqui..."></textarea>
 				<div>
-					<label id="image-placeholder" for="post-image" class="input-image placeholder"><img /></label>
+					<label id="image-placeholder" for="post-image" class="input-image placeholder-image"><img /></label>
 					<input id="post-image" class="image" name="image" type="file" />
 				</div>
 			</div>

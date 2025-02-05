@@ -23,7 +23,7 @@
 				<p><?= $user['email'] ?></p>
 
 				<div class="input">
-					<label for="profile-image" class="input-image person"><img /></label>
+					<label for="profile-image" class="input-image placeholder-image"><img /></label>
 					<input id="profile-image" class="image" name="profile" type="file" />
 				</div>
 				
