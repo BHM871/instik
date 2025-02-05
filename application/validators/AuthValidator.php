@@ -2,28 +2,28 @@
 
 namespace Instik\Validators;
 
-use DateTime;
 use Instik\DTO\AuthLoginDto;
-use Instik\DTO\AuthRegisterDto;
-use Instik\Repository\AuthRepository;
+use Instik\Repository\UserRepository;
 use Instik\Util\HashGenerator;
+
+use DateTime;
 use System\Logger;
 
 class AuthValidator {
 
-	private readonly Logger $logger;
+	private Logger $logger;
 
 	public function __construct(
-		private readonly AuthRepository $repository
+		private readonly UserRepository $userRepository
 	) {
-		$logger = new Logger($this);
+		$this->logger = new Logger($this);
 	}
 
 	public function validToLogin(AuthLoginDto $dto) : bool {
-		$user = $this->repository->getUserByEmail($dto->getEmail(), ['password']);
+		$user = $this->userRepository->getByEmail($dto->getEmail(), ['password']);
 
 		if ($user == null || $user->getPassword() == null) {
-			$user = $this->repository->getUserByUsername($dto->getEmail(), ['password']);
+			$user = $this->userRepository->getByUsername($dto->getEmail(), ['password']);
 		}
 
 		if ($user == null || $user->getPassword() == null) {
@@ -37,22 +37,8 @@ class AuthValidator {
 		return true;
 	}
 
-	public function validToRegister(AuthRegisterDto $dto) : bool {
-		$user = $this->repository->getUserByEmail($dto->getEmail());
-
-		if ($user != null && $user->getId() != null) {
-			return false;
-		}
-
-		if (HashGenerator::encrypt($dto->getPassword()) != HashGenerator::encrypt($dto->getConfirm())) {
-			return false;
-		}
-
-		return true;
-	}
-
 	public function validToEmail(string $email) : bool {
-		$user = $this->repository->getUserByEmail($email, ['id']);
+		$user = $this->userRepository->getByEmail($email, ['id']);
 		
 		return $user != null && $user->getId() != null;
 	}
@@ -73,7 +59,7 @@ class AuthValidator {
 			if ((new DateTime()) > $limit)
 				return false;
 
-			$user = $this->repository->getUserByEmail($email, ['hash_change_password']);
+			$user = $this->userRepository->getByEmail($email, ['hash_change_password']);
 
 			if ($user == null || $user->getHash() == null)
 				return false;
@@ -84,20 +70,5 @@ class AuthValidator {
 
 			return false;
 		}
-	}
-
-	public function validUserId(int $id) : bool {
-		if ($id == null || $id <= 0)
-			return false;
-
-		$user = $this->repository->getUserById($id, ['id']);
-
-		if ($user == null || $user->getId() == null)
-			$user = $this->repository->getInvalidUserById($id, ['id']);
-
-		if ($user == null || $user->getId() == null)
-			return false;
-
-		return true;
 	}
 }

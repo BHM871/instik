@@ -2,7 +2,7 @@
 
 namespace Instik\DTO;
 
-class AuthRegisterDto {
+class UserRegisterDto {
 
 	public function __construct(
 		private readonly string $email,

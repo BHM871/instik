@@ -1,6 +1,10 @@
 <?php
 
+namespace Instik\Services;
+
 use System\Logger;
+
+use Throwable;
 
 class FileService {
 

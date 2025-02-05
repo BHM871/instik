@@ -5,9 +5,7 @@ namespace Instik\Controllers;
 use Instik\Configs\Navigation;
 use Instik\Configs\Pages;
 use Instik\DTO\AuthLoginDto;
-use Instik\DTO\AuthRegisterDto;
 use Instik\DTO\AuthChangePasswordDto;
-use Instik\DTO\AuthConfirmRegisterDto;
 use Instik\DTO\Entity\UserDto;
 use Instik\Services\AuthService;
 use Instik\Validators\AuthValidator;
@@ -46,75 +44,6 @@ class AuthController extends IController {
 
 		if ($user == null || $user->getId() == null) {
 			return $this->returnPage(Pages::login, ["message" => "Usuário inválido"]);
-		}
-
-		$this->session->putUser(UserDto::by($user));
-		$this->redirect(Navigation::feed);
-	}
-
-	#[Route("/register", Route::POST)]
-	public function register_init() {
-		$registerDto = new AuthRegisterDto($_POST["email"], $_POST["password"], $_POST["password-confirm"]);
-
-		if ($this->session->isAuthenticated() && $this->session->getUser()['email'] == $registerDto->getEmail()) {
-			$this->redirect(Navigation::feed);
-			return;
-		}
-
-		if ($registerDto->getEmail() == "" || $registerDto->getPassword() == "" || $registerDto->getConfirm() == "") {
-			return $this->returnPage(Pages::login, ["message" => "Preencha os campos corretamente"]);
-		}
-
-		$isValid = $this->validator->validToRegister($registerDto);
-
-		if (!$isValid) {
-			return $this->returnPage(Pages::login, ["message" => "Email ou senhas inválidas"]);
-		}
-
-		$user = $this->service->getInvalidUser($registerDto->getEmail());
-
-		if ($user != null && $user->getId() != null) {
-			return $this->returnPage(Pages::register_confirm, ["user" => ['id' => $user->getId(), 'email' => $user->getEmail()]]);
-		}
-
-		$user = $this->service->registerUser($registerDto);
-		
-		if ($user == null || $user->getId() == null) {
-			return $this->returnPage(Pages::login, ["message" => "Houve algum erro ao registrar usuário"]);
-		}
-
-		return $this->returnPage(Pages::register_confirm, ['user' => ['id' => $user->getId(), 'email' => $user->getEmail()]]);
-	}
-
-	#[Route("/confirm-register", Route::POST)]
-	public function confirm_register() {
-		$confirmDto = new AuthConfirmRegisterDto($_POST["user-id"], $_POST["username"]);
-		$profile = $_FILES['profile'];
-
-		if ($this->session->isAuthenticated() && $this->session->getUser()['id'] == $confirmDto->getId()) {
-			$this->redirect(Navigation::feed);
-			return;
-		}
-
-		if ($confirmDto->getId() == "" || $confirmDto->getUsername() == "") {
-			return $this->returnPage(Pages::login, ["message" => "Preencha os campos corretamente"]);
-		}
-
-		$isValid = $this->validator->validUserId($confirmDto->getId());
-
-		if (!$isValid) {
-			return $this->returnPage(Pages::login, ["message" => "Id enviado é inválido"]);
-		}
-		
-		$user = $this->service->confirmRegister($confirmDto, $profile);
-
-		if ($user == null || $user->getId() == null) {
-			$user = $this->service->getInvalidUser($confirmDto->getId());
-
-			return $this->returnPage(Pages::register_confirm, [
-				"message" => "Erro ao salvar usuário, tente novamente mais tarde", 
-				"user" => $user->toArray()
-			]);
 		}
 
 		$this->session->putUser(UserDto::by($user));

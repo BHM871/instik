@@ -2,7 +2,7 @@
 
 namespace Instik\DTO;
 
-class AuthConfirmRegisterDto {
+class UserConfirmRegisterDto {
 
 	public function __construct(
 		private readonly int $id,

@@ -5,17 +5,19 @@ namespace Instik\Configs;
 class Navigation {
 	// AuthController
 	const authenticate = "/auth/authenticate";
-	const register = "/auth/register";
-	const confirm_register = "/auth/confirm-register";
 	const send_password_email = "/auth/send-password-email";
 	const change_password_view = "/auth/change-password-view";
 	const change_password = "/auth/change-password";
 	const logout = "/auth/logout";
 
-	//FeedController
+	// UserController
+	const register = "/user/register";
+	const confirm_register = "/user/confirm-register";
+
+	// FeedController
 	const feed = "/feed/";
 
-	//PostController
+	// PostController
 	const like = "/post/like";
 	const unlike = "/post/unlike";
 	const comment = "/post/comment";
