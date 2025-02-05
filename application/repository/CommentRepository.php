@@ -22,4 +22,18 @@ class CommentRepository extends IRepository {
 		}
 	}
 
+	public function getByPostId(int $postId) : ?array {
+		$result = $this->db->get('comment', ['*'], ['id_post' => $postId]);
+
+		if ($result == null || empty($result))
+			return null;
+
+		$comments = [];
+		foreach ($result as $comment) {
+			$comments[] = Comment::instancer($comment);
+		}
+
+		return $comments;
+	}
+
 }

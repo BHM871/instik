@@ -27,7 +27,7 @@
 			<?php 
 				if (isset($post['comments'])) {
 			 		foreach($post['comments'] as $comment) {
-						$this->load(Instik\Configs\Templates::comment, $comment);
+						$this->load(Instik\Configs\Templates::comment, ['comment' => $comment]);
 					}
 				}
 			?>

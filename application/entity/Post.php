@@ -16,7 +16,8 @@ class Post {
 		private readonly ?string $caption = null,
 		private readonly ?string $image_path = null,
 		private readonly ?int $like = null,
-		private readonly ?User $publisher = null
+		private readonly ?User $publisher = null,
+		private readonly ?array $comments = null
 	) {}
 
 	public static function instancer(?array $post) : ?self {
@@ -30,7 +31,15 @@ class Post {
 		$like = Post::getValueFromArray($post, 'like');
 		$publisher = Post::getUserFromArray($post);
 
-		return new Post($id, $posted_date, $caption, $image_path, $like, $publisher);
+		$commentsArr =  Post::getValueFromArray($post, 'comments');
+		$comments = [];
+		if ($commentsArr != null) {
+			foreach ($commentsArr as $comment) {
+				$comments[] = Comment::instancer($comment);
+			}
+		}
+
+		return new Post($id, $posted_date, $caption, $image_path, $like, $publisher, $comments);
 	}
 
 	public function toArray() : array {
@@ -42,6 +51,14 @@ class Post {
 			if ($value != null) {
 				if ($value instanceof User)
 					$array[$property->getName()] = $value->toArray();
+				else if (is_array($value) && !empty($value) && $value[0] instanceof Comment) {
+					$comments = [];
+					foreach($value as $comment) {
+						$comments[] = $comment->toArray();
+					}
+
+					$array[$property->getName()] = $comments;
+				}
 				else
 					$array[$property->getName()] = $value;
 			}
@@ -68,14 +85,14 @@ class Post {
 	}
 
 	private static function getUserFromArray(array $post) : ?User {
-		if (!isset($post['id_publisher']) && !isset($post['user'])) return null;
+		if (!isset($post['id_publisher']) && !isset($post['publisher'])) return null;
 
 		if (isset($post['id_publisher']) && is_int($post['id_publisher'])) {
 			return new User(id: $post['id_publisher']);
 		}
 		
-		if (isset($post['user'])) {
-			$value = $post['user'];		
+		if (isset($post['publisher'])) {
+			$value = $post['publisher'];		
 			
 			if (is_array($value))
 				return User::instancer($value);
@@ -109,6 +126,10 @@ class Post {
 
 	public function getPublisher() : ?User {
 		return $this->publisher;
+	}
+
+	public function getComments() : ?array {
+		return $this->comments;
 	}
 
 }

@@ -39,6 +39,8 @@ class Comment {
 			if ($value != null) {
 				if ($value instanceof User)
 					$array[$property->getName()] = $value->toArray();
+				else if ($value instanceof Post)
+					$array[$property->getName()] = $value->toArray();
 				else
 					$array[$property->getName()] = $value;
 			}

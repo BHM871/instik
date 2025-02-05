@@ -4,10 +4,16 @@ namespace Instik\Repository;
 
 use Instik\DTO\FeedFiltersDto;
 use Instik\Entity\Post;
-
 use System\Interfaces\Application\IRepository;
 
 class PostRepository extends IRepository {
+
+	public function __construct(
+		private readonly UserRepository $userRepository,
+		private readonly CommentRepository $commentRepository,
+	) {
+		parent::__construct();
+	}
 
 	public function getPostsByUser(int $userId, ?FeedFiltersDto $filters = null) : ?array {
 		if ($userId == null || $userId <= 0)
@@ -54,15 +60,6 @@ class PostRepository extends IRepository {
 
 		$posts = [];
 		foreach ($result as $post) {
-			$user = $this->db->get(
-				'user', 
-				['id', 'username', 'email', 'image_path'], 
-				['id' => $post['id_publisher']]
-			);
-
-			unset($post['id_publisher']);
-			$post['user'] = $user[0];
-
 			$posts[] = Post::instancer($post);
 		}
 
