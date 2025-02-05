@@ -6,6 +6,7 @@ use Instik\DTO\Entity\CommentDto;
 use Instik\Services\CommentService;
 use Instik\Services\LikeService;
 use Instik\Services\PostService;
+use Instik\Validators\PostValidator;
 
 use System\Annotations\Request\ResponseBody;
 use System\Annotations\Route\Routable;
@@ -21,6 +22,7 @@ class PostController extends IController {
 		private readonly PostService $service,
 		private readonly LikeService $likeService,
 		private readonly CommentService $commentService,
+		private readonly PostValidator $validator,
 		SessionManager $session
 	) {
 		parent::__construct($session);
@@ -47,13 +49,11 @@ class PostController extends IController {
 			return "Usuário não autenticado, faça login";
 		}
 
-		$postId = $_POST['postId'];
+		$isValid = $this->validator->validLikeAndUnlike($_POST['postId']);
 
-		if ($postId == null || $postId == '') return "ID do post não informado";
+		if (!$isValid) return "ID do post não informado";
 
-		$postId = (int) $postId;
-
-		$success = $this->likeService->likePost($postId, $user['id']);
+		$success = $this->likeService->likePost($_POST['postId'], $user['id']);
 
 		return $this->returnJson(['success' => $success]);
 	}
@@ -67,13 +67,11 @@ class PostController extends IController {
 			return "Usuário não autenticado, faça login";
 		}
 
-		$postId = $_POST['postId'];
+		$isValid = $this->validator->validLikeAndUnlike($_POST['postId']);
 
-		if ($postId == null || $postId == '') return "ID do post não informado";
+		if (!$isValid) return "ID do post não informado";
 
-		$postId = (int) $postId;
-
-		$success = $this->likeService->unlikePost($postId, $user['id']);
+		$success = $this->likeService->unlikePost((int) $_POST['postId'], $user['id']);
 
 		return $this->returnJson(['success' => $success]);
 	}
@@ -87,15 +85,15 @@ class PostController extends IController {
 			return "Usuário não autenticado, faça login";
 		}
 
-		$postId = $_POST['postId'];
-		$comment = $_POST['comment'];
+		$isValid = $this->validator->validComment($_POST['postId'], $_POST['comment']);
 
-		if ($postId == null || $postId == '') return "ID do post não informado";
-		if ($comment == null || $comment == '') return "Comentário vazio";
+		if (!$isValid) {
+			if (trim($_POST['comment']) == '')	return 'Comentário vazio';
 
-		$postId = (int) $postId;
+			return "ID do post não informado";
+		}
 
-		$comment = $this->commentService->commentPost($user['id'], $postId, $comment);
+		$comment = $this->commentService->commentPost($user['id'], (int) $_POST['postId'], $_POST['comment']);
 
 		if ($comment == null)
 			return $this->returnJson(['success' => false]);
