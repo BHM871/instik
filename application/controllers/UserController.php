@@ -26,7 +26,7 @@ class UserController extends IController {
 		parent::__construct($session);
 	}
 
-	#[Route("/register", Route::POST)]
+	#[Route("/register", [Route::GET ,Route::POST])]
 	public function register_init() {
 		$registerDto = new UserRegisterDto($_POST["email"], $_POST["password"], $_POST["password-confirm"]);
 

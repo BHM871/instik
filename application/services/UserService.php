@@ -13,7 +13,8 @@ class UserService {
 
 	public function __construct(
 		private readonly UserRepository $repository,
-		private readonly FileService $fileService
+		private readonly FileService $fileService,
+		private readonly Notificator $notificator
 	) {}
 
 	public function getUser(string|int $identificator) : ?User {
@@ -45,6 +46,8 @@ class UserService {
 		if ($user == null || $user->getId() == null) {
 			return null;
 		}
+
+		$this->notificator->confirmRegister(($dto->getEmail()));
 
 		return $user;
 	}
