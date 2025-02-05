@@ -29,6 +29,7 @@ labelsImg.forEach((label) => {
 				fr.readAsDataURL(file);
 				console.log(file);
 				label.classList.remove("person");
+				label.classList.remove("placeholder");
 		    }
 		});
 	}

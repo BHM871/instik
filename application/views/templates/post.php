@@ -1,7 +1,7 @@
 <div class="post">
 	<div class="post-head">
 		<div class="post-user">
-			<img class="profile" src="<?= BASE_PATH . "/" . $post['publisher']['image_path'] ?>" />
+			<img class="profile" src="<?= isset($post['publisher']['image_path']) ? BASE_PATH . "/" . $post['publisher']['image_path'] : ''?>" />
 			<p><a href="<?= BASE_URL . "/user?id=" . $post['publisher']['id'] ?>"><?= $post['publisher']['username'] ?></a></p>
 		</div>
 	</div>

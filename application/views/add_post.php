@@ -15,21 +15,33 @@
 		<p>Feed</p>
 		<?php $this->load(Instik\Configs\Icons::arrow_back) ?>
 	</a>
-	<main>
-		<div id="head">
-			<div id="user-data">
-				<img class="profile" src="<?= isset($user['image_path']) ? (BASE_PATH . "/" . $user['image_path']) : '' ?>" />
-				<p><?= $user['username'] ?></p>
+	<form action="<?= BASE_URL . Instik\Configs\Navigation::publish ?>" method="POST" enctype="multipart/form-data">
+		<main>
+			<div id="head">
+				<div id="user-data">
+					<img class="profile" src="<?= isset($user['image_path']) ? (BASE_PATH . "/" . $user['image_path']) : '' ?>" />
+					<p><?= $user['username'] ?></p>
+				</div>
+				<button id="post-btn" class="btn-submit">Publicar</button>
 			</div>
-			<button id="post-btn" class="btn-submit">Publicar</button>
+			<div id="content">
+				<textarea id="post-caption" name="caption" class="input-black" placeholder="Escreva seus pensamentos aqui..."></textarea>
+				<div>
+					<label id="image-placeholder" for="post-image" class="input-image placeholder"><img /></label>
+					<input id="post-image" class="image" name="image" type="file" />
+				</div>
+			</div>
+		</main>
+	</form>
+	
+	<?php if (isset($message)) : ?>
+		<div id="message" class="message">
+			<p><?= $message ?></p>
 		</div>
-		<form id="content" action="<?= BASE_URL . Instik\Configs\Navigation::publish ?>">
-			<textarea id="post-caption" name="caption" class="input-black" placeholder="Escreva seus pensamentos aqui..."></textarea>
-			<div>
-				<label id="image-placeholder" for="post-image" class="input-image"><img /></label>
-				<input id="post-image" class="image" name="image" type="file" />
-			</div>
-		</form>
-	</main>
+	<?php endif ?>
 </body>
+
+<script type="text/javascript" src="<?= BASE_URL ?>/assets/js/default.js"></script>
+<script type="text/javascript" src="<?= BASE_URL ?>/assets/js/input-image.js"></script>
+
 </html>

@@ -22,7 +22,7 @@ class Navigation {
 	const unlike = "/post/unlike";
 	const comment = "/post/comment";
 	const post = "/post/post";
-	const publish = "post/publish";
+	const publish = "/post/publish";
 }
 
 class Templates {

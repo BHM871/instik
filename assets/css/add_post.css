@@ -113,7 +113,6 @@ main {
 	aspect-ratio: 1;
 	position: relative;
 	border: 2px solid var(--white);
-	background-color: var(--secondary-black);
 	overflow: hidden;
 	display: flex;
 	justify-content: center;
@@ -126,4 +125,8 @@ main {
 		object-fit: cover;
 		object-position: center;
 	}
+}
+
+.placeholder {
+	background-color: var(--secondary-black);
 }
