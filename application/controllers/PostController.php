@@ -1,5 +1,6 @@
 <?php
 
+use Instik\DTO\Entity\CommentDto;
 use Instik\Services\CommentService;
 use Instik\Services\LikeService;
 use Instik\Services\PostService;
@@ -80,9 +81,15 @@ class PostController extends IController {
 
 		$postId = (int) $postId;
 
-		$success = $this->commentService->commentPost($user['id'], $postId, $comment);
+		$comment = $this->commentService->commentPost($user['id'], $postId, $comment);
 
-		return $this->returnJson(['success' => $success]);
+		if ($comment == null)
+			return $this->returnJson(['success' => false]);
+
+		$comment = CommentDto::by($comment)->toArray();
+		$comment['user'] = $user;
+
+		return $this->returnJson(['success' => true, 'comment' => $comment]);
 	}
 
 }

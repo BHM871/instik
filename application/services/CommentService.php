@@ -2,6 +2,7 @@
 
 namespace Instik\Services;
 
+use Instik\Entity\Comment;
 use Instik\Repository\CommentRepository;
 
 class CommentService {
@@ -10,9 +11,9 @@ class CommentService {
 		private readonly CommentRepository $repository
 	) {}
 
-	public function commentPost(int $userId, int $postId, string $comment) : bool {
+	public function commentPost(int $userId, int $postId, string $comment) : ?Comment {
 		if ($userId == null || $postId == null || $comment == null)
-			return false;
+			return null;
 		
 		
 		return $this->repository->addComment($userId, $postId, $comment);	
