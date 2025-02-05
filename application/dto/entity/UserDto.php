@@ -15,7 +15,10 @@ class UserDto {
 		private readonly ?string $image_path = null
 	) {}
 
-	public static function by(User $user) : self {
+	public static function by(User $user) : ?self {
+		if ($user == null || $user->getId() == null)
+			return null;
+
 		return new UserDto(
 			id: $user->getId(),
 			username: $user->getUsername(),

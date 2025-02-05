@@ -11,7 +11,7 @@ class Post {
 	private const DATE_FORMAT = "Y-m-d H:i:s";
 
 	public function __construct(
-		private readonly ?int $id = null,
+		private readonly int $id = null,
 		private readonly ?DateTime $posted_date = null,
 		private readonly ?string $caption = null,
 		private readonly ?string $image_path = null,

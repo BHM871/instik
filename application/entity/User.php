@@ -7,7 +7,7 @@ use ReflectionClass;
 class User {
 
 	public function __construct(
-		private ?int $id = null,
+		private int $id = null,
 		private ?string $username = null,
 		private ?string $email = null,
 		private ?string $password = null,

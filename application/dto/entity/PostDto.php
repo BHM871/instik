@@ -14,17 +14,20 @@ class PostDto {
 		private readonly ?string $caption = null,
 		private readonly ?string $image_path = null,
 		private readonly int $likes = 0,
-		private readonly User $publisher,
+		private readonly UserDto $publisher,
 		private readonly bool $isLike = false
 	) {}
 
-	public static function by(Post $post) : self {
+	public static function by(Post $post) : ?self {
+		if ($post == null || $post->getId() == null)
+			return null;
+
 		return new PostDto(
 				id: $post->getId(),
 				caption: $post->getCaption(),
 				image_path: $post->getImagePath(),
 				likes: $post->getLike(),
-				publisher: $post->getPublisher()
+				publisher: UserDto::by($post->getPublisher())
 		);
 	}
 
@@ -35,7 +38,7 @@ class PostDto {
 		foreach ($reflection->getProperties() as $property) {
 			$value = $property->getValue($this);
 			if ($value != null) {
-				if ($value instanceof User)
+				if ($value instanceof UserDto)
 					$array[$property->getName()] = $value->toArray();
 				else
 					$array[$property->getName()] = $value;
