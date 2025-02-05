@@ -64,7 +64,8 @@ class UserRepository extends IRepository {
 		
 		$result = $this->db->update('user', [
 			'is_valid' => true, 
-			'username' => $user->getUsername()
+			'username' => $user->getUsername(),
+			'image_path' => $user->getImagePath()
 		], [
 			'id' => $user->getId()
 		]);

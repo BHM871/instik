@@ -28,7 +28,15 @@ class UserController extends IController {
 
 	#[Route("/register", [Route::GET ,Route::POST])]
 	public function register_init() {
-		$registerDto = new UserRegisterDto($_POST["email"], $_POST["password"], $_POST["password-confirm"]);
+		$registerDto = null;
+		
+		if (isset($_POST['email']))
+			$registerDto = new UserRegisterDto($_POST["email"], $_POST["password"], $_POST["password-confirm"]);
+		else if (isset($_GET['email']))
+			$registerDto = new UserRegisterDto($_GET["email"], $_GET["password"], $_GET["password-confirm"]);
+
+		if ($registerDto == null)
+			return $this->returnPage(Pages::login, ["message" => "Campos não foram enviador corretamente"]);
 
 		if ($this->session->isAuthenticated() && $this->session->getUser()['email'] == $registerDto->getEmail()) {
 			$this->redirect(Navigation::feed);
@@ -70,7 +78,7 @@ class UserController extends IController {
 			return;
 		}
 
-		if ($confirmDto->getId() == "" || $confirmDto->getUsername() == "") {
+		if ($confirmDto->getId() == "" || $confirmDto->getUsername() == "" || $profile['size'] <= 0) {
 			return $this->returnPage(Pages::login, ["message" => "Preencha os campos corretamente"]);
 		}
 

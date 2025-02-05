@@ -12,6 +12,7 @@ class EmailTemplate {
 				"h1 {text-align: center}" .
 				"body {" .
 					"display: flex;" .
+					"flex-direction: column;" .
 					"justify-content: space-evenly;" .
 					"align-items: center;" .
 					"margin: 0;" .
@@ -33,7 +34,7 @@ class EmailTemplate {
 			"</style>" .
 			"<body>" .
 				"<h1>Venha e confirme seu cadastro</h1>" .
-				"<a class=\"btn-submit\" href=\"" . BASE_URL . Navigation::register . "?email=$email&password=empty&confirm-password=empty\">Finalizar</a>" .
+				"<a class=\"btn-submit\" href=\"" . BASE_URL . Navigation::register . "?email=$email&password=empty&password-confirm=empty\">Finalizar</a>" .
 			"</body>";
 	}
 

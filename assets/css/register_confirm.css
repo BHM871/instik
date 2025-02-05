@@ -91,6 +91,10 @@ p {
 }
 
 .inputs {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 	margin: 0 0 35px 0;
 
 	.input {
