@@ -14,7 +14,6 @@ use ReflectionClass;
 
 class SecurityLayer extends Layer {
 
-	private array $visitedClass = [];
 	private array $routes = [];
 
 	public function __construct(
@@ -25,47 +24,38 @@ class SecurityLayer extends Layer {
 	}
 
 	#[\Override]
-	public function configure() : bool {
-		foreach (get_declared_classes() as $className) {
-			if (isset($this->visitedClass[$className]) && $this->visitedClass[$className])
-				continue;
+	public function setupToClassName(string $className) {
+		$reflection = new ReflectionClass($className);
+		$attributes = $reflection->getAttributes(Routable::class);
 
-			$this->visitedClass[$className] = true;
+		if (empty($attributes))
+			return;
 
-			$reflection = new ReflectionClass($className);
-			$attributes = $reflection->getAttributes(Routable::class);
+		$uri = $attributes[0]->getArguments()[0];
+		$uri = preg_replace("/^[^\/]/", "/", $uri);
+
+		foreach ($reflection->getMethods() as $method) {
+			$attributes = $method->getAttributes(Authenticated::class);
 
 			if (empty($attributes))
 				continue;
 
-			$uri = $attributes[0]->getArguments()[0];
-			$uri = preg_replace("/^[^\/]/", "/", $uri);
+			$attributes = $method->getAttributes(Route::class);
 
-			foreach ($reflection->getMethods() as $method) {
-				$attributes = $method->getAttributes(Authenticated::class);
+			if (empty($attributes))
+				continue;
 
-				if (empty($attributes))
-					continue;
+			$route = (new ReflectionClass(Route::class))->newInstanceArgs($attributes[0]->getArguments());
 
-				$attributes = $method->getAttributes(Route::class);
+			$uri .= preg_replace("/^[^\/]/", "/", $route->getValue());
 
-				if (empty($attributes))
-					continue;
-
-				$route = (new ReflectionClass(Route::class))->newInstanceArgs($attributes[0]->getArguments());
-
-				$uri .= preg_replace("/^[^\/]/", "/", $route->getValue());
-
-				if (is_string($route->getMethods())) {
-					$this->addRoute($route->getMethods(), $uri);
-				} else if (is_array($route->getMethods())) {
-					foreach ($route->getMethods() as $met)
-						$this->addRoute($met, $uri);
-				}
+			if (is_string($route->getMethods())) {
+				$this->addRoute($route->getMethods(), $uri);
+			} else if (is_array($route->getMethods())) {
+				foreach ($route->getMethods() as $met)
+					$this->addRoute($met, $uri);
 			}
 		}
-
-		return parent::configure();
 	}
 
 	#[\Override]
