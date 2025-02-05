@@ -147,9 +147,10 @@ button[liked="true"] svg path {
 
 	textarea {
 		width: 96%;
-		height: 85%;
+		min-height: 85%;
 		padding-top: 10px;
 		margin: 0;
+		resize: vertical;
 	}
 }
 

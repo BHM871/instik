@@ -90,9 +90,10 @@ main {
 
 #content > textarea {
 	width: 53%;
-	height: 15%;
+	height: 20%;
 	font-size: 1rem;
 	padding: 10px 20px;
+	resize: none;
 }
 
 #content > div {
