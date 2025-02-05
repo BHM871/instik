@@ -68,6 +68,7 @@
 		padding: 0 15px;
 		font-size: .9rem;
 		text-wrap: wrap;
+		word-wrap: break-word;
 		overflow: scroll;
 		scrollbar-width: thin;
 	}
@@ -182,11 +183,12 @@ button[liked="true"] svg path {
 }
 
 .comment-content {
-	padding: 0 0 0 20px;
+	padding: 0 20px;
 
 	small {
 		display: block;
 		max-height: 3rem;
+		word-wrap: break-word;
 		margin: 0;
 	}
 }
