@@ -33,7 +33,7 @@ main {
 	color: var(--white);
 
 	p {
-		font-size: 1.5rem;
+		font-size: 1.3rem;
 		font-weight: bold;
 	}
 
@@ -57,7 +57,7 @@ main {
 
 #head #user-data {
 	width: calc((100vw - 55vw) / 2);
-	height: 13vh;
+	height: 12vh;
 	display: flex;
 	justify-content: start;
 	align-items: center;
@@ -75,7 +75,7 @@ main {
 		text-overflow: ellipsis;
 		font-weight: bold;
 		letter-spacing: 1.5px;
-		font-size: 1.3rem;
+		font-size: 1.1rem;
 	}
 }
 
