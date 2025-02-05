@@ -20,6 +20,7 @@ class Navigation {
 	const unlike = "/post/unlike";
 	const comment = "/post/comment";
 	const post = "/post/post";
+	const publish = "post/publish";
 }
 
 class Templates {
@@ -33,7 +34,8 @@ class Pages {
 	const login = "index";
 	const register_confirm = "register_confirm";
 	const change_password = "change_password";
-	const home = "feed"; // to test
+	const home = "feed";
+	const add_post = "add_post";
 }
 
 class Icons {

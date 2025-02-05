@@ -20,16 +20,16 @@
 			<p><?= $user['username'] ?></p>
 		</div>
 		<ul id="options">
-			<li><a>Adicionar Post</a></li>
+			<li><a href="<?= BASE_URL . Instik\Configs\Navigation::post ?>">Adicionar Post</a></li>
 			<li><a title="Indisponível, volte em breve">Perfil</a></li>
 			<li><a href="#forgot-password-modal" data-toggle="modal">Trocar Senha</a></li>
-			<li><a href="<?= BASE_URL . \Instik\Configs\Navigation::logout ?>">Sair</a></li>
+			<li><a href="<?= BASE_URL . Instik\Configs\Navigation::logout ?>">Sair</a></li>
 		</ul>
 	</section>
 	
 	<section id="main">
 		<section id="searcher">
-			<form id="filters-form" action="<?= BASE_URL . \Instik\Configs\Navigation::feed ?>">
+			<form id="filters-form" action="<?= BASE_URL . Instik\Configs\Navigation::feed ?>">
 				<div id="finder">
 					<input id="search" name="search" type="text" class="input-black" placeholder="Pesquise..." value="<?= isset($filters['text']) ? $filters['text'] : "" ?>"/>
 					<button id="btn-search" type="submit">
@@ -56,7 +56,7 @@
 				<?php
 					if (isset($posts) && sizeof($posts) > 0) {
 						foreach ($posts as $post) {
-							$this->load(\Instik\Configs\Templates::post, ['post' => $post]);
+							$this->load(Instik\Configs\Templates::post, ['post' => $post]);
 						}
 					} else {
 						echo '<h1 style="text-align: center">Não há publicações</h1>';

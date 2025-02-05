@@ -1,5 +1,7 @@
 <?php
 
+use Instik\Configs\Navigation;
+use Instik\Configs\Pages;
 use Instik\DTO\Entity\CommentDto;
 use Instik\Services\CommentService;
 use Instik\Services\LikeService;
@@ -22,6 +24,18 @@ class PostController extends IController {
 		SessionManager $session
 	) {
 		parent::__construct($session);
+	}
+	
+	#[Route('/post', Route::GET)]
+	#[Authenticated]
+	public function post() {
+		$user = $this->session->getUser();
+		if ($user == null || !isset($user['id']) || $user['id'] == null) {
+			$this->redirect("/");
+			return;
+		}
+
+		return $this->returnPage(Pages::add_post, ['user' => $user]);
 	}
 
 	#[Route('/like', Route::POST)]

@@ -23,7 +23,7 @@
 			</div>
 			<button id="post-btn" class="btn-submit">Publicar</button>
 		</div>
-		<form id="content" action="<?= BASE_URL . Instik\Configs\Navigation::post ?>">
+		<form id="content" action="<?= BASE_URL . Instik\Configs\Navigation::publish ?>">
 			<textarea id="post-caption" name="caption" class="input-black" placeholder="Escreva seus pensamentos aqui..."></textarea>
 			<div>
 				<label id="image-placeholder" for="post-image" class="input-image"><img /></label>
