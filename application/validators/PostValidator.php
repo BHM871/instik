@@ -12,6 +12,17 @@ class PostValidator {
 		private readonly PostRepository $repository
 	) {}
 
+	public function validNewPost(?string $caption, ?array $image) : bool {
+		echo 'Caption ' . $caption . "\n Image " . var_dump($image);
+		if (($caption == null || trim($caption) == '') && ($image == null || empty($image) || !isset($image['size'])))
+			return false;
+
+		if ($image != null && $image['size'] > 0 && (!isset($image['tmp_name']) || !isset($image['type']) || !preg_match("/image/", $image['type'])))
+			return false;
+
+		return true;
+	}
+
 	public function validLikeAndUnlike(?string $postId) : bool {
 		if ($postId == null || trim($postId) == '')
 			return false;

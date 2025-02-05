@@ -4,6 +4,7 @@ namespace Instik\Services;
 
 use Instik\DTO\FeedFiltersDto;
 use Instik\Entity\Post;
+use Instik\Entity\User;
 use Instik\Repository\CommentRepository;
 use Instik\Repository\LikeRepository;
 use Instik\Repository\PostRepository;
@@ -12,6 +13,7 @@ use Instik\Repository\UserRepository;
 class PostService {
 
 	public function __construct(
+		private readonly FileService $fileService,
 		private readonly PostRepository $repository,
 		private readonly LikeRepository $likeRepository,
 		private readonly UserRepository $userRepository,
@@ -56,5 +58,29 @@ class PostService {
 		}
 
 		return $posts;
+	}
+
+	public function publish(int $userId, ?string $caption, ?array $image) : ?Post {
+		$post = new Post(publisher: new User(id: $userId), caption: $caption);
+		
+		$post = $this->repository->publish($post);
+		if ($post == null || $post->getId() == null)
+			return null;
+
+		if ($image != null) {
+			$filename = $post->getId() . "_post_image";
+			$filename .= "." . preg_split("/\//", $image['type'])[1];
+
+			$imagePath = $this->fileService->upload($image, $filename, DEFAULT_UPLOADS_PATH . "/posts");
+
+			$post = $post->toArray();
+			$post['image_path'] = $imagePath;
+			$post = $this->repository->update(Post::instancer($post));
+		}
+
+		if ($post == null || $post->getId() == null)
+			return null;
+		
+		return $post;
 	}
 }

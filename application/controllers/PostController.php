@@ -40,6 +40,28 @@ class PostController extends IController {
 		return $this->returnPage(Pages::add_post, ['user' => $user]);
 	}
 
+	#[Route('/publish', Route::POST)]
+	#[Authenticated]
+	public function publish() {
+		$user = $this->session->getUser();
+		if ($user == null || !isset($user['id']) || $user['id'] == null) {
+			$this->redirect("/");
+			return;
+		}
+
+		$isValid = $this->validator->validNewPost($_POST['caption'], $_FILES['image']);
+
+		if (!$isValid)
+			return $this->returnPage(Pages::add_post, ['user' => $user, 'message' => 'Campos enviados não são válidos']);
+
+		$post = $this->service->publish($user['id'], $_POST['caption'], $_FILES['image']);
+
+		if ($post == null || $post->getId() == null)
+			return $this->returnPage(Pages::add_post, ['user' => $user, 'message' => 'Houve algum erro ao publicar o post']);
+
+		$this->redirect(Navigation::feed);
+	}
+
 	#[Route('/like', Route::POST)]
 	#[Authenticated]
 	#[ResponseBody]

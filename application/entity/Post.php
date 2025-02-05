@@ -2,6 +2,7 @@
 
 namespace Instik\Entity;
 
+use DateError;
 use DateTime;
 use Instik\Entity\User;
 use ReflectionClass;
@@ -59,6 +60,8 @@ class Post {
 
 					$array[$property->getName()] = $comments;
 				}
+				else if ($value instanceof DateTime)
+					$array[$property->getName()] = $value->format(Post::DATE_FORMAT);
 				else
 					$array[$property->getName()] = $value;
 			}

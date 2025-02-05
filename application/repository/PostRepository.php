@@ -78,6 +78,41 @@ class PostRepository extends IRepository {
 		return $posts;
 	}
 
+	public function publish(Post $post) : ?Post {
+		if ($post == null || $post->getPublisher() == null)
+			return null;
+
+		$post = $post->toArray();
+		$post['id_publisher'] = $post['publisher']['id'];
+		unset($post['publisher']);
+
+		$result = $this->db->insert('post', $post);
+
+		if ($result == null || empty($result))
+			return null;
+
+		return Post::instancer($result[0]);
+	}
+
+	public function update(Post $post) : ?Post {
+		if ($post == null || $post->getId() == null || $post->getPublisher() == null)
+			return null;
+
+		$post = $post->toArray();
+		$id = $post['id'];
+		$post['id_publisher'] = $post['publisher']['id'];
+
+		unset($post['id']);
+		unset($post['publisher']);
+
+		$result = $this->db->update('post', $post, ['id' => $id]);
+
+		if ($result == null || empty($result))
+			return null;
+
+		return Post::instancer($result[0]);
+	}
+
 	public function addLike(int $postId) : ?Post {
 		if ($postId == null)
 			return null;
