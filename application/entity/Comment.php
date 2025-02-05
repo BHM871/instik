@@ -41,6 +41,8 @@ class Comment {
 					$array[$property->getName()] = $value->toArray();
 				else if ($value instanceof Post)
 					$array[$property->getName()] = $value->toArray();
+				else if ($value instanceof DateTime)
+					$array[$property->getName()] = $value->format(Comment::DATE_FORMAT);
 				else
 					$array[$property->getName()] = $value;
 			}

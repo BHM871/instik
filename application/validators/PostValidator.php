@@ -13,8 +13,7 @@ class PostValidator {
 	) {}
 
 	public function validNewPost(?string $caption, ?array $image) : bool {
-		echo 'Caption ' . $caption . "\n Image " . var_dump($image);
-		if (($caption == null || trim($caption) == '') && ($image == null || empty($image) || !isset($image['size'])))
+		if (($caption == null || trim($caption) == '') && ($image == null || empty($image) || $image['size'] <= 0))
 			return false;
 
 		if ($image != null && $image['size'] > 0 && (!isset($image['tmp_name']) || !isset($image['type']) || !preg_match("/image/", $image['type'])))
