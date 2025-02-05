@@ -10,24 +10,24 @@ class Comment {
 	private const DATE_FORMAT = "Y-m-d H:i:s";
 
 	public function __construct(
-		private readonly int $id,
-		private readonly ?DateTime $comment_date,
-		private readonly ?string $content,
-		private readonly ?Post $post,
-		private readonly ?User $user
+		private readonly ?int $id = null,
+		private readonly ?DateTime $comment_date = null,
+		private readonly ?string $content = null,
+		private readonly ?Post $post = null,
+		private readonly ?User $user = null
 	) {}
 
-	public static function instancer(array $comment) : ?self {
+	public static function instancer(?array $comment) : ?self {
 		if ($comment == null || sizeof($comment) == 0)
 			return null;
 
 		$id = Comment::getValueFromArray($comment, 'id');
 		$comment_date = Comment::getDateTimeFromArray($comment);
 		$content = Comment::getValueFromArray($comment, 'content');
-		$like = Comment::getValueFromArray($comment, 'like');
+		$post = Comment::getPostFromArray($comment);
 		$commenter = Comment::getUserFromArray($comment);
 
-		return new Comment($id, $comment_date, $content, $like, $commenter);
+		return new Comment($id, $comment_date, $content, $post, $commenter);
 	}
 
 	public function toArray() : array {
@@ -64,11 +64,11 @@ class Comment {
 		return null;
 	}
 
-	private static function getPostFromArray(array $comment) : ?User {
+	private static function getPostFromArray(array $comment) : ?Post {
 		if (!isset($comment['id_post']) && !isset($comment['post'])) return null;
 
-		if (isset($comment['id_post']) && is_string($comment['id_post'])) {
-			return new User(id: $comment['id_post']);
+		if (isset($comment['id_post']) && is_int($comment['id_post'])) {
+			return new Post(id: $comment['id_post']);
 		}
 		
 		if (isset($comment['post'])) {
@@ -87,7 +87,7 @@ class Comment {
 	private static function getUserFromArray(array $comment) : ?User {
 		if (!isset($comment['id_commenter']) && !isset($comment['user'])) return null;
 
-		if (isset($comment['id_commenter']) && is_string($comment['id_commenter'])) {
+		if (isset($comment['id_commenter']) && is_int($comment['id_commenter'])) {
 			return new User(id: $comment['id_commenter']);
 		}
 		

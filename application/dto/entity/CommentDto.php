@@ -18,7 +18,7 @@ class CommentDto {
 		private readonly UserDto $user
 	) {}
 
-	public static function by(Comment $comment) : ?self {
+	public static function by(?Comment $comment) : ?self {
 		if ($comment == null || $comment->getId() == null)
 			return null;
 

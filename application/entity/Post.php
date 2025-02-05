@@ -11,7 +11,7 @@ class Post {
 	private const DATE_FORMAT = "Y-m-d H:i:s";
 
 	public function __construct(
-		private readonly int $id = null,
+		private readonly ?int $id = null,
 		private readonly ?DateTime $posted_date = null,
 		private readonly ?string $caption = null,
 		private readonly ?string $image_path = null,
@@ -19,7 +19,7 @@ class Post {
 		private readonly ?User $publisher = null
 	) {}
 
-	public static function instancer(array $post) : ?self {
+	public static function instancer(?array $post) : ?self {
 		if ($post == null || sizeof($post) == 0)
 			return null;
 
@@ -70,7 +70,7 @@ class Post {
 	private static function getUserFromArray(array $post) : ?User {
 		if (!isset($post['id_publisher']) && !isset($post['user'])) return null;
 
-		if (isset($post['id_publisher']) && is_string($post['id_publisher'])) {
+		if (isset($post['id_publisher']) && is_int($post['id_publisher'])) {
 			return new User(id: $post['id_publisher']);
 		}
 		

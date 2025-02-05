@@ -10,12 +10,12 @@ class UserDto {
 
 	public function __construct(
 		private readonly int $id,
-		private readonly string $username,
-		private readonly string $email,
+		private readonly ?string $username,
+		private readonly ?string $email,
 		private readonly ?string $image_path = null
 	) {}
 
-	public static function by(User $user) : ?self {
+	public static function by(?User $user) : ?self {
 		if ($user == null || $user->getId() == null)
 			return null;
 

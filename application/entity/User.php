@@ -7,7 +7,7 @@ use ReflectionClass;
 class User {
 
 	public function __construct(
-		private int $id = null,
+		private ?int $id = null,
 		private ?string $username = null,
 		private ?string $email = null,
 		private ?string $password = null,
@@ -16,7 +16,7 @@ class User {
 		private ?string $hash_change_password = null
 	) {}
 
-	public static function instancer(array $user) : ?self {
+	public static function instancer(?array $user) : ?self {
 		if ($user == null) return null;
 
 		$id = User::getValueFromArray($user, 'id');

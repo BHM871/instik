@@ -13,12 +13,12 @@ class PostDto {
 		private readonly int $id,
 		private readonly ?string $caption = null,
 		private readonly ?string $image_path = null,
-		private readonly int $likes = 0,
-		private readonly UserDto $publisher,
+		private readonly ?int $likes = 0,
+		private readonly ?UserDto $publisher,
 		private readonly bool $isLike = false
 	) {}
 
-	public static function by(Post $post) : ?self {
+	public static function by(?Post $post) : ?self {
 		if ($post == null || $post->getId() == null)
 			return null;
 
@@ -26,7 +26,7 @@ class PostDto {
 				id: $post->getId(),
 				caption: $post->getCaption(),
 				image_path: $post->getImagePath(),
-				likes: $post->getLike(),
+				likes: $post->getLike() != null ? $post->getLike() : 0,
 				publisher: UserDto::by($post->getPublisher())
 		);
 	}
