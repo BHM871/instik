@@ -21,7 +21,7 @@
 		</div>
 		<ul id="options">
 			<li><a>Adicionar Post</a></li>
-			<li><a>Perfil</a></li>
+			<li><a title="Indisponível, volte em breve">Perfil</a></li>
 			<li><a href="#forgot-password-modal" data-toggle="modal">Trocar Senha</a></li>
 			<li><a href="<?= BASE_URL . \Instik\Configs\Navigation::logout ?>">Sair</a></li>
 		</ul>
