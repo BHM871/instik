@@ -20,7 +20,7 @@
 	</div>
 	<div class="post-comment">
 		<div class="commenter">
-			<input id="<?= $post['id'] ?>" type="text" class="input-black" placeholder="Comente..." />
+			<textarea id="<?= $post['id'] ?>" type="text" class="input-black" placeholder="Comente..."></textarea>
 			<button type="send-comment" class="send-comment"><?php $this->load(Instik\Configs\Icons::send) ?></button>
 		</div>
 		<div class="comments">

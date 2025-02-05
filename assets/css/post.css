@@ -140,15 +140,16 @@ button[liked="true"] svg path {
 
 .commenter {
 	width: calc(100% - 20px);
-	min-height: 50px;
+	height: 70px;
 	display: flex;
 	justify-content: center;
 	position: relative;
 
-	input {
+	textarea {
 		width: 96%;
-		height: 100%;
-		position: absolute;
+		height: 85%;
+		padding-top: 10px;
+		margin: 0;
 	}
 }
 
