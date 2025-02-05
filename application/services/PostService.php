@@ -22,7 +22,7 @@ class PostService {
 		if ($userId == null || $userId <= 0)
 			return null;
 
-		$posts = $this->repository->getPostsByUser($userId, $filters);
+		$posts = $this->repository->getPostsToFeed($userId, $filters);
 
 		if ($posts == null || empty($posts))
 			return null;

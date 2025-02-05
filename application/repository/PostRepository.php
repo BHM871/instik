@@ -15,7 +15,19 @@ class PostRepository extends IRepository {
 		parent::__construct();
 	}
 
-	public function getPostsByUser(int $userId, ?FeedFiltersDto $filters = null) : ?array {
+	public function getById(int $postId) : ?Post {
+		if ($postId <= 0)
+			return null;
+
+		$result = $this->db->get('post', ['*'], ['id' => $postId]);
+
+		if ($result == null || empty($result))
+			return null;
+
+		return Post::instancer($result[0]);
+	}
+
+	public function getPostsToFeed(int $userId, ?FeedFiltersDto $filters = null) : ?array {
 		if ($userId == null || $userId <= 0)
 			return null;
 		
