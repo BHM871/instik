@@ -131,10 +131,10 @@ button[liked="true"] svg path {
 	background-color: var(--thirty-black);
 	border-radius: 20px;
 	overflow: scroll;
+}
 
-	div {
-		width: 100%;
-	}
+.post-comment > div {
+	width: 100%;
 }
 
 .commenter {
@@ -165,9 +165,10 @@ button[liked="true"] svg path {
 }
 
 .comment {
-	width: 100%;
+	width: calc(100% - 10px);
 	display: block;
 	overflow: scroll;
+	margin-left: 10px;
 }
 
 .comment-user {
