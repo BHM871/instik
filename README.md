@@ -1,6 +1,15 @@
 # Instik
 
-**A simple project in PHP, that I create all libs code. This is to a colege actvity**
+**This is a simple framework created by myself. It has the most used framework features, like:**
+- **Routes**
+- **Dependency Injection**
+- **Session Manager**
+- **ORM** - Only works with MySQL Driver
+- **External Libs Integration**
+
+**`application/` path is like used for development, so all files in this directory, is for a college activity that I developed with framework**
+
+Below has some specifications about how to use framework. **!It can has errors, the framework is unfinished!**
 
 ---
 
@@ -27,7 +36,7 @@
  > - `ENV_PATH` - To load environment variables
  > - `LOG_PATH` - To save logs in a file
  > - `DB_HOST` - Must be updated
- > - `DB_PORT` - Must be updated if you use a diferent port
+ > - `DB_PORT` - Must be updated if you use a different port
  > - `DB_USER` - Must be updated
  > - `DB_PASSWORD` - Must be updated
  > - `DB_NAME` - Must be updated
@@ -69,11 +78,12 @@
 
 ## ./application/init.php
 
- - **If you want perform some configuration os initial setup, use `./application/init.php`**
- - **If you want perform some SQL script, use `Database::instance()->getDefaultConnection()`, this create a connection in `mysql` database with PDO class, so see _[PDO documentation](https://www.php.net/manual/pt_BR/class.pdo.php)_. With this, you can create another database before try connect with `DB_NAME`**
+ - **If you want perform some configuration on initial setup, use this file**
+ - **If you want perform some SQL script, use `Database::instance()->getDefaultConnection()`, this create a connection in `mysql` database with PDO class, so see _[PDO documentation](https://www.php.net/manual/pt_BR/class.pdo.php)_. With this, you can create another database before try to connect with `DB_NAME`**
 
  <br/>
 
  ## TODO
 
   - Implements Requests Attributes
+  - Refactor request management to work with claims, each step just is a claim.
