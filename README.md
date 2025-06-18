@@ -86,4 +86,4 @@ Below has some specifications about how to use framework. **!It can has errors, 
  ## TODO
 
   - Implements Requests Attributes
-  - Refactor request management to work with claims, each step just is a claim.
+  - Refactor request management to work with layers, each step just is a layer.

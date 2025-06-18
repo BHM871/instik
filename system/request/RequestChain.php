@@ -11,19 +11,29 @@ use System\Logger;
 
 class RequestChain {
 
-	private static ?Layer $first = null;
+	public static array $observators = [];
+	private static ?Layer $first;
 	private static bool $isConfigured = false;
+
+	private static array $visitedClass = [];
 
 	public static function configure() {
 		if (RequestChain::$isConfigured)
 			return;
 
+		foreach (get_declared_classes() as $className) {
+			if (isset(RequestChain::$visitedClass[$className]) && RequestChain::$visitedClass[$className])
+				continue;
+
+			RequestChain::$visitedClass[$className] = true;
+
+			foreach (RequestChain::$observators as $obs) {
+				$obs->setupToClassName($className);
+			}
+		}
+
 		RequestChain::$first = Instancer::get(ResponseLayer::class);
-
-		if (RequestChain::$first == null)
-			return;
-
-		RequestChain::$isConfigured = RequestChain::$first->configure();
+		RequestChain::$isConfigured = true;
 	}
 
 	public static function submit() : mixed {

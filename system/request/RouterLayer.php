@@ -16,7 +16,6 @@ use ReflectionMethod;
 
 class RouterLayer extends Layer {
 
-	private array $visitedClass = [];
 	private static $route = array();
 
 	private const METHOD = 'method';
@@ -28,46 +27,36 @@ class RouterLayer extends Layer {
 	public function __construct() {}
 
 	#[\Override]
-	public function configure() : bool {
-		foreach (get_declared_classes() as $className) {
-			if (isset($this->visitedClass[$className]) && $this->visitedClass[$className])
+	public function setupToClassName(string $className) {
+		$class = new ReflectionClass($className);
+		$attributes = $class->getAttributes(Routable::class);
+		
+		if (empty($attributes))
+			return;
+
+		$object = Instancer::get($class);
+
+		$routable = Instancer::getByReflectionAttribute($attributes[0]);
+		$classUri = preg_replace("/\/$/", '', preg_replace("/^[^\/]/", '/', $routable->getName()));
+
+		foreach ($class->getMethods() as $method) {
+			$attributes = $method->getAttributes(Route::class);
+
+			if(empty($attributes) || $method->isConstructor() || $method->isDestructor())
 				continue;
 
-			$this->visitedClass[$className] = true;
+			$route = Instancer::getByReflectionAttribute($attributes[0]);
 
-			$class = new ReflectionClass($className);
-			$attributes = $class->getAttributes(Routable::class);
-			
-			if (empty($attributes)) {
-				continue;
-			}
+			$methodUri = preg_replace("/\/$]/", '', preg_replace("/^[^\/]/", '/', $route->getValue()));
+			$realPath = $classUri.$methodUri;
 
-			$object = Instancer::get($class);
+			$arguments = [
+				RouterLayer::URI 	=> $realPath,
+				RouterLayer::TYPES=> $route->getMethods(),
+			];
 
-			$routable = Instancer::getByReflectionAttribute($attributes[0]);
-			$classUri = preg_replace("/\/$/", '', preg_replace("/^[^\/]/", '/', $routable->getName()));
-
-			foreach ($class->getMethods() as $method) {
-				$attributes = $method->getAttributes(Route::class);
-
-				if(empty($attributes) || $method->isConstructor() || $method->isDestructor())
-					continue;
-
-				$route = Instancer::getByReflectionAttribute($attributes[0]);
-
-				$methodUri = preg_replace("/\/$]/", '', preg_replace("/^[^\/]/", '/', $route->getValue()));
-				$realPath = $classUri.$methodUri;
-
-				$arguments = [
-					RouterLayer::URI 	=> $realPath,
-					RouterLayer::TYPES=> $route->getMethods(),
-				];
-
-				RouterLayer::add($arguments, $object, $method);
-			}
+			RouterLayer::add($arguments, $object, $method);
 		}
-
-		return true;
 	}
 
 	public static function add(array $arguments, object $object, ReflectionMethod $method) {

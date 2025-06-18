@@ -8,12 +8,7 @@ abstract class Layer {
 		protected readonly ?Layer $next = null
 	) {}
 
-	public function configure() : bool {
-		if ($this->next == null)
-			return true;
-
-		return $this->next->configure();
-	}
+	public abstract function setupToClassName(string $className);		
 
 	public function execute(string $url, array $params = []) : mixed {
 		if ($this->next == null)
